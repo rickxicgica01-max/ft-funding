@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+import Footer from '../components/Footer.astro';
+
+const {
+  title = 'FT Funding Direct Capital',
+  description = 'We arrange commercial financing for real estate investors, developers, and business owners across Toronto, GTA and Greater Vancouver.',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Mark JS as active before first paint so reveal elements start hidden only when motion can run -->
+  <script is:inline>document.documentElement.classList.add('js-motion');</script>
+  <!-- Toggle the solid/condensed nav once the page is scrolled past the top -->
+  <script is:inline>
+    (function () {
+      function syncNav() {
+        var nav = document.querySelector('.nav-wrap');
+        if (nav) nav.classList.toggle('scrolled', window.scrollY > 20);
+      }
+      window.addEventListener('scroll', syncNav, { passive: true });
+      window.addEventListener('load', syncNav);
+      syncNav();
+    })();
+  </script>
+</head>
+<body>
+  <slot />
+  <Footer />
+
+  <script>
+    import { initMotion } from '../scripts/motion.js';
+    initMotion();
+  </script>
+</body>
+</html>

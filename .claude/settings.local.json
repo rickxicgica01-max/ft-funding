@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la public/navigation/)",
+      "Bash(file public/navigation/site-logo.png)",
+      "Bash(npm run *)",
+      "Bash(grep -niE \"#[0-9a-f]{3,6}|rgba?\\\\\\(|navy-dark|offwhite\" src/styles/global.css)",
+      "Bash(grep -niE \"#[0-9a-f]{3,6}|rgba?\\\\\\(\" src/styles/global.css)",
+      "Bash(grep -viE \"#13274f|#d3a243|#ffffff|#fff[^0-9a-f]|#fff$|19,39,79|255,255,255\")",
+      "Bash(lsof -iTCP -sTCP:LISTEN -n -P)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}  size=%{size_download} bytes\\\\n\" http://127.0.0.1:4321/home/home-hero-bg.png)",
+      "Bash(curl -s http://127.0.0.1:4321/)",
+      "Bash(mv \"public/Group 16.png\" \"public/home/home-icon-construction.png\")",
+      "Bash(mv \"public/Group 17.png\" \"public/home/home-icon-bridge.png\")",
+      "Bash(mv \"public/Group 18.png\" \"public/home/home-icon-cmhc.png\")",
+      "Bash(ls public/*.png)",
+      "Bash(node -e ' *)",
+      "Bash(npx astro *)",
+      "Bash(grep -n \"@media \\(max-width:1024px\\)\\\\|@media \\(max-width:767px\\)\\\\|\\\\.why,\\\\|\\\\.reasons \\\\.row {\" src/styles/global.css)",
+      "Bash(grep -n \"^section {\\\\|^\\\\.svc-section {\\\\|^\\\\.why-band {\\\\|^\\\\.capital-band {\\\\|^\\\\.page-head {\\\\|section {$\\\\|padding:96px\\\\|padding:200px\\\\|padding:64px 0\\\\|padding:170px\\\\|padding:120px 0\\\\|padding:80px 0\" src/styles/global.css)",
+      "Bash(ls -la *.png *.svg *.jpg)",
+      "Bash(find . -maxdepth 2 -iname \"*group*27*\")",
+      "Bash(sed -n '/TESTIMONIALS/,/CONSULTATION/p' src/pages/index.astro)",
+      "Bash(sips -g pixelWidth -g pixelHeight \"Group 27.png\")",
+      "Bash(git --version)",
+      "Bash(git config *)",
+      "Bash(gh --version)",
+      "Bash(gh auth *)",
+      "Bash(git init *)",
+      "Bash(git branch *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

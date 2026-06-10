@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+---
+<BaseLayout
+  title="Contact — FT Funding Direct Capital"
+  description="Book a consultation with FT Funding Direct Capital. Direct access to senior brokers serving Toronto, the GTA, and Greater Vancouver."
+>
+  <Nav solid />
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>Contact</div>
+      <h1 data-reveal>Book a <span class="gold">Consultation</span></h1>
+      <p data-reveal>Direct access to senior brokers, not call centres. Tell us about your deal and we'll respond within hours.</p>
+    </div>
+  </section>
+
+  <section class="consult-band">
+    <div class="wrap consult">
+      <div>
+        <h2 data-reveal>Let's <span class="gold">Talk</span></h2>
+        <p class="intro-copy" style="margin-top:18px;" data-reveal>7181 Woodbine Ave #108, Markham, ON L3R 1A3</p>
+        <p class="intro-copy" data-reveal>+647-123-4567</p>
+        <p class="intro-copy" data-reveal>info@FTfunding.com</p>
+      </div>
+      <div>
+        <form onsubmit="return false;" data-reveal>
+          <div class="formgrid">
+            <div class="field"><input type="text" placeholder="Your Name"></div>
+            <div class="field"><input type="email" placeholder="Your Email"></div>
+            <div class="field full"><input type="text" placeholder="Your Message"></div>
+          </div>
+          <button class="btn btn-outline" type="submit">Get Your Free Consultation</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

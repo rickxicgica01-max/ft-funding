@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+---
+<BaseLayout
+  title="Services — FT Funding Direct Capital"
+  description="Commercial lending solutions: construction loans, bridge financing, CMHC insured, and term & permanent financing across Toronto, the GTA, and Greater Vancouver."
+>
+  <Nav solid />
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>Our Services</div>
+      <h1 data-reveal>Our Lending <span class="gold">Solutions</span></h1>
+      <p data-reveal>We arrange commercial financing for real estate investors, developers, and business owners — matching every deal to the right source of capital.</p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="cards" data-reveal-stagger>
+      <div class="card photo" data-reveal><span class="icon">▢</span><h3>Construction Loans</h3></div>
+      <div class="card navy" data-reveal><span class="icon">▢</span><h3>Bridge Financing</h3></div>
+      <div class="card navy" data-reveal><span class="icon">▢</span><h3>CMHC Insured &amp; Construction</h3></div>
+      <div class="card navy" data-reveal><span class="icon">▢</span><h3>Term &amp; Permanent</h3></div>
+    </div>
+  </section>
+
+  <section class="band-navy">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow" data-reveal>Our Services</div>
+        <h2 data-reveal>Asset <span class="gold">Classes</span></h2>
+        <p class="intro-copy" data-reveal>We finance across every major commercial asset class.</p>
+        <a href="/contact" class="btn btn-outline" style="margin-top:8px;" data-reveal>Talk to an Expert</a>
+      </div>
+      <div class="asset-cards" data-reveal-stagger>
+        <div class="asset" data-reveal><span class="icon">▢</span><h3>Retail</h3></div>
+        <div class="asset" data-reveal><span class="icon">▢</span><h3>Office</h3></div>
+        <div class="asset" data-reveal><span class="icon">▢</span><h3>Student Housing</h3></div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+---
+<BaseLayout
+  title="About — FT Funding Direct Capital"
+  description="Learn about FT Funding Direct Capital, a one-stop commercial lending brokerage serving Toronto, the GTA, and Greater Vancouver."
+>
+  <!-- Inner pages use the solid (navy, sticky) nav since there's no hero image behind it -->
+  <Nav solid />
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>About Us</div>
+      <h1 data-reveal>One Stop Commercial <span class="gold">Lending Brokerage</span></h1>
+      <p data-reveal>This is an example second page. It shares the same Nav and Footer as the home page — edit those once in <code>src/components/</code> and every page updates.</p>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="why">
+      <div>
+        <h2 data-reveal>Built for <span class="gold">Canadian Business</span></h2>
+        <p class="intro-copy" style="margin-top:18px;" data-reveal>We combine deep market expertise with a client-first approach to deliver exceptional results.</p>
+        <a href="/contact" class="btn btn-outline" style="margin-top:8px;" data-reveal>Contact Us Today</a>
+      </div>
+      <div class="reasons" data-reveal-stagger>
+        <div class="row" data-reveal><h3>Our Mission</h3><p>To make commercial financing simple, fast, and transparent for investors and developers.</p></div>
+        <div class="row" data-reveal><h3>Our Network</h3><p>Direct relationships with banks, credit unions, insurers, and private capital across Canada.</p></div>
+        <div class="row" data-reveal><h3>Our Track Record</h3><p>15+ years arranging financing across every major commercial asset class.</p></div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

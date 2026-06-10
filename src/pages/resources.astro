@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+---
+<BaseLayout
+  title="Resources — FT Funding Direct Capital"
+  description="Our sources of capital span Canadian and international banks, insurers, pension funds, credit unions, CMHC, private equity, MICs, CMBS conduits, and family offices."
+>
+  <Nav solid />
+
+  <section class="page-head">
+    <div class="wrap">
+      <div class="eyebrow" data-reveal>Resources</div>
+      <h1 data-reveal>Sources of <span class="gold">Capital</span></h1>
+      <p data-reveal>Direct relationships across the full spectrum of commercial lenders let us place every deal with the right capital partner.</p>
+    </div>
+  </section>
+
+  <section class="sources-band">
+    <div class="wrap sources">
+      <div class="logos" data-reveal-stagger>
+        <div data-reveal>TD</div><div data-reveal>CIBC</div><div data-reveal>MCAP</div>
+        <div data-reveal>Equitable</div><div data-reveal>Desjardins</div><div data-reveal>RBC</div>
+        <div data-reveal>IAM</div><div data-reveal>Home Trust</div><div data-reveal>First National</div>
+      </div>
+      <div>
+        <h2 style="font-size:clamp(32px,4vw,50px);margin-bottom:24px;" data-reveal>Who We <span class="gold">Work With</span></h2>
+        <ul>
+          <li>Canadian Banks</li>
+          <li>International Banks</li>
+          <li>Insurance Companies (Domestic &amp; Foreign)</li>
+          <li>Pension Funds</li>
+          <li>Credit Unions</li>
+          <li>CMHC</li>
+          <li>Private Equity &amp; Debt Funds</li>
+          <li>Mortgage Investment Corporations (MICs)</li>
+          <li>CMBS Conduits</li>
+          <li>Family Offices</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

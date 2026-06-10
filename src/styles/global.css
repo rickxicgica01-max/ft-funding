@@ -1,0 +1,1333 @@
+:root {
+  /* Brand palette. */
+  --navy:#13274f;
+  --gold:#d3a243;
+  --white:#ffffff;
+  --offwhite:#f6f5f5;   /* light section background */
+  --serif:'Times New Roman', Times, Georgia, serif;
+  --sans:'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --maxw:1200px;   /* inner content width (desktop) */
+  --navw:1275px;   /* nav + footer width (desktop) */
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html {
+  scroll-behavior:smooth;
+}
+
+body {
+  font-family:var(--sans);
+  color:var(--navy);
+  background:var(--white);
+  line-height:1.5em;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family:var(--serif);
+  font-weight:700;
+  letter-spacing:-0.03em;
+  line-height:1em;
+}
+
+/* Site-wide H1 spec: 70px / 68px line / -2.8px tracking (px→em). */
+h1 {
+  font-size:70px;
+  line-height:0.971em;      /* 68 / 70 */
+  letter-spacing:-0.04em;   /* -2.8 / 70 */
+}
+
+/* Site-wide H2 spec: 50px / 50px line / -2px tracking (px→em).
+   Hero is the only h1; every other large title is an h2. */
+h2 {
+  font-size:clamp(34px,4.5vw,50px);   /* 50px desktop, scales on portables */
+  line-height:1em;          /* 50 / 50 */
+  letter-spacing:-0.04em;   /* -2 / 50 */
+}
+
+/* Site-wide body/paragraph spec: 17px / 25px line / 0.34px tracking (px→em). */
+p {
+  font-size:17px;
+  line-height:1.471em;      /* 25 / 17 */
+  letter-spacing:0.02em;    /* 0.34 / 17 */
+}
+
+img {
+  max-width:100%;
+  display:block;
+}
+
+a {
+  color:inherit;
+  text-decoration:none;
+}
+
+/* Inner content container: 90% width gives a 5% safe gutter on every device,
+   capped at 1200px on desktop. The full-bleed section/band backgrounds live on
+   the outer element, so colored bands still span edge to edge. */
+.wrap {
+  width:90%;
+  max-width:var(--maxw);
+  margin-inline:auto;
+}
+
+/* Small subheading — Instrument Sans 17px / 25px line / 5.1px tracking (px→em). */
+.eyebrow {
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:17px;
+  line-height:1.471em;     /* 25 / 17 */
+  letter-spacing:0.3em;    /* 5.1 / 17 */
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:15px;      /* gap to the h2 */
+}
+
+/* Buttons */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--serif);
+  font-style:normal;
+  font-weight:700;
+  font-size:16px;
+  line-height:1.3em;
+  letter-spacing:-0.04em; /* -0.64px / 16px */
+  padding:0.375em 1.4375em; /* 6px 23px @16px — em keeps ratio across breakpoints */
+  cursor:pointer;
+  border:none;
+  /* Only transition hover props — NOT transform, which GSAP drives on reveal. */
+  transition:background .6s ease, color .6s ease, border-color .6s ease, box-shadow .6s ease;
+  white-space:nowrap;
+}
+
+.btn-solid {
+  background:var(--gold);
+  color:#fff;
+}
+
+.btn-solid:hover {
+  /* Darker gold = gold with a navy tint over it. Inset shadow is transitionable
+     (a gradient background-image would snap in with no easing). */
+  box-shadow:inset 0 0 0 200px rgba(19,39,79,.22);
+  color:var(--white);
+}
+
+.btn-outline {
+  background:transparent;
+  color:var(--gold);
+  border:1px solid var(--gold);
+}
+
+.btn-outline:hover {
+  background:var(--gold);
+  color:#fff;
+}
+
+/* ---------- HEADER / HERO ---------- */
+.hero {
+  position:relative;
+  color:#fff;
+  min-height:770px;
+  display:flex;
+  flex-direction:column;
+  padding:126px 0 0;   /* top clears the nav; no section v-padding (override) */
+  background:url('/home/home-hero-bg.png') center center/cover no-repeat;
+}
+
+.nav {
+  display:flex;
+  align-items:center;
+  gap:40px;
+  padding:36px 0;
+  width:90%;
+  max-width:var(--navw);
+  margin:0 auto;
+  transition:padding .5s ease;
+}
+
+.logo {
+  display:flex;
+  align-items:center;
+  flex:none;
+}
+
+.logo img {
+  width:290px;
+  height:54px;
+  transition:width .5s ease, height .5s ease;
+}
+
+.nav-links {
+  display:flex;
+  gap:50px;            /* space between each nav link */
+  margin-left:auto;
+  margin-right:30px;   /* space between the links and the CTA button */
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:16px;
+  line-height:1em;
+  letter-spacing:0;
+}
+
+.nav-links a {
+  color:#fff;
+  transition:color .4s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color:var(--gold);
+}
+
+/* Hamburger toggle + dropdown — hidden on desktop, shown ≤1024 (see media query). */
+.nav-toggle {
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  width:32px;
+  height:32px;
+  padding:0;
+  margin-left:auto;
+  background:none;
+  border:none;
+  cursor:pointer;
+}
+
+.nav-toggle span {
+  display:block;
+  width:26px;
+  height:2px;
+  background:#fff;
+  transition:transform .3s ease, opacity .3s ease;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform:translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity:0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform:translateY(-7px) rotate(-45deg);
+}
+
+.nav-menu {
+  display:none;
+  flex-direction:column;
+}
+
+.nav-menu-item {
+  display:block;
+  padding:16px 5%;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:16px;
+  line-height:1em;
+  color:#fff;
+  background:var(--navy);
+  border-top:1px solid rgba(255,255,255,.10);
+  transition:background .4s ease, color .4s ease;
+}
+
+.nav-menu-item:hover,
+.nav-menu-item.active {
+  background:var(--gold);
+  color:#fff;
+}
+
+.hero-body {
+  flex:1;                 /* fills hero height minus the 126px nav clearance */
+  display:flex;
+  flex-direction:column;
+  justify-content:center; /* title block centered in the space below the nav */
+  max-width:var(--maxw);
+  margin:0 auto;
+  width:90%;
+  position:relative;
+}
+
+.hero-inner {
+  max-width:660px;
+  transform:translateY(-40px); 
+}
+
+.hero h1 {
+  font-size:clamp(40px,7vw,70px);   /* 70px desktop, scales down on portables */
+  margin-bottom:32px;
+}
+
+.hero p {
+  font-size:17px;
+  max-width:640px;
+  margin-bottom:32px;
+  opacity:.95;
+}
+
+/* Rates card */
+.rates {
+  --rates-pad:55px;       /* side padding; dividers bleed by the same amount */
+  position:absolute;
+  top:50%;
+  transform:translateY(-55%);   /* vertically centered alongside the title block */
+  right:0;
+  width:384px;
+  max-width:90vw;
+  background:rgba(255,255,255,.92);
+  color:var(--navy);
+  padding:35px var(--rates-pad);
+  backdrop-filter:blur(2px);
+}
+
+/* Small labels — Instrument Sans 12px / 0.24px tracking. Tight line + small
+   margin gives a snug label→value pair; the grid row gap separates the pairs. */
+.rates .label,
+.rate .k {
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:12px;
+  line-height:1em;
+  letter-spacing:0.02em;    /* 0.24 / 12 */
+  margin-bottom:6px;
+}
+
+.rates .label {
+  color:var(--navy);
+}
+
+.rate .k {
+  color:var(--gold);
+}
+
+/* Large figures — Times New Roman 30px / -1.2px tracking, tight line so the
+   pairs stay compact and the row gap does the spacing. */
+.rates .date,
+.rate .v {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:30px;
+  line-height:1em;
+  letter-spacing:-0.04em;   /* -1.2 / 30 */
+}
+
+/* Up/down trend arrows before each rate value. */
+.rate .v {
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.rate .v .arr {
+  width:0;
+  height:0;
+  border-left:4px solid transparent;
+  border-right:4px solid transparent;
+}
+
+.rate .v .arr.up {
+  border-bottom:6px solid var(--navy);
+}
+
+.rate .v .arr.down {
+  border-top:6px solid var(--navy);
+}
+
+/* Full-bleed gold divider — bleeds across the side padding. */
+.rates hr {
+  border:none;
+  border-top:1px solid var(--gold);
+  margin:17px calc(-1 * var(--rates-pad));
+}
+
+.rates-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:28px 40px;   /* 28px between rate pairs, 40px between columns */
+}
+
+/* Bottom note — Instrument Sans 11 / 15px line / 0.22px tracking. */
+.rates .foot {
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:11px;
+  line-height:1.364em;      /* 15 / 11 */
+  letter-spacing:0.02em;    /* 0.22 / 11 */
+  margin:18px calc(-1 * var(--rates-pad)) 0;  /* pull line to card edges */
+  padding:18px var(--rates-pad) 0;            /* keep text within the side padding */
+  border-top:1px solid var(--gold);
+}
+
+/* ---------- SECTION SCAFFOLD ---------- */
+/* Every section gets 170px top/bottom by default (hero, nav, footer, the
+   capital band, and inner-page headers override this themselves). */
+section {
+  padding:170px 0;
+}
+
+.sec-head {
+  margin-bottom:48px;
+}
+
+.sec-head h2 {
+  font-size:clamp(34px,4.5vw,50px);
+}
+
+.gold {
+  color:var(--gold);
+}
+
+/* Lending solutions */
+.cards {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+}
+
+.card {
+  position:relative;
+  min-height:390px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:28px;
+  color:#fff;
+  overflow:hidden;
+}
+
+.card.navy {
+  background:var(--navy);
+}
+
+.card.photo {
+  background:linear-gradient(180deg,rgba(19,39,79,0),rgba(19,39,79,.75)),url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop') center/cover;
+}
+
+.card h3 {
+  font-size:28px;
+  line-height:1.05em;
+}
+
+.card .icon {
+  position:absolute;
+  top:24px;
+  left:28px;
+  font-size:26px;
+  color:var(--gold);
+}
+
+.center-cta {
+  text-align:center;
+  margin-top:48px;
+}
+
+/* ---------- LENDING SOLUTIONS (text + 3 hover cards) ---------- */
+/* Full-width section; .wrap inside is the 1200px content holder (5% gutters). */
+.svc-section {
+  padding:200px 0;
+}
+
+.svc-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);   /* col 1 = text, cols 2-4 = cards */
+  gap:24px;
+  align-items:stretch;
+}
+
+.svc-text {
+  align-self:start;      /* top-align the copy with the cards */
+  margin-bottom:0;       /* override .sec-head bottom margin */
+}
+
+/* Smaller paragraph→button gap in this section. The text block is centered,
+   so reducing the 60px gap by 30 moves the button up ~15px. */
+.svc-text .intro-copy {
+  margin-bottom:45px;
+}
+
+/* Card: solid navy by default; hover reveals its image + dark bottom gradient. */
+.svc-card {
+  position:relative;
+  min-height:390px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:15px 18px;
+  color:var(--white);
+  overflow:hidden;
+  background:var(--navy);
+}
+
+.svc-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,0) 55%), var(--img) center center/cover no-repeat;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+
+.svc-card:hover::before {
+  opacity:1;
+}
+
+.svc-icon {
+  position:absolute;
+  top:15px;
+  left:18px;           /* same padding as the title */
+  z-index:1;
+  width:auto;
+  height:32px;
+}
+
+/* Box-character icon placeholder (until real asset icons are supplied). */
+span.svc-icon {
+  height:auto;
+  font-size:26px;
+  line-height:1;
+}
+
+/* Card title — Times New Roman 30px / 28px line / -1.2px tracking (px→em). */
+.svc-card h3 {
+  position:relative;   /* sit above the hover image layer */
+  z-index:1;
+  font-size:30px;
+  line-height:0.933em;     /* 28 / 30 */
+  letter-spacing:-0.04em;  /* -1.2 / 30 */
+}
+
+/* ----- Asset Classes variant: navy section + gold cards ----- */
+.svc-section--dark {
+  background:var(--navy);
+  color:var(--white);   /* h2 "Asset" + paragraph turn white; .gold span stays gold */
+}
+
+.svc-card--gold {
+  background:var(--gold);
+}
+
+@media (max-width:1024px) {
+  .svc-section {
+    padding:120px 0;
+  }
+
+  .svc-grid {
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .svc-text {
+    grid-column:1 / -1;   /* copy spans full width above the 3 cards */
+    align-self:start;
+    margin-bottom:16px;
+  }
+}
+
+@media (max-width:767px) {
+  .svc-section {
+    padding:80px 0;
+  }
+
+  .svc-grid {
+    grid-template-columns:1fr;
+  }
+
+  .svc-card {
+    min-height:340px;
+  }
+}
+
+/* Asset classes (navy band) */
+.band-navy {
+  background:var(--navy);
+  color:#fff;
+}
+
+.band-navy .eyebrow {
+  color:var(--gold);
+}
+
+.asset-cards {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+.asset {
+  background:var(--gold);
+  min-height:390px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:28px;
+  color:#fff;
+  position:relative;
+}
+
+.asset .icon {
+  position:absolute;
+  top:24px;
+  left:28px;
+  font-size:26px;
+}
+
+.asset h3 {
+  font-size:28px;
+  line-height:1.05em;
+}
+
+.intro-copy {
+  max-width:240px;
+  font-size:17px;
+  margin:35px 0 60px;   /* 35px below the h2, 60px above the button */
+}
+
+/* Sources of capital */
+.sources-band {
+  background:var(--white);
+}
+
+.sources {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  align-items:center;
+}
+
+.sources ul {
+  list-style:none;
+  columns:1;
+}
+
+.sources li {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:9px 0;
+  font-size:17px;
+}
+
+.sources li::before {
+  content:'';
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--gold);
+  flex:none;
+}
+
+.logos {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  opacity:.5;
+}
+
+.logos div {
+  background:var(--white);
+  border:1px solid rgba(19,39,79,.15);
+  height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:var(--navy);
+  font-size:14px;
+}
+
+/* ---------- SOURCES OF CAPITAL (homepage) ---------- */
+/* Left: 6 rows of infinite-scrolling lender logos, bleeding to the left edge and
+   running behind the right panel. Right: an F6F5F5 panel (same colour as the band,
+   no white) whose 588px content sits a 5% gutter from the right edge. */
+.capital-band {
+  position:relative;
+  overflow:hidden;
+  padding:0;                       /* override the global section 96px padding (the gap!) */
+  background:var(--white);         /* logo area is white; the panel is the grey */
+}
+
+/* Logo rows run the FULL section height, behind everything. Rows are stacked at a
+   fixed 20px gap from the top; any that exceed the height are clipped by the band. */
+.capital-logos {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;    /* equal space above, between, and below the rows */
+  padding:0;
+  user-select:none;
+}
+
+.logo-row {
+  overflow:hidden;
+}
+
+.logo-track {
+  display:flex;
+  align-items:center;
+  width:max-content;
+  will-change:transform;
+  animation-name:logo-marquee;
+  animation-timing-function:linear;
+  animation-iteration-count:infinite;
+  /* animation-duration is set per row (inline) so every row scrolls same px/s. */
+}
+
+/* Alternate direction per row: 1st left, 2nd right, 3rd left, … */
+.logo-row.rev .logo-track {
+  animation-direction:reverse;
+}
+
+/* Pause a row on hover so its logos can be hovered to colour up. */
+.logo-row:hover .logo-track {
+  animation-play-state:paused;
+}
+
+@keyframes logo-marquee {
+  from { transform:translateX(0); }
+  to   { transform:translateX(-50%); }
+}
+
+.logo-chip {
+  flex:none;
+  /* width/height set per-logo (equal area) via the img attributes */
+  margin-right:50px;           /* spacing owned by the item → seamless loop */
+  filter:grayscale(1) opacity(.3);   /* greyed out at rest (lighter) */
+  transition:filter .35s ease;
+  -webkit-user-drag:none;
+}
+
+.logo-chip:hover {
+  filter:grayscale(0) opacity(1);    /* colours up on hover */
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .logo-track { animation:none; }
+}
+
+/* Right panel — F6F5F5 (same as band), bleeds right, covers the logos behind it.
+   5% right gutter keeps the left logo area a little wider than the panel. */
+.capital-panel {
+  position:relative;
+  margin-left:auto;          /* push to the right within the flex band */
+  width:fit-content;
+  max-width:100%;
+  background:var(--offwhite); /* grey panel fills the full section height */
+  padding:170px calc(5vw + 80px) 170px 114px;   /* 170px from the text to top/bottom edge */
+}
+
+.capital-content {
+  width:588px;
+  max-width:100%;
+}
+
+/* Heading uses the global h2 spec; 50px gap to the list lives on the list. */
+.capital-list {
+  list-style:none;
+  margin-top:50px;
+  display:flex;
+  flex-direction:column;
+  gap:24px;                /* 1.5× — taller section (logo rows redistribute via space-evenly) */
+}
+
+.capital-list li {
+  display:flex;
+  align-items:center;
+  gap:32px;                /* dot → text */
+  font-size:17px;          /* same as global p */
+  line-height:1.471em;
+  letter-spacing:0.02em;
+  color:var(--navy);
+}
+
+.capital-list li::before {
+  content:'';
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--gold);
+  flex:none;
+}
+
+@media (max-width:1024px) {
+  /* Stack: scrolling logo rows on top, panel full width below. */
+  .capital-logos {
+    position:static;
+    justify-content:flex-start;
+    padding:64px 0 0;
+  }
+
+  .capital-panel {
+    width:auto;
+    margin-left:0;
+    padding:64px 5%;
+  }
+
+  .capital-content {
+    width:auto;
+  }
+}
+
+/* Why funding direct */
+/* ---------- WHY FUNDING DIRECT ---------- */
+.why-band {
+  padding:170px 0;          /* 170px top/bottom (override the global section padding) */
+}
+
+.why-band .wrap {
+  max-width:1275px;         /* a touch wider so the right paragraphs fit on one line */
+}
+
+.why {
+  display:grid;
+  grid-template-columns:390px 1fr;   /* fixed left; wide right for single-line copy */
+  gap:155px;                /* more separation, but keeps the right wide enough for one-line copy */
+  align-items:center;       /* centre the left copy against the rows */
+}
+
+.why .intro-copy {
+  max-width:390px;          /* fits the left column; breaks like the mockup */
+  margin:35px 0 45px;       /* h2→p 35px, p→button 45px (same as Asset Classes) */
+}
+
+/* Right-hand rows: heading + paragraph stacked, a divider between each (none
+   before the first or after the last). */
+.reasons .row {
+  position:relative;
+  padding-bottom:30px;      /* paragraph → divider line */
+  margin-bottom:30px;       /* divider line → next heading */
+  border-bottom:1px solid rgba(255,255,255,1);   /* more visible divider */
+}
+
+.reasons .row:last-child {
+  padding-bottom:0;
+  margin-bottom:0;
+  border-bottom:none;
+}
+
+/* Heading — Times New Roman 30 / 50px line / -1.2px tracking (px→em). */
+.reasons h3 {
+  font-size:30px;
+  line-height:1.667em;      /* 50 / 30 */
+  letter-spacing:-0.04em;   /* -1.2 / 30 */
+  transition:color .6s ease;
+}
+
+.reasons .row p {
+  margin-top:10px;          /* heading → paragraph (tighter) */
+  transition:color .6s ease;
+}
+
+/* Hover: heading + paragraph turn gold (same 0.6s as buttons). */
+.reasons .row:hover h3,
+.reasons .row:hover p {
+  color:var(--gold);
+}
+
+/* Hover: circled gold arrow fades in to the left of the row. */
+.row-arrow {
+  position:absolute;
+  left:-58px;
+  top:8px;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:var(--white);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--gold);
+  font-size:24px;
+  opacity:0;
+  transition:opacity .6s ease;
+}
+
+.row-arrow::before {
+  content:'→';
+}
+
+.reasons .row:hover .row-arrow {
+  opacity:1;
+}
+
+/* Testimonials */
+/* ---------- TESTIMONIALS (slider) ---------- */
+.test-band {
+  position:relative;
+  overflow:hidden;          /* clip the FT watermark */
+  background:var(--white);
+}
+
+/* Faint FT watermark behind the slider, upper-right. */
+.test-ft {
+  position:absolute;
+  top:120px;          /* lower, away from the top edge */
+  right:5%;
+  width:46%;          /* a bit smaller */
+  max-width:640px;
+  height:auto;
+  z-index:0;
+  pointer-events:none;
+}
+
+.test-band .wrap {
+  position:relative;
+  z-index:1;
+}
+
+.test-band .sec-head {
+  margin-bottom:65px;       /* heading → cards */
+}
+
+/* Auto-scrolling, non-draggable, seamless loop. Text stays selectable. */
+.test-slider {
+  overflow:hidden;
+}
+
+.test-track {
+  display:flex;
+  width:max-content;
+  /* Stepped movement (one slide every 5s) is driven by JS. */
+}
+
+.tcard {
+  flex:none;
+  width:min(376px, 80vw);   /* 376 + 24 margin = 400 → 3 fit in the 1200 wrap; shrinks on mobile */
+  margin-right:24px;        /* gap owned by the item → seamless loop */
+  background:var(--offwhite);   /* brand grey F6F5F5 */
+  padding:40px;
+  display:flex;
+  flex-direction:column;
+}
+
+.tcard .stars {
+  color:var(--gold);
+  letter-spacing:0.222em;   /* 4 / 18 */
+  margin-bottom:20px;
+  font-size:18px;
+}
+
+/* Quote — Times New Roman 25 / 26px line / -1px tracking (px→em). */
+.tcard blockquote {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:25px;
+  line-height:1.04em;       /* 26 / 25 */
+  letter-spacing:-0.04em;   /* -1 / 25 */
+}
+
+.who {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-top:125px;         /* quote → name/photo block */
+}
+
+.who .ava {
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:rgba(19,39,79,.12) url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop') center/cover;
+  flex:none;
+}
+
+/* Name — Times New Roman 25 / 26px line / -1px tracking. */
+.who .name {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:25px;
+  line-height:1.04em;
+  letter-spacing:-0.04em;
+  color:var(--navy);
+}
+
+/* Title/company — Instrument Sans 17 / 25px line / 0.34px tracking. */
+.who .title {
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+  color:var(--gold);
+}
+
+/* Consultation form */
+/* ---------- CONSULTATION FORM ---------- */
+.consult-band {
+  background:var(--offwhite);   /* brand grey F6F5F5 */
+  padding:110px 0 90px;         /* 110 top, 90 bottom (override the global section) */
+}
+
+.consult {
+  display:grid;
+  grid-template-columns:0.9fr 1.1fr;
+  gap:64px;
+  align-items:start;
+}
+
+.formgrid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px 40px;
+}
+
+.field {
+  display:flex;
+  flex-direction:column;
+}
+
+.field.full {
+  grid-column:1 / -1;
+}
+
+/* Inputs sit on a 1px solid navy underline. Typed text is navy @1; the textarea
+   grows with its rows (see the auto-grow script), so its height isn't a fixed px. */
+.field input,
+.field textarea {
+  border:none;
+  border-bottom:1px solid var(--navy);   /* 1px navy, full opacity */
+  background:transparent;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.471em;       /* 25 / 17 */
+  letter-spacing:0.02em;     /* 0.34 / 17 */
+  color:var(--navy);         /* typed text = navy @1 */
+  padding:0 0 12px;          /* 12px from the text to the underline */
+}
+
+.field textarea {
+  resize:none;
+  overflow:hidden;           /* hidden so the auto-grow has no scrollbar */
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color:rgba(19,39,79,.5);   /* navy @0.5 until typed */
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline:none;
+}
+
+.consult .btn {
+  margin-top:34px;
+}
+
+/* Footer */
+footer {
+  background:var(--navy);
+  color:#fff;
+  padding:80px 0 40px;
+}
+
+/* Footer matches the nav width (wider than the 1200px page content). */
+footer .wrap {
+  max-width:var(--navw);
+}
+
+.foot-top {
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr 1fr;
+  gap:40px;
+}
+
+.foot-brand .logo {
+  margin-bottom:28px;
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:20px;
+  color:#fff;
+  gap:10px;
+}
+
+.foot-brand .logo .mark {
+  color:var(--gold);
+  font-size:26px;
+}
+
+.foot-brand .deliver {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:42px;
+  line-height:1em;
+}
+
+.foot-brand .deliver span {
+  color:var(--gold);
+}
+
+.foot-social {
+  display:flex;
+  gap:14px;
+  margin-top:24px;
+}
+
+.foot-social a {
+  width:34px;
+  height:34px;
+  border:1px solid rgba(255,255,255,.4);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+}
+
+.foot-social a:hover {
+  background:var(--gold);
+  border-color:var(--gold);
+}
+
+.foot-col h4 {
+  font-size:25px;
+  margin-bottom:18px;
+}
+
+.foot-col ul {
+  list-style:none;
+}
+
+.foot-col li {
+  padding:7px 0;
+  font-size:16px;
+  opacity:.92;
+}
+
+.foot-col p {
+  font-size:16px;
+  opacity:.92;
+  margin-bottom:8px;
+}
+
+.news-input {
+  display:flex;
+  background:#fff;
+  border-radius:4px;
+  overflow:hidden;
+  margin-top:12px;
+  max-width:240px;
+}
+
+.news-input input {
+  flex:1;
+  border:none;
+  padding:9px 12px;
+  font-family:var(--sans);
+  font-size:14px;
+}
+
+.news-input input:focus {
+  outline:none;
+}
+
+.news-input button {
+  background:var(--gold);
+  border:none;
+  color:#fff;
+  width:42px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.foot-bottom {
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+  border-top:1px solid rgba(255,255,255,.2);
+  margin-top:56px;
+  padding-top:24px;
+  font-size:14px;
+  opacity:.85;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:1024px) {
+  section {
+    padding:120px 0;   /* scale the 170px section padding down on tablet */
+  }
+
+  /* Collapse the inline nav into a hamburger dropdown; bar stays solid + sticky. */
+  .nav-links,
+  .nav-cta {
+    display:none;
+  }
+
+  .nav-toggle {
+    display:flex;
+  }
+
+  .nav-menu:not([hidden]) {
+    display:flex;
+  }
+
+  .cards {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .why,
+  .consult,
+  .sources {
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+
+  .why-band {
+    padding:120px 0;
+  }
+
+  .row-arrow {
+    display:none;   /* no hover on touch/tablet */
+  }
+
+  .foot-top {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .rates {
+    position:static;
+    transform:none;
+    width:100%;
+    max-width:420px;
+    margin-top:36px;
+  }
+
+  .hero-body {
+    padding-bottom:48px;
+  }
+}
+
+@media (max-width:767px) {
+  section {
+    padding:80px 0;
+  }
+
+  .logo img {
+    width:215px;
+    height:40px;
+  }
+
+  .cards,
+  .asset-cards,
+  .tcards,
+  .logos {
+    grid-template-columns:1fr;
+  }
+
+  .formgrid {
+    grid-template-columns:1fr;
+  }
+
+  .why-band {
+    padding:80px 0;
+  }
+
+  .foot-top {
+    grid-template-columns:1fr;
+  }
+
+  .foot-bottom {
+    flex-direction:column;
+  }
+
+  .rates-grid {
+    gap:18px 12px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  html {
+    scroll-behavior:auto;
+  }
+}
+
+/* ---------- NAV WRAPPER ---------- */
+/* Fixed, transparent over the hero. Gains a solid navy bar + shrinks
+   once the page is scrolled (`.scrolled` toggled in BaseLayout). */
+.nav-wrap {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:100;
+  background:var(--navy);   /* solid by default — portables + inner pages */
+  transition:background .5s ease, box-shadow .5s ease;
+}
+
+/* Inner pages (no hero image behind the bar) start solid + offset content. */
+.nav-solid {
+  background:var(--navy);
+}
+
+/* Transparent-over-hero + scroll shrink is DESKTOP ONLY.
+   On portables (≤1024) the bar is solid navy + sticky with no scroll effect. */
+@media (min-width:1025px) {
+  .nav-wrap:not(.nav-solid) {
+    background:transparent;
+  }
+
+  .nav-wrap.scrolled {
+    background:var(--navy);
+    box-shadow:0 1px 8px rgba(19,39,79,.18);
+  }
+
+  .nav-wrap.scrolled .nav {
+    padding-top:16px;
+    padding-bottom:16px;
+  }
+
+  .nav-wrap.scrolled .logo img {
+    width:236px;
+    height:44px;
+  }
+}
+
+/* Push inner-page content below the fixed bar (homepage hero sits behind it). */
+.page-head {
+  margin-top:126px;
+}
+
+/* Generic page header band for inner pages */
+.page-head {
+  background:var(--navy);
+  color:#fff;
+  padding:72px 0 64px;
+  text-align:center;
+}
+
+.page-head h1 {
+  font-size:clamp(40px,6vw,64px);
+  margin-bottom:14px;
+}
+
+.page-head p {
+  font-size:18px;
+  opacity:.9;
+  max-width:620px;
+  margin:0 auto;
+}
+
+/* ---------- SCROLL REVEAL (GSAP) ---------- */
+/* Hidden initial state is applied ONLY when JS/GSAP is active, so no-JS users still see content */
+.js-motion [data-reveal] {
+  opacity:0;
+  transform:translateY(28px);
+  will-change:transform,opacity;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .js-motion [data-reveal] {
+    opacity:1;
+    transform:none;
+  }
+}

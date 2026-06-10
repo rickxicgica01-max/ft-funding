@@ -1,0 +1,263 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+
+// Sources-of-Capital logo rows. Three fixed groups, each used twice across the
+// 6 rows, every row repeated enough times to scroll seamlessly.
+type Logo = { name: string; src: string; w: number; h: number };
+const logoGroups: Logo[][] = [
+  [ { name: 'BMO', src: '/home/logos/logo-bmo.png', w: 399, h: 139 },
+    { name: 'CIBC', src: '/home/logos/logo-cibc.png', w: 400, h: 103 },
+    { name: 'MCAP', src: '/home/logos/logo-mcap.png', w: 400, h: 130 } ],
+  [ { name: 'TD Asset Management', src: '/home/logos/logo-td.png', w: 400, h: 92 },
+    { name: 'iA Financial Group', src: '/home/logos/logo-ia.png', w: 398, h: 218 },
+    { name: 'Home Trust', src: '/home/logos/logo-hometrust.png', w: 400, h: 87 } ],
+  [ { name: 'RBC', src: '/home/logos/logo-rbc.png', w: 170, h: 222 },
+    { name: 'Equitable Bank', src: '/home/logos/logo-equitable.png', w: 395, h: 57 },
+    { name: 'Desjardins', src: '/home/logos/logo-desjardins.png', w: 396, h: 85 } ],
+];
+// 6 rows total — the 3 groups, each shown twice (directions alternate).
+const logoRows = [0, 1, 2, 0, 1, 2];
+
+// Every logo drawn to the same AREA (w*h), keeping its own ratio → balanced sizes.
+// LOGO_AREA is tuned so ~5 logos show per row. COPIES even so -50% loops seamlessly.
+const LOGO_AREA = 6000, LOGO_GAP = 50, SPEED = 55, COPIES = 8;
+const logoDisp = (l: Logo) => {
+  const r = l.w / l.h;
+  return { w: Math.round(Math.sqrt(LOGO_AREA * r)), h: Math.round(Math.sqrt(LOGO_AREA / r)) };
+};
+const repeatGroup = (g: number) => Array.from({ length: COPIES }, () => logoGroups[g]).flat();
+// Width of one group at display size, then per-row duration so every row scrolls
+// at the same px/s regardless of its logos' widths.
+const groupWidth = (g: number) => logoGroups[g].reduce((s, l) => s + logoDisp(l).w + LOGO_GAP, 0);
+const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixed(1);
+---
+<BaseLayout
+  title="FT Funding Direct Capital — One Stop Commercial Lending Brokerage"
+>
+  <!-- HERO -->
+  <section class="hero">
+    <Nav />
+
+    <div class="hero-body">
+      <div class="hero-inner">
+        <h1 data-reveal>One Stop Commercial Lending Brokerage</h1>
+        <p data-reveal>We arrange commercial financing for real estate investors, developers, and business owners across Toronto, GTA and Greater Vancouver.</p>
+        <a href="/#contact" class="btn btn-outline" data-reveal>Talk to an Expert Today</a>
+      </div>
+
+      <!-- Rates card -->
+      <aside class="rates">
+        <div class="label">Today's Rates</div>
+        <div class="date">Apr 7, 2026</div>
+        <hr>
+        <div class="rates-grid">
+          <div class="rate"><div class="k">RBC Prime Rate</div><div class="v">4.45%</div></div>
+          <div class="rate"><div class="k">5 Year GOC</div><div class="v"><span class="arr up"></span>3.49%</div></div>
+          <div class="rate"><div class="k">5 Year GOC</div><div class="v"><span class="arr up"></span>3.13%</div></div>
+          <div class="rate"><div class="k">10 Year CMB</div><div class="v"><span class="arr up"></span>3.89%</div></div>
+          <div class="rate"><div class="k">5 Year CMB</div><div class="v"><span class="arr up"></span>3.39%</div></div>
+          <div class="rate"><div class="k">CORRA 3 Mo Term</div><div class="v"><span class="arr down"></span>2.28%</div></div>
+          <div class="rate"><div class="k">CORRA 1 Mo Term</div><div class="v"><span class="arr down"></span>2.27%</div></div>
+        </div>
+        <p class="foot">We arrange commercial financing for real estate investors, developers, and business owners across Toronto, GTA and Greater Vancouver.</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- LENDING SOLUTIONS -->
+  <section id="services" class="svc-section">
+    <div class="wrap svc-grid" data-reveal-stagger>
+      <div class="sec-head svc-text" data-reveal>
+        <div class="eyebrow">Our Services</div>
+        <h2>Our Lending <span class="gold">Solutions</span></h2>
+        <p class="intro-copy">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+        <a href="/services" class="btn btn-outline">View All Loan Services</a>
+      </div>
+      <article class="svc-card" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+        <img class="svc-icon" src="/home/home-icon-construction.png" alt="" />
+        <h3>Construction<br>Loans</h3>
+      </article>
+      <article class="svc-card" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+        <img class="svc-icon" src="/home/home-icon-bridge.png" alt="" />
+        <h3>Bridge<br>Financing</h3>
+      </article>
+      <article class="svc-card" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+        <img class="svc-icon" src="/home/home-icon-cmhc.png" alt="" />
+        <h3>CMHC Insured<br>&amp; Construction</h3>
+      </article>
+    </div>
+  </section>
+
+  <!-- ASSET CLASSES -->
+  <section id="asset-classes" class="svc-section svc-section--dark">
+    <div class="wrap svc-grid" data-reveal-stagger>
+      <div class="sec-head svc-text" data-reveal>
+        <div class="eyebrow">Our Services</div>
+        <h2>Asset <span class="gold">Classes</span></h2>
+        <p class="intro-copy">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+        <a href="/services" class="btn btn-outline">View All Services</a>
+      </div>
+      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+        <img class="svc-icon" src="/home/home-icon-retail.png" alt="" />
+        <h3>Retail</h3>
+      </article>
+      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+        <img class="svc-icon" src="/home/home-icon-office.png" alt="" />
+        <h3>Office</h3>
+      </article>
+      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+        <img class="svc-icon" src="/home/home-icon-student.png" alt="" />
+        <h3>Student<br>Housing</h3>
+      </article>
+    </div>
+  </section>
+
+  <!-- SOURCES OF CAPITAL -->
+  <section id="sources" class="capital-band">
+    <div class="capital-logos" aria-hidden="true">
+      {logoRows.map((g, i) => (
+        <div class:list={["logo-row", { rev: i % 2 === 1 }]}>
+          <div class="logo-track" style={`animation-duration:${rowDuration(g)}s`}>
+            {repeatGroup(g).map((l) => {
+              const d = logoDisp(l);
+              return <img class="logo-chip" src={l.src} alt={l.name} width={d.w} height={d.h} draggable={false} />;
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+    <div class="capital-panel">
+      <div class="capital-content" data-reveal>
+        <h2>Sources of <span class="gold">Capital</span></h2>
+        <ul class="capital-list">
+          <li>Canadian Banks</li>
+          <li>International Banks</li>
+          <li>Insurance Companies (Domestic &amp; Foreign)</li>
+          <li>Pension Funds</li>
+          <li>Credit Unions</li>
+          <li>CMHC</li>
+          <li>Private Equity &amp; Debt Funds</li>
+          <li>Mortgage Investment Corporations (MICs)</li>
+          <li>CMBS Conduits</li>
+          <li>Family Offices</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY FUNDING DIRECT -->
+  <section id="about" class="band-navy why-band">
+    <div class="wrap why">
+      <div class="why-text">
+        <h2 data-reveal>Why<br><span class="gold">Funding Direct</span></h2>
+        <p class="intro-copy" data-reveal>We combine deep market expertise with a client-first approach to deliver exceptional results for Canadian businesses.</p>
+        <a href="/contact" class="btn btn-outline" data-reveal>Contact Us Today</a>
+      </div>
+      <div class="reasons" data-reveal-stagger>
+        <div class="row" data-reveal><span class="row-arrow" aria-hidden="true"></span><h3>Responsiveness</h3><p>Direct access to senior brokers, not call centres. We respond within hours, not days.</p></div>
+        <div class="row" data-reveal><span class="row-arrow" aria-hidden="true"></span><h3>Speed</h3><p>Conditional approvals in 48 hours. Our streamlined process gets you funded faster.</p></div>
+        <div class="row" data-reveal><span class="row-arrow" aria-hidden="true"></span><h3>Reliability</h3><p>Built on 15+ years of successful deals. We deliver on our commitments, every time.</p></div>
+        <div class="row" data-reveal><span class="row-arrow" aria-hidden="true"></span><h3>Simplicity</h3><p>One point of contact from application to closing. No handoffs, no confusion.</p></div>
+        <div class="row" data-reveal><span class="row-arrow" aria-hidden="true"></span><h3>Professionalism</h3><p>Institutional-grade service for every client. We treat your deal like our own.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="test-band">
+    <img class="test-ft" src="/home/testimonial-ft.png" alt="" aria-hidden="true" />
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <div class="eyebrow">Client Stories</div>
+        <h2>What Our Clients Say</h2>
+      </div>
+      <div class="test-slider" data-reveal>
+        <div class="test-track">
+          {Array.from({ length: 10 }).map(() => (
+            <article class="tcard">
+              <div class="stars">★★★★★</div>
+              <blockquote>"Working with FT Funding Direct was the first time I felt like the broker was actually fighting for my deal. They came back with terms I didn't think were possible."</blockquote>
+              <div class="who">
+                <div class="ava"></div>
+                <div>
+                  <div class="name">Client Name</div>
+                  <div class="title">Client Title / Company</div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSULTATION -->
+  <section id="contact" class="consult-band">
+    <div class="wrap consult">
+      <div>
+        <h2 data-reveal>Book a<br><span class="gold">Consultation</span></h2>
+      </div>
+      <div>
+        <form onsubmit="return false;" data-reveal>
+          <div class="formgrid">
+            <div class="field"><input type="text" placeholder="Your Name"></div>
+            <div class="field"><input type="email" placeholder="Your Email"></div>
+            <div class="field full"><textarea placeholder="Your Message" rows="3"></textarea></div>
+          </div>
+          <button class="btn btn-outline" type="submit">Get Your Free Consultation</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  // Testimonials: stepped carousel — advance one slide, pause 5s, repeat.
+  // Pauses on hover; resumes 3s after the pointer leaves. Seamless infinite loop
+  // (the 5 unique slides are rendered twice, so it snaps back invisibly).
+  const slider = document.querySelector('.test-slider');
+  const track = slider?.querySelector('.test-track') as HTMLElement | null;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (slider && track && !reduce) {
+    const tr = track;
+    const cards = tr.querySelectorAll('.tcard') as NodeListOf<HTMLElement>;
+    const ORIGINALS = 5;     // number of unique slides
+    const STEP_MS = 5000;    // each slide is shown 5s
+    const RESUME_MS = 2000;  // restart 2s after hover leaves
+    const MOVE_MS = 900;     // duration of the slide movement (slower)
+    let index = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let resume: ReturnType<typeof setTimeout> | null = null;
+
+    const stepWidth = () =>
+      cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth + 24;
+
+    function advance() {
+      index++;
+      tr.style.transition = `transform ${MOVE_MS}ms ease`;
+      tr.style.transform = `translateX(-${index * stepWidth()}px)`;
+      if (index >= ORIGINALS) {
+        // After the move finishes, snap back to the start with no transition.
+        tr.addEventListener('transitionend', function snap() {
+          tr.style.transition = 'none';
+          index = 0;
+          tr.style.transform = 'translateX(0)';
+        }, { once: true });
+      }
+    }
+
+    const stop = () => { if (timer) clearInterval(timer); timer = null; };
+    const start = () => { stop(); timer = setInterval(advance, STEP_MS); };
+
+    slider.addEventListener('mouseenter', () => { if (resume) clearTimeout(resume); stop(); });
+    slider.addEventListener('mouseleave', () => {
+      if (resume) clearTimeout(resume);
+      // After 2s, slide immediately, then keep the normal 5s cadence.
+      resume = setTimeout(() => { advance(); start(); }, RESUME_MS);
+    });
+
+    start();
+  }
+  </script>
+</BaseLayout>

@@ -1,0 +1,40 @@
+name: Build & Deploy to SiteGround
+
+# Runs automatically on every push to the main branch.
+on:
+  push:
+    branches: [main]
+  # Lets you also trigger a deploy manually from the GitHub "Actions" tab.
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Deploy dist/ to SiteGround via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          # Local build output that gets uploaded:
+          local-dir: ./dist/
+          # Where it lands on SiteGround. Most accounts use public_html/.
+          # If your FTP login already starts inside public_html, change this to ./
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
