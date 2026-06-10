@@ -1027,7 +1027,7 @@ span.svc-icon {
 footer {
   background:var(--navy);
   color:#fff;
-  padding:80px 0 40px;
+  padding:90px 0 40px;       /* 90px top */
 }
 
 /* Footer matches the nav width (wider than the 1200px page content). */
@@ -1037,29 +1037,27 @@ footer .wrap {
 
 .foot-top {
   display:grid;
-  grid-template-columns:1.3fr 1fr 1fr 1fr;
-  gap:40px;
+  grid-template-columns:auto 1fr 1fr 1fr;   /* brand auto-sizes to the heading */
+  gap:24px;                  /* tighter gap between the three columns */
+}
+
+.foot-brand {
+  margin-right:80px;         /* larger gap between the brand and the columns */
 }
 
 .foot-brand .logo {
-  margin-bottom:28px;
-  font-family:var(--serif);
-  font-weight:700;
-  font-size:20px;
-  color:#fff;
-  gap:10px;
+  display:inline-flex;
+  margin-bottom:30px;        /* logo → heading */
 }
 
-.foot-brand .logo .mark {
-  color:var(--gold);
-  font-size:26px;
+.foot-brand .logo img {
+  width:363px;               /* same logo as the header */
+  height:67px;
 }
 
+/* "You Ask. We Deliver." — global h2, kept on one line. */
 .foot-brand .deliver {
-  font-family:var(--serif);
-  font-weight:700;
-  font-size:42px;
-  line-height:1em;
+  white-space:nowrap;
 }
 
 .foot-brand .deliver span {
@@ -1068,75 +1066,120 @@ footer .wrap {
 
 .foot-social {
   display:flex;
-  gap:14px;
-  margin-top:24px;
+  gap:27px;
+  margin-top:50px;           /* heading → icons */
 }
 
+/* White social glyphs (PNG used as a mask) → brand gold on hover. */
 .foot-social a {
-  width:34px;
-  height:34px;
-  border:1px solid rgba(255,255,255,.4);
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
+  width:27px;
+  height:27px;
+  background:var(--white);
+  -webkit-mask:var(--icon) center/contain no-repeat;
+  mask:var(--icon) center/contain no-repeat;
+  transition:background .4s ease;
 }
 
 .foot-social a:hover {
   background:var(--gold);
-  border-color:var(--gold);
 }
 
+/* Column titles — Times New Roman 25 / 26px line / -1px tracking (px→em). */
 .foot-col h4 {
   font-size:25px;
-  margin-bottom:18px;
+  line-height:1.04em;        /* 26 / 25 */
+  letter-spacing:-0.04em;    /* -1 / 25 */
+  margin-bottom:28px;        /* heading → text/input */
+}
+
+.foot-col h4.mt {
+  margin-top:30px;
 }
 
 .foot-col ul {
   list-style:none;
 }
 
-.foot-col li {
-  padding:7px 0;
-  font-size:16px;
+/* Links + text — global p spec. */
+.foot-col li,
+.foot-col p {
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
   opacity:.92;
+}
+
+.foot-col li {
+  padding:6px 0;
 }
 
 .foot-col p {
-  font-size:16px;
-  opacity:.92;
   margin-bottom:8px;
 }
 
+/* Quick links, phone, email → brand gold on hover. */
+.foot-col a {
+  transition:color .4s ease;
+}
+
+.foot-col a:hover {
+  color:var(--gold);
+}
+
+/* Newsletter — white input + an orange circle button with a ↗ arrow. */
 .news-input {
   display:flex;
-  background:#fff;
-  border-radius:4px;
-  overflow:hidden;
-  margin-top:12px;
-  max-width:240px;
+  align-items:center;
+  gap:10px;
 }
 
 .news-input input {
   flex:1;
+  min-width:0;               /* fills the column, leaving room for the button */
+  height:36px;
   border:none;
-  padding:9px 12px;
+  border-radius:0;           /* square */
+  background:var(--white);
+  padding:0 14px;
   font-family:var(--sans);
+  font-weight:400;
   font-size:14px;
+  line-height:1.786em;       /* 25 / 14 */
+  letter-spacing:0.02em;     /* 0.28 / 14 */
+  color:var(--navy);         /* typed text navy @1 */
+}
+
+.news-input input::placeholder {
+  color:rgba(19,39,79,.5);   /* navy @0.5 */
 }
 
 .news-input input:focus {
   outline:none;
 }
 
-.news-input button {
-  background:var(--gold);
+.news-btn {
+  flex:none;
+  width:38px;
+  height:38px;
   border:none;
-  color:#fff;
-  width:42px;
+  border-radius:50%;
+  background:var(--gold);
+  color:var(--white);
   cursor:pointer;
-  font-size:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:box-shadow .6s ease;
+}
+
+/* Darker gold on hover — same navy-tint approach as the nav CTA. */
+.news-btn:hover {
+  box-shadow:inset 0 0 0 200px rgba(19,39,79,.22);
+}
+
+.news-btn svg {
+  width:18px;
+  height:18px;
 }
 
 .foot-bottom {
@@ -1144,11 +1187,23 @@ footer .wrap {
   justify-content:space-between;
   gap:20px;
   flex-wrap:wrap;
-  border-top:1px solid rgba(255,255,255,.2);
+  border-top:1px solid var(--white);   /* white @1 */
   margin-top:56px;
   padding-top:24px;
+  font-family:var(--sans);
+  font-weight:400;
   font-size:14px;
+  line-height:normal;
   opacity:.85;
+}
+
+/* "CGICA" → brand gold on hover. */
+.foot-bottom a {
+  transition:color .4s ease;
+}
+
+.foot-bottom a:hover {
+  color:var(--gold);
 }
 
 /* ---------- RESPONSIVE ---------- */

@@ -259,5 +259,17 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
 
     start();
   }
+
+  // Consultation message: grow with the number of rows typed (never below its
+  // initial height), so the gap to the underline isn't a fixed px.
+  const ta = document.querySelector('.consult textarea') as HTMLTextAreaElement | null;
+  if (ta) {
+    const minH = ta.offsetHeight;
+    const grow = () => {
+      ta.style.height = 'auto';
+      ta.style.height = Math.max(ta.scrollHeight, minH) + 'px';
+    };
+    ta.addEventListener('input', grow);
+  }
   </script>
 </BaseLayout>

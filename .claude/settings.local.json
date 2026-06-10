@@ -29,7 +29,11 @@
       "Bash(git init *)",
       "Bash(git branch *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(ls -la *.png *.svg)",
+      "Bash(find . -path ./node_modules -prune -o -path ./dist -prune -o -type f \\\\\\( -iname \"*.png\" -o -iname \"*.svg\" \\\\\\) -newermt \"2026-06-09 16:25\" -print)",
+      "Bash(git remote *)",
+      "Bash(git push *)"
     ]
   }
 }
