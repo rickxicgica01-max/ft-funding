@@ -1,0 +1,3 @@
+# The raw post JSON is served to visitors through post.php / index.php only.
+# Block direct web access to the .json files themselves.
+Require all denied

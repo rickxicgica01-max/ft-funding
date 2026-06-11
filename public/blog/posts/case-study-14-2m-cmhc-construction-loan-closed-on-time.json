@@ -1,0 +1,43 @@
+{
+    "slug": "case-study-14-2m-cmhc-construction-loan-closed-on-time",
+    "title": "Case Study: $14.2M CMHC Construction Loan, Closed on Time",
+    "image": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop",
+    "categories": ["Case Studies"],
+    "tags": ["CMHC", "construction", "Toronto"],
+    "blocks": [
+        {
+            "type": "paragraph",
+            "text": "How a complete underwriting package secured insured leverage before the rate lock expired. A Toronto developer came to us with a 68-unit purpose-built rental, a CMHC certificate application in progress, and a rate lock with 45 days left on it."
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "The challenge"
+        },
+        {
+            "type": "paragraph",
+            "text": "The certificate was stalled on documentation — energy modelling, updated costing, and an appraisal that no longer matched the revised plans. Missing the lock meant repricing the entire capital stack roughly 40 basis points higher, eroding two years of projected cash flow."
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "What we did"
+        },
+        {
+            "type": "list",
+            "style": "bullet",
+            "items": [
+                "Rebuilt the cost-to-complete schedule to the insurer's current template",
+                "Commissioned the updated appraisal and energy model in parallel, not in sequence",
+                "Pre-cleared every revised number with the lender's underwriter before resubmission",
+                "Delivered the complete package in 12 days"
+            ]
+        },
+        {
+            "type": "paragraph",
+            "text": "The certificate was issued with nine days to spare, and the loan funded at the locked rate: $14.2M at 95% of cost, 50-year amortization. The lesson isn't speed for its own sake — it's that a file with nothing left to question moves as fast as the people reviewing it."
+        }
+    ],
+    "date": "2026-03-19T09:00:00+00:00",
+    "updated": "2026-03-19T09:00:00+00:00"
+}

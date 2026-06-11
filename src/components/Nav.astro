@@ -33,7 +33,7 @@ const menuItems = [...links, { href: '/contact', label: 'Book A Consultation' }]
     </button>
   </nav>
 
-  <div class="nav-menu" id="nav-menu" hidden>
+  <div class="nav-menu" id="nav-menu">
     {menuItems.map(({ href, label }) => (
       <a href={href} class:list={["nav-menu-item", { active: path === href }]} aria-current={path === href ? 'page' : undefined}>{label}</a>
     ))}
@@ -41,13 +41,17 @@ const menuItems = [...links, { href: '/contact', label: 'Book A Consultation' }]
 </header>
 
 <script>
+  // Slide the dropdown open/closed (max-height transition in global.css).
+  // scrollHeight gives the real content height even while collapsed, so the
+  // transition always travels the exact distance — smooth both ways.
   const toggle = document.querySelector('.nav-toggle');
   const menu = document.getElementById('nav-menu');
   if (toggle && menu) {
     toggle.addEventListener('click', () => {
       const open = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!open));
-      menu.hidden = open;
+      menu.classList.toggle('open', !open);
+      menu.style.maxHeight = open ? '0' : menu.scrollHeight + 'px';
     });
   }
 </script>

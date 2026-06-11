@@ -1,0 +1,43 @@
+{
+    "slug": "bridge-financing-101-when-speed-beats-rate",
+    "title": "Bridge Financing 101: When Speed Beats Rate",
+    "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop",
+    "categories": ["Financing Tips"],
+    "tags": ["bridge"],
+    "blocks": [
+        {
+            "type": "paragraph",
+            "text": "When paying more for speed is the right call — and how to structure a bridge so the exit is already in place. Bridge debt is the most misunderstood tool in commercial financing: expensive when it's the wrong answer, cheap when it's the right one."
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "When a bridge makes sense"
+        },
+        {
+            "type": "list",
+            "style": "bullet",
+            "items": [
+                "A closing deadline the conventional process can't meet",
+                "A property that won't qualify for term debt until it's stabilized",
+                "Equity trapped in one asset that's needed to close another",
+                "A discounted purchase where certainty wins the deal"
+            ]
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "The exit is the deal"
+        },
+        {
+            "type": "paragraph",
+            "text": "A bridge without a defined exit is just expensive debt. Every bridge we arrange is structured backwards from its takeout — the term financing, sale, or refinance that repays it — with the timeline, conditions, and lender for that exit identified before the bridge funds."
+        },
+        {
+            "type": "paragraph",
+            "text": "Do the math on the whole trade, not the rate. Three points of bridge cost that captures a below-market acquisition is the cheapest money you'll ever borrow."
+        }
+    ],
+    "date": "2026-04-16T09:00:00+00:00",
+    "updated": "2026-04-16T09:00:00+00:00"
+}

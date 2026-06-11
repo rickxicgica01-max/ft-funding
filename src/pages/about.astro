@@ -1,34 +1,243 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
+
+// PLACEHOLDER team roster — fictional names/titles/quotes + stock headshots.
+// Replace with the real roster (and /about/team-*.jpg photos) when supplied.
+const team = [
+  {
+    name: 'Michael Chen',
+    title: 'Managing Partner',
+    quote: '“A deal is won in the underwriting, long before the term sheet.”',
+    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    name: 'Sarah Whitfield',
+    title: 'Senior Director, Origination',
+    quote: '“Lenders say yes to files that answer their questions before they ask.”',
+    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    name: 'David Rosenberg',
+    title: 'Director, Debt Structuring',
+    quote: '“Structure is where the real money is made or lost.”',
+    img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    name: 'Priya Sharma',
+    title: 'Director, CMHC Programs',
+    quote: '“Insured financing rewards the borrowers who prepare early.”',
+    img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    name: 'James Okafor',
+    title: 'Vice President, Capital Markets',
+    quote: '“Know the lender’s book and you’ll know their answer.”',
+    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop',
+  },
+  {
+    name: 'Émilie Tremblay',
+    title: 'Senior Analyst',
+    quote: '“Every strong approval starts with an honest model.”',
+    img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop',
+  },
+];
 ---
 <BaseLayout
   title="About — FT Funding Direct Capital"
-  description="Learn about FT Funding Direct Capital, a one-stop commercial lending brokerage serving Toronto, the GTA, and Greater Vancouver."
+  description="FT Funding Direct was founded by former senior bankers with 80+ years of combined experience in commercial real estate financing across Canada."
 >
-  <!-- Inner pages use the solid (navy, sticky) nav since there's no hero image behind it -->
-  <Nav solid />
+  <!-- HERO — transparent nav over the image, same as the homepage -->
+  <section class="hero hero--about">
+    <Nav />
+    <div class="hero-body">
+      <div class="hero-inner" data-reveal-stagger>
+        <h1 data-reveal>Built on Relationships.<br>Driven by <span class="gold">Results.</span></h1>
+        <p data-reveal>For over eight decades of combined experience, we've helped Canadian investors, developers, and business owners finance their next projects.</p>
+        <a href="/contact" class="btn btn-outline" data-reveal>Talk to an Expert Today</a>
+      </div>
+    </div>
+  </section>
 
-  <section class="page-head">
+  <!-- OUR MISSION — typographic statement band -->
+  <section class="mission-band">
     <div class="wrap">
-      <div class="eyebrow" data-reveal>About Us</div>
-      <h1 data-reveal>One Stop Commercial <span class="gold">Lending Brokerage</span></h1>
-      <p data-reveal>This is an example second page. It shares the same Nav and Footer as the home page — edit those once in <code>src/components/</code> and every page updates.</p>
+      <div class="eyebrow" data-reveal>Our Mission</div>
+      <h2 data-reveal>We're here to make complex <span class="gold">simple.</span></h2>
     </div>
   </section>
 
-  <section class="wrap">
-    <div class="why">
-      <div>
-        <h2 data-reveal>Built for <span class="gold">Canadian Business</span></h2>
-        <p class="intro-copy" style="margin-top:18px;" data-reveal>We combine deep market expertise with a client-first approach to deliver exceptional results.</p>
-        <a href="/contact" class="btn btn-outline" style="margin-top:8px;" data-reveal>Contact Us Today</a>
+  <!-- OUR STORY — media left, narrative right -->
+  <section class="story-band">
+    <div class="wrap story">
+      <!-- PLACEHOLDER image — replace with a real office/team photo -->
+      <div class="story-media" data-reveal>
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" alt="Commercial towers in a Canadian downtown core" loading="lazy" />
       </div>
-      <div class="reasons" data-reveal-stagger>
-        <div class="row" data-reveal><h3>Our Mission</h3><p>To make commercial financing simple, fast, and transparent for investors and developers.</p></div>
-        <div class="row" data-reveal><h3>Our Network</h3><p>Direct relationships with banks, credit unions, insurers, and private capital across Canada.</p></div>
-        <div class="row" data-reveal><h3>Our Track Record</h3><p>15+ years arranging financing across every major commercial asset class.</p></div>
+      <div class="story-text">
+        <div class="eyebrow" data-reveal>Our Story</div>
+        <h2 data-reveal>80+ years in the field. <span class="gold">One standard.</span></h2>
+        <p data-reveal>FT Funding Direct was founded by a team of real estate and financing professionals who spent their careers inside Canada's banks and lending institutions, underwriting, structuring, and approving the very deals we now advocate for.</p>
+        <p data-reveal>That experience changed how we work. We learned what lenders look for, where deals fall apart, and how the strongest applications get to "yes." Today we put that knowledge to work on your side of the table.</p>
+        <p data-reveal>Together, our team brings more than 80 years of combined experience in commercial real estate financing, earned in senior roles across Canadian banks and institutions. It's the foundation of everything we do, and the reason clients trust us with their most important transactions.</p>
       </div>
     </div>
   </section>
+
+  <!-- STAT BAND — 3 columns, gold rules between -->
+  <section class="stat-band">
+    <div class="wrap stats" data-reveal-stagger>
+      <div class="stat" data-reveal>
+        <div class="num" data-count="80" data-suffix="+">80+</div>
+        <div class="lbl">Years Combined Experience</div>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="num">All</div>
+        <div class="lbl">Asset Classes Financed</div>
+      </div>
+      <div class="stat" data-reveal>
+        <div class="num">Nationwide</div>
+        <div class="lbl">Lender Relationships</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR TEAM — header + stepped card slider -->
+  <section class="team-band">
+    <div class="wrap">
+      <div class="team-head">
+        <div class="sec-head" data-reveal>
+          <div class="eyebrow">Our Team</div>
+          <h2>Meet the team <span class="gold">behind your deal.</span></h2>
+          <p class="intro-copy">Behind every approval is a person who's done this before, often from inside the institutions now lending on your project. Get to know the people who'll be in your corner.</p>
+        </div>
+        <div class="team-nav" data-reveal>
+          <button class="team-arrow prev" type="button" aria-label="Previous team members">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <button class="team-arrow next" type="button" aria-label="Next team members">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="team-slider" data-reveal>
+        <div class="team-track">
+          {/* Roster rendered twice → the slider loops seamlessly (snap-back is invisible). */}
+          {[...team, ...team].map((m) => (
+            <article class="tm-card">
+              <div class="tm-photo"><img src={m.img} alt={`Portrait of ${m.name}`} loading="lazy" /></div>
+              <div class="tm-body">
+                <div class="tm-name">{m.name}</div>
+                <div class="tm-title">{m.title}</div>
+                <p class="tm-quote">{m.quote}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-band">
+    <div class="wrap">
+      <h2 data-reveal>Your next deal starts with a <span class="gold">conversation.</span></h2>
+      <a href="/contact" class="btn btn-outline" data-reveal>Talk to an Expert Today</a>
+    </div>
+  </section>
+
+  <script>
+  // Stat count-up: "80+" counts from 0 once the band enters the viewport.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.stat .num[data-count]').forEach((node) => {
+    const el = node as HTMLElement;
+    const target = parseInt(el.dataset.count || '0', 10);
+    const suffix = el.dataset.suffix || '';
+    if (reduce || !target) return;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      const t0 = performance.now();
+      const DUR = 1400;
+      const tick = (now: number) => {
+        const p = Math.min((now - t0) / DUR, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    io.observe(el);
+  });
+
+  // Team slider: arrows step one card at a time, looping infinitely. The
+  // roster is rendered twice; after animating into the clone half the track
+  // snaps back by one roster-length with no transition (invisible), and prev
+  // from the start snaps forward first — so both directions wrap seamlessly.
+  const slider = document.querySelector('.team-slider');
+  const track = slider?.querySelector('.team-track') as HTMLElement | null;
+  const prev = document.querySelector('.team-arrow.prev') as HTMLButtonElement | null;
+  const next = document.querySelector('.team-arrow.next') as HTMLButtonElement | null;
+
+  if (slider && track && prev && next) {
+    const tr = track;
+    const cards = tr.querySelectorAll('.tm-card') as NodeListOf<HTMLElement>;
+    const ORIGINALS = cards.length / 2;   // unique roster size
+    const MOVE_MS = 900;                  // slide duration
+    let index = 0;
+
+    const step = () =>
+      cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth;
+
+    const setX = (animate: boolean) => {
+      tr.style.transition = animate ? `transform ${MOVE_MS}ms ease` : 'none';
+      tr.style.transform = `translateX(-${index * step()}px)`;
+    };
+
+    // Pending loop-snap (armed when animating into the clone half). Every
+    // interaction settles it FIRST — otherwise the once-listener would fire on
+    // the wrong transition and subtract the roster length twice.
+    let snap: (() => void) | null = null;
+
+    const finishSnap = () => {
+      if (!snap) return;
+      tr.removeEventListener('transitionend', snap);
+      snap = null;
+      index -= ORIGINALS;                 // clone position ↔ original position
+      setX(false);
+      void tr.offsetWidth;                // flush so the next move animates
+    };
+
+    next.addEventListener('click', () => {
+      finishSnap();
+      index++;
+      setX(true);
+      if (index >= ORIGINALS) {
+        snap = () => { snap = null; index -= ORIGINALS; setX(false); };
+        tr.addEventListener('transitionend', snap, { once: true });
+      }
+    });
+
+    prev.addEventListener('click', () => {
+      finishSnap();
+      if (index === 0) {
+        index = ORIGINALS;                // jump to the identical clone position…
+        setX(false);
+        void tr.offsetWidth;              // …flush it so the step below animates
+      }
+      index--;
+      setX(true);
+    });
+
+    window.addEventListener('resize', () => { finishSnap(); setX(false); });
+    window.addEventListener('load', () => setX(false));
+  }
+  </script>
 </BaseLayout>

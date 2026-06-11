@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+
+// Article template — renders ANY blog post published via /blog/admin.
+// URL: /resources/post?slug=<slug>. The post is fetched client-side from
+// /blog/api.php and its blocks (headings, paragraphs, lists, images) are
+// built with textContent, so the page owns all escaping of the raw text.
+---
+<BaseLayout
+  title="Article — FT Funding Direct Capital"
+  description="Insights from FT Funding Direct Capital — market moves, lending criteria, and practical guidance for borrowers."
+>
+  <Nav solid />
+
+  <main class="art-main">
+    <div class="wrap art-wrap">
+      <p class="art-state" id="art-loading">Loading article…</p>
+      <p class="art-state" id="art-error" hidden>
+        This article could not be found. <a href="/resources">Back to Resources</a>
+      </p>
+
+      <article id="art" hidden>
+        <div class="res-tag" id="art-tag"></div>
+        <h1 class="art-title" id="art-title"></h1>
+        <div class="art-meta" id="art-meta"></div>
+        <img class="art-featured" id="art-featured" alt="" hidden>
+        <div class="art-body" id="art-body"></div>
+        <a class="art-back" href="/resources">← Back to Resources</a>
+      </article>
+    </div>
+  </main>
+
+  <!-- CTA BANNER -->
+  <section class="cta-band">
+    <div class="wrap">
+      <h2 data-reveal>Tell us what you're <span class="gold">working on.</span></h2>
+      <a href="/contact" class="btn btn-outline" data-reveal>Get Your Free Consultation</a>
+    </div>
+  </section>
+
+  <script>
+  const UPLOADS = '/blog/uploads/';
+
+  type Block = { type: string; text?: string; items?: string[]; caption?: string; src?: string; level?: string; style?: string };
+  type Post = {
+    slug: string; title: string; image?: string;
+    categories?: string[]; tags?: string[];
+    blocks?: Block[]; date?: string; updated?: string;
+  };
+
+  const $ = (id: string) => document.getElementById(id);
+  const loading = $('art-loading');
+  const errorEl = $('art-error');
+  const art = $('art');
+
+  // Admin uploads store bare filenames under /blog/uploads/; the seed posts
+  // use absolute URLs — resolve both.
+  const imgUrl = (name: string): string =>
+    /^(https?:)?\/\//.test(name) || name.startsWith('/') ? name : UPLOADS + encodeURIComponent(name);
+
+  const fmtDate = (iso?: string): string => {
+    const d = new Date(iso ?? '');
+    return isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const readTimeOf = (p: Post): string => {
+    let words = (p.title ?? '').split(/\s+/).length;
+    for (const b of p.blocks ?? []) {
+      if (b.text) words += b.text.split(/\s+/).length;
+      if (b.items) words += b.items.join(' ').split(/\s+/).length;
+    }
+    return Math.max(1, Math.round(words / 200)) + ' min read';
+  };
+
+  /* Paragraph text keeps its typed line breaks (the blog stores raw text). */
+  const withBreaks = (el: HTMLElement, text: string) => {
+    text.split('\n').forEach((lineText, i) => {
+      if (i > 0) el.appendChild(document.createElement('br'));
+      el.appendChild(document.createTextNode(lineText));
+    });
+  };
+
+  const renderPost = (p: Post) => {
+    document.title = (p.title ?? 'Article') + ' — FT Funding Direct Capital';
+    ($('art-tag') as HTMLElement).textContent = (p.categories ?? [])[0] ?? 'Insights';
+    ($('art-title') as HTMLElement).textContent = p.title ?? '';
+
+    const metaBits = [fmtDate(p.date), readTimeOf(p)];
+    const extraCats = (p.categories ?? []).slice(1);
+    if (extraCats.length) metaBits.push(extraCats.join(', '));
+    ($('art-meta') as HTMLElement).textContent = metaBits.filter(Boolean).join(' · ');
+
+    const featured = $('art-featured') as HTMLImageElement;
+    if (p.image) {
+      featured.src = imgUrl(p.image);
+      featured.hidden = false;
+    }
+
+    const body = $('art-body') as HTMLElement;
+    for (const b of p.blocks ?? []) {
+      if (b.type === 'heading') {
+        const h = document.createElement(b.level === 'h3' ? 'h3' : 'h2');
+        h.textContent = b.text ?? '';
+        body.appendChild(h);
+      } else if (b.type === 'paragraph') {
+        const para = document.createElement('p');
+        withBreaks(para, b.text ?? '');
+        body.appendChild(para);
+      } else if (b.type === 'list') {
+        const listEl = document.createElement(b.style === 'number' ? 'ol' : 'ul');
+        (b.items ?? []).forEach((it) => {
+          const li = document.createElement('li');
+          li.textContent = it;
+          listEl.appendChild(li);
+        });
+        body.appendChild(listEl);
+      } else if (b.type === 'image' && b.src) {
+        const fig = document.createElement('figure');
+        const img = document.createElement('img');
+        img.src = imgUrl(b.src);
+        img.alt = b.caption ?? '';
+        img.loading = 'lazy';
+        fig.appendChild(img);
+        if (b.caption) {
+          const cap = document.createElement('figcaption');
+          cap.textContent = b.caption;
+          fig.appendChild(cap);
+        }
+        body.appendChild(fig);
+      }
+    }
+
+    loading!.hidden = true;
+    art!.hidden = false;
+  };
+
+  const fail = () => {
+    loading!.hidden = true;
+    errorEl!.hidden = false;
+  };
+
+  // Slugs are always [a-z0-9-] (the blog's slugify guarantees it).
+  const slug = new URLSearchParams(location.search).get('slug') ?? '';
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    fail();
+  } else {
+    fetch('/blog/api.php?slug=' + encodeURIComponent(slug), { headers: { Accept: 'application/json' } })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((p) => (p && p.title ? renderPost(p) : Promise.reject(new Error('bad post'))))
+      .catch(() =>
+        // PHP unreachable (e.g. `astro dev`) — read the post JSON statically.
+        fetch('/blog/posts/' + encodeURIComponent(slug) + '.json')
+          .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+          .then((p) => (p && p.title ? renderPost(p) : fail()))
+          .catch(fail)
+      );
+  }
+  </script>
+</BaseLayout>

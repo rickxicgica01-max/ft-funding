@@ -19,6 +19,12 @@ const {
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <!-- Mark JS as active before first paint so reveal elements start hidden only when motion can run -->
   <script is:inline>document.documentElement.classList.add('js-motion');</script>
+  <!-- Always start at the top on refresh: the browser's scroll restoration would
+       land mid-page and break the scroll-triggered GSAP reveals. -->
+  <script is:inline>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  </script>
   <!-- Toggle the solid/condensed nav once the page is scrolled past the top -->
   <script is:inline>
     (function () {

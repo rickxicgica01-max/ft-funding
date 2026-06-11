@@ -1,0 +1,13 @@
+# No directory listings anywhere under the blog module.
+Options -Indexes
+
+# Protect the per-site config (it holds the admin hash) from direct web access.
+<FilesMatch "^config\.php$">
+    Require all denied
+</FilesMatch>
+
+# NOTE: this install has no public PHP pages — the FT Funding site renders all
+# posts itself (the /resources page + /resources/post template) by reading
+# /blog/api.php. Only /blog/admin (publishing) and /blog/api.php (read-only
+# JSON feed) are web-reachable; posts/ and data/ are denied by their own
+# .htaccess files, and uploads/ serves the post images.

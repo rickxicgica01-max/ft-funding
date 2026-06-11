@@ -1,0 +1,6 @@
+# core.php and init.php are include-only bootstraps (they hold paths + the
+# admin hash). They're never meant to be requested directly in a browser,
+# so deny direct access as defence-in-depth.
+<FilesMatch "^(core|init)\.php$">
+    Require all denied
+</FilesMatch>

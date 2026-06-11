@@ -1,0 +1,43 @@
+{
+    "slug": "cmhc-insured-loans-explained-lower-rates-higher-leverage",
+    "title": "CMHC Insured Loans Explained: Lower Rates, Higher Leverage",
+    "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1200&auto=format&fit=crop",
+    "categories": ["Financing Tips"],
+    "tags": ["CMHC", "multifamily"],
+    "blocks": [
+        {
+            "type": "paragraph",
+            "text": "How insured multifamily programs work, who qualifies, and why preparing early is the difference-maker. CMHC insurance lets lenders advance more, at better rates, because the federal insurer carries the default risk — but the programs reward borrowers who plan for them from day one."
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "What the insurance actually buys you"
+        },
+        {
+            "type": "list",
+            "style": "bullet",
+            "items": [
+                "Leverage up to 95% on qualifying affordable projects",
+                "Amortizations up to 50 years under select programs",
+                "Rates priced off CMB yields — typically well inside conventional spreads",
+                "Certainty of execution once the certificate of insurance is issued"
+            ]
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "Why early preparation matters"
+        },
+        {
+            "type": "paragraph",
+            "text": "The premium structure, affordability commitments, and documentation standards are set before your application is submitted — and retrofitting a deal to fit a program after the fact costs both time and leverage. Energy targets, accessibility scoring, and rent commitments all earn premium discounts when they're designed in, not bolted on."
+        },
+        {
+            "type": "paragraph",
+            "text": "We structure CMHC applications from the first conversation, so the program works as hard for your deal as the building does."
+        }
+    ],
+    "date": "2026-04-30T09:00:00+00:00",
+    "updated": "2026-04-30T09:00:00+00:00"
+}

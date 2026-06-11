@@ -21,11 +21,15 @@ const logoRows = [0, 1, 2, 0, 1, 2];
 
 // Every logo drawn to the same AREA (w*h), keeping its own ratio → balanced sizes.
 // LOGO_AREA is tuned so ~5 logos show per row. COPIES even so -50% loops seamlessly.
-const LOGO_AREA = 6000, LOGO_GAP = 50, SPEED = 55, COPIES = 8;
-const logoDisp = (l: Logo) => {
+// LOGO_AREA_T is the smaller tablet/mobile area (~80% linear scale), applied via
+// per-logo CSS vars so each keeps its own ratio (see the .logo-chip media rule).
+const LOGO_AREA = 6000, LOGO_AREA_T = 3800, LOGO_GAP = 50, SPEED = 55, COPIES = 8;
+const sized = (area: number, l: Logo) => {
   const r = l.w / l.h;
-  return { w: Math.round(Math.sqrt(LOGO_AREA * r)), h: Math.round(Math.sqrt(LOGO_AREA / r)) };
+  return { w: Math.round(Math.sqrt(area * r)), h: Math.round(Math.sqrt(area / r)) };
 };
+const logoDisp = (l: Logo) => sized(LOGO_AREA, l);
+const logoDispT = (l: Logo) => sized(LOGO_AREA_T, l);
 const repeatGroup = (g: number) => Array.from({ length: COPIES }, () => logoGroups[g]).flat();
 // Width of one group at display size, then per-row duration so every row scrolls
 // at the same px/s regardless of its logos' widths.
@@ -40,7 +44,7 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
     <Nav />
 
     <div class="hero-body">
-      <div class="hero-inner">
+      <div class="hero-inner" data-reveal-stagger>
         <h1 data-reveal>One Stop Commercial Lending Brokerage</h1>
         <p data-reveal>We arrange commercial financing for real estate investors, developers, and business owners across Toronto, GTA and Greater Vancouver.</p>
         <a href="/#contact" class="btn btn-outline" data-reveal>Talk to an Expert Today</a>
@@ -52,13 +56,13 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
         <div class="date">Apr 7, 2026</div>
         <hr>
         <div class="rates-grid">
-          <div class="rate"><div class="k">RBC Prime Rate</div><div class="v">4.45%</div></div>
-          <div class="rate"><div class="k">5 Year GOC</div><div class="v"><span class="arr up"></span>3.49%</div></div>
-          <div class="rate"><div class="k">5 Year GOC</div><div class="v"><span class="arr up"></span>3.13%</div></div>
-          <div class="rate"><div class="k">10 Year CMB</div><div class="v"><span class="arr up"></span>3.89%</div></div>
-          <div class="rate"><div class="k">5 Year CMB</div><div class="v"><span class="arr up"></span>3.39%</div></div>
-          <div class="rate"><div class="k">CORRA 3 Mo Term</div><div class="v"><span class="arr down"></span>2.28%</div></div>
-          <div class="rate"><div class="k">CORRA 1 Mo Term</div><div class="v"><span class="arr down"></span>2.27%</div></div>
+          <div class="rate"><div class="k">RBC Prime Rate</div><div class="v"><span class="num-wrap"><span class="num" data-count="4.45">4.45</span>%</span></div></div>
+          <div class="rate"><div class="k">5 Year GOC</div><div class="v"><span class="arr up"></span><span class="num-wrap"><span class="num" data-count="3.49">3.49</span>%</span></div></div>
+          <div class="rate"><div class="k">5 Year GOC</div><div class="v"><span class="arr up"></span><span class="num-wrap"><span class="num" data-count="3.13">3.13</span>%</span></div></div>
+          <div class="rate"><div class="k">10 Year CMB</div><div class="v"><span class="arr up"></span><span class="num-wrap"><span class="num" data-count="3.89">3.89</span>%</span></div></div>
+          <div class="rate"><div class="k">5 Year CMB</div><div class="v"><span class="arr up"></span><span class="num-wrap"><span class="num" data-count="3.39">3.39</span>%</span></div></div>
+          <div class="rate"><div class="k">CORRA 3 Mo Term</div><div class="v"><span class="arr down"></span><span class="num-wrap"><span class="num" data-count="2.28">2.28</span>%</span></div></div>
+          <div class="rate"><div class="k">CORRA 1 Mo Term</div><div class="v"><span class="arr down"></span><span class="num-wrap"><span class="num" data-count="2.27">2.27</span>%</span></div></div>
         </div>
         <p class="foot">We arrange commercial financing for real estate investors, developers, and business owners across Toronto, GTA and Greater Vancouver.</p>
       </aside>
@@ -121,7 +125,8 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
           <div class="logo-track" style={`animation-duration:${rowDuration(g)}s`}>
             {repeatGroup(g).map((l) => {
               const d = logoDisp(l);
-              return <img class="logo-chip" src={l.src} alt={l.name} width={d.w} height={d.h} draggable={false} />;
+              const t = logoDispT(l);
+              return <img class="logo-chip" src={l.src} alt={l.name} width={d.w} height={d.h} style={`--wt:${t.w}px;--ht:${t.h}px`} draggable={false} />;
             })}
           </div>
         </div>
@@ -255,6 +260,13 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
       if (resume) clearTimeout(resume);
       // After 2s, slide immediately, then keep the normal 5s cadence.
       resume = setTimeout(() => { advance(); start(); }, RESUME_MS);
+    });
+
+    // Re-apply the current offset when the card width changes (e.g. phone
+    // rotation) — otherwise the track sits misaligned until the next step.
+    window.addEventListener('resize', () => {
+      tr.style.transition = 'none';
+      tr.style.transform = `translateX(-${index * stepWidth()}px)`;
     });
 
     start();

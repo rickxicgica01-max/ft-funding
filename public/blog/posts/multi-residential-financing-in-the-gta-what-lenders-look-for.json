@@ -1,0 +1,42 @@
+{
+    "slug": "multi-residential-financing-in-the-gta-what-lenders-look-for",
+    "title": "Multi-Residential Financing in the GTA: What Lenders Look For",
+    "image": "https://images.unsplash.com/photo-1460317442991-0ec209397118?q=80&w=1200&auto=format&fit=crop",
+    "categories": ["Lending Criteria"],
+    "tags": ["GTA", "multifamily"],
+    "blocks": [
+        {
+            "type": "paragraph",
+            "text": "The underwriting boxes GTA lenders check first — and the gaps that quietly kill otherwise strong applications. Multi-residential remains the most sought-after asset class in the region, which means lenders can afford to be selective."
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "The first three things a credit desk checks"
+        },
+        {
+            "type": "list",
+            "style": "number",
+            "items": [
+                "Debt service coverage on in-place income — not projected rents",
+                "The sponsor's track record with this asset class and this market",
+                "Vacancy and turnover assumptions against the building's actual history"
+            ]
+        },
+        {
+            "type": "heading",
+            "level": "h2",
+            "text": "Where applications fall apart"
+        },
+        {
+            "type": "paragraph",
+            "text": "The most common killers are quiet ones: rent rolls that don't reconcile to bank deposits, deferred maintenance that surfaces in the appraisal, and environmental flags from a neighbouring property nobody checked. None of these are fatal — if they're addressed in the file before submission rather than discovered by the lender."
+        },
+        {
+            "type": "paragraph",
+            "text": "Our submissions reconcile every number and disclose every issue with a mitigation attached. That's why our GTA multi-residential files move through credit in days, not weeks."
+        }
+    ],
+    "date": "2026-05-14T09:00:00+00:00",
+    "updated": "2026-05-14T09:00:00+00:00"
+}

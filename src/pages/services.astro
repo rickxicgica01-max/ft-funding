@@ -1,43 +1,252 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
+
+// PLACEHOLDER icons — the existing white line-icon PNGs, recoloured via CSS
+// mask (gold on white bands, white on gold tiles). Swap each `icon` for the
+// real line-icon set when the client supplies it.
+const ic = {
+  construction: '/home/home-icon-construction.png',
+  bridge: '/home/home-icon-bridge.png',
+  cmhc: '/home/home-icon-cmhc.png',
+  retail: '/home/home-icon-retail.png',
+  office: '/home/home-icon-office.png',
+  student: '/home/home-icon-student.png',
+};
+
+const services = [
+  { icon: ic.construction, name: 'Construction Loan', desc: 'Funding to build, structured to draw down with your timeline.' },
+  { icon: ic.office, name: 'Land & Development Loan', desc: 'Capital to acquire and entitle, before the first shovel hits the ground.' },
+  { icon: ic.retail, name: 'Standard Conventional Term', desc: 'Long-term financing on stabilized, income-producing assets.' },
+  { icon: ic.bridge, name: 'Bridge Financing', desc: 'Fast, flexible capital to close the gap and keep momentum.' },
+  { icon: ic.cmhc, name: 'CMHC Insured & Construction', desc: 'Lower rates and higher leverage through insured multifamily programs.' },
+  { icon: ic.student, name: 'Mezzanine Financing', desc: 'Additional leverage that sits behind the senior debt.' },
+  { icon: ic.office, name: 'Junior Mortgages', desc: 'Second-position financing to unlock equity in the asset.' },
+  { icon: ic.bridge, name: 'A/B Notes', desc: 'Tranched structures that match risk to the right capital source.' },
+  { icon: ic.retail, name: 'Preferred Equity, GP & LP', desc: 'Equity solutions for sponsors and partners on larger projects.' },
+  { icon: ic.cmhc, name: 'Credit Enhancement', desc: 'Strengthening the deal so lenders can say yes with confidence.' },
+];
+
+const assetClasses = [
+  { icon: ic.retail, name: 'Retail' },
+  { icon: ic.cmhc, name: 'Multifamily (including CMHC)' },
+  { icon: ic.office, name: 'Office' },
+  { icon: ic.construction, name: 'Industrial' },
+  { icon: ic.bridge, name: 'Hospitality' },
+  { icon: ic.student, name: 'Retirement Housing' },
+  { icon: ic.student, name: 'Student Housing' },
+  { icon: ic.office, name: 'Self Storage' },
+  { icon: ic.retail, name: 'Mixed Use' },
+  { icon: ic.construction, name: 'Land & Development' },
+  { icon: ic.bridge, name: 'Special Purpose' },
+];
+
+const steps = [
+  { title: 'Tell us about your deal.', body: 'Share the property, the plan, and what matters most, rate, leverage, structure, or speed.' },
+  { title: 'We assess and strategize.', body: 'We pressure-test the numbers and identify the right path before anyone commits.' },
+  { title: 'We build your case.', body: "We package a complete, bank-quality underwriting file that answers the questions before they're asked." },
+  { title: 'We connect with the right people.', body: 'We take it to the lenders most likely to fund it, through relationships built over decades.' },
+  { title: 'You close with confidence.', body: 'Clear terms, no surprises, no hidden fees.' },
+];
+
+// PLACEHOLDER transactions — fictional deals; replace with real closings.
+const deals = [
+  { amount: '$14.2M', asset: 'Multifamily', type: 'CMHC Construction', location: 'Toronto, ON', note: 'Insured leverage secured before the rate lock expired.' },
+  { amount: '$8.6M', asset: 'Industrial', type: 'Bridge Financing', location: 'Vancouver, BC', note: 'Closed in 21 days to beat a competing offer.' },
+  { amount: '$22.5M', asset: 'Mixed Use', type: 'Construction Loan', location: 'Markham, ON', note: '' },
+  { amount: '$5.4M', asset: 'Retail', type: 'Conventional Term', location: 'Mississauga, ON', note: 'Refinanced at 75% LTV on stabilized income.' },
+  { amount: '$31.0M', asset: 'Student Housing', type: 'CMHC Insured', location: 'Waterloo, ON', note: '' },
+  { amount: '$11.8M', asset: 'Self Storage', type: 'A/B Notes', location: 'Burnaby, BC', note: 'Tranched structure matched two capital sources.' },
+];
 ---
 <BaseLayout
   title="Services — FT Funding Direct Capital"
-  description="Commercial lending solutions: construction loans, bridge financing, CMHC insured, and term & permanent financing across Toronto, the GTA, and Greater Vancouver."
+  description="Commercial financing for every stage: construction, land & development, bridge, CMHC insured, mezzanine, and more — across every asset class in Canada."
 >
-  <Nav solid />
-
-  <section class="page-head">
-    <div class="wrap">
-      <div class="eyebrow" data-reveal>Our Services</div>
-      <h1 data-reveal>Our Lending <span class="gold">Solutions</span></h1>
-      <p data-reveal>We arrange commercial financing for real estate investors, developers, and business owners — matching every deal to the right source of capital.</p>
-    </div>
-  </section>
-
-  <section class="wrap">
-    <div class="cards" data-reveal-stagger>
-      <div class="card photo" data-reveal><span class="icon">▢</span><h3>Construction Loans</h3></div>
-      <div class="card navy" data-reveal><span class="icon">▢</span><h3>Bridge Financing</h3></div>
-      <div class="card navy" data-reveal><span class="icon">▢</span><h3>CMHC Insured &amp; Construction</h3></div>
-      <div class="card navy" data-reveal><span class="icon">▢</span><h3>Term &amp; Permanent</h3></div>
-    </div>
-  </section>
-
-  <section class="band-navy">
-    <div class="wrap">
-      <div class="sec-head">
-        <div class="eyebrow" data-reveal>Our Services</div>
-        <h2 data-reveal>Asset <span class="gold">Classes</span></h2>
-        <p class="intro-copy" data-reveal>We finance across every major commercial asset class.</p>
-        <a href="/contact" class="btn btn-outline" style="margin-top:8px;" data-reveal>Talk to an Expert</a>
-      </div>
-      <div class="asset-cards" data-reveal-stagger>
-        <div class="asset" data-reveal><span class="icon">▢</span><h3>Retail</h3></div>
-        <div class="asset" data-reveal><span class="icon">▢</span><h3>Office</h3></div>
-        <div class="asset" data-reveal><span class="icon">▢</span><h3>Student Housing</h3></div>
+  <!-- HERO — transparent nav over the image, same as About -->
+  <section class="hero hero--services">
+    <Nav />
+    <div class="hero-body">
+      <div class="hero-inner" data-reveal-stagger>
+        <h1 data-reveal>Financing for every stage of your <span class="gold">project.</span></h1>
+        <p data-reveal>From land to lease-up, acquisition to refinance, we structure commercial financing across every asset class, and we package it to the standard lenders expect.</p>
+        <a href="/contact" class="btn btn-outline" data-reveal>Request a Quote</a>
       </div>
     </div>
   </section>
+
+  <!-- WHAT WE DO — 10 services, divider rows in 2 columns -->
+  <section class="svcdo-band">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <div class="eyebrow">What We Do</div>
+        <h2>The full lifecycle of commercial real estate <span class="gold">financing.</span></h2>
+        <p class="intro-copy svcdo-intro">Whatever the stage, whatever the structure, we arrange the capital that fits. One point of contact. Access to lenders across Canada.</p>
+      </div>
+      <div class="sv-grid" data-reveal-stagger>
+        {services.map((s) => (
+          <div class="sv-row" data-reveal>
+            <span class="sv-icon" style={`--icon:url('${s.icon}')`} aria-hidden="true"></span>
+            <div>
+              <h3 class="sv-name">{s.name}</h3>
+              <p>{s.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE FINANCE — navy band, compact gold tiles -->
+  <section class="finance-band">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <div class="eyebrow">What We Finance</div>
+        <h2>Every commercial <span class="gold">asset class.</span></h2>
+      </div>
+      <div class="asset-tiles" data-reveal-stagger>
+        {assetClasses.map((a) => (
+          <div class="asset-tile" data-reveal>
+            <span class="at-icon" style={`--icon:url('${a.icon}')`} aria-hidden="true"></span>
+            <h3>{a.name}</h3>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW WE WORK — statement left, 5 numbered steps right -->
+  <section class="process-band">
+    <div class="wrap process">
+      <div class="process-text">
+        <div class="eyebrow" data-reveal>How We Work</div>
+        <h2 data-reveal>You Ask. <span class="gold">We Deliver.</span></h2>
+        <p class="intro-copy process-intro" data-reveal>Our process is built around one idea: do the heavy lifting so you don't have to. We underwrite your deal to bank quality before it ever reaches a lender, which is why we deliver faster and cleaner.</p>
+      </div>
+      <div class="steps" data-reveal-stagger>
+        {steps.map((s, i) => (
+          <div class="step" data-reveal>
+            <div class="step-num">{String(i + 1).padStart(2, '0')}</div>
+            <div>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTABLE TRANSACTIONS — infinite data-card slider -->
+  <section class="deals-band">
+    <div class="wrap">
+      <div class="team-head">
+        <div class="sec-head" data-reveal>
+          <div class="eyebrow">Proof of Work</div>
+          <h2>Deals we've closed across <span class="gold">Canada.</span></h2>
+          <!-- PLACEHOLDER link — point at the transactions/blog page when it exists -->
+          <a href="/resources" class="btn btn-outline deals-btn">View Recent Transactions</a>
+        </div>
+        <div class="team-nav" data-reveal>
+          <button class="team-arrow prev" type="button" aria-label="Previous transactions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <button class="team-arrow next" type="button" aria-label="Next transactions">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="team-slider" data-reveal>
+        <div class="team-track">
+          {/* Deals rendered twice → the slider loops seamlessly. */}
+          {[...deals, ...deals].map((d) => (
+            <article class="deal-card">
+              <div class="deal-amount">{d.amount}</div>
+              <hr />
+              <div class="deal-row"><div class="k">Asset Class</div><div class="v">{d.asset}</div></div>
+              <div class="deal-row"><div class="k">Financing Type</div><div class="v">{d.type}</div></div>
+              <div class="deal-row"><div class="k">Location</div><div class="v">{d.location}</div></div>
+              {d.note && <p class="deal-note">{d.note}</p>}
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-band">
+    <div class="wrap">
+      <h2 data-reveal>Tell us what you're <span class="gold">working on.</span></h2>
+      <a href="/contact" class="btn btn-outline" data-reveal>Get Your Free Consultation</a>
+    </div>
+  </section>
+
+  <script>
+  // Deals slider: same infinite-loop stepping as the About team slider
+  // (cards rendered twice; snaps are settled before any new interaction).
+  const band = document.querySelector('.deals-band');
+  const slider = band?.querySelector('.team-slider');
+  const track = slider?.querySelector('.team-track') as HTMLElement | null;
+  const prev = band?.querySelector('.team-arrow.prev') as HTMLButtonElement | null;
+  const next = band?.querySelector('.team-arrow.next') as HTMLButtonElement | null;
+
+  if (slider && track && prev && next) {
+    const tr = track;
+    const cards = tr.querySelectorAll('.deal-card') as NodeListOf<HTMLElement>;
+    const ORIGINALS = cards.length / 2;
+    const MOVE_MS = 900;
+    let index = 0;
+
+    const step = () =>
+      cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth;
+
+    const setX = (animate: boolean) => {
+      tr.style.transition = animate ? `transform ${MOVE_MS}ms ease` : 'none';
+      tr.style.transform = `translateX(-${index * step()}px)`;
+    };
+
+    let snap: (() => void) | null = null;
+
+    const finishSnap = () => {
+      if (!snap) return;
+      tr.removeEventListener('transitionend', snap);
+      snap = null;
+      index -= ORIGINALS;
+      setX(false);
+      void tr.offsetWidth;
+    };
+
+    next.addEventListener('click', () => {
+      finishSnap();
+      index++;
+      setX(true);
+      if (index >= ORIGINALS) {
+        snap = () => { snap = null; index -= ORIGINALS; setX(false); };
+        tr.addEventListener('transitionend', snap, { once: true });
+      }
+    });
+
+    prev.addEventListener('click', () => {
+      finishSnap();
+      if (index === 0) {
+        index = ORIGINALS;
+        setX(false);
+        void tr.offsetWidth;
+      }
+      index--;
+      setX(true);
+    });
+
+    window.addEventListener('resize', () => { finishSnap(); setX(false); });
+    window.addEventListener('load', () => setX(false));
+  }
+  </script>
 </BaseLayout>

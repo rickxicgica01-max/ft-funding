@@ -46,7 +46,7 @@ h1 {
 /* Site-wide H2 spec: 50px / 50px line / -2px tracking (px→em).
    Hero is the only h1; every other large title is an h2. */
 h2 {
-  font-size:clamp(34px,4.5vw,50px);   /* 50px desktop, scales on portables */
+  font-size:50px;           /* 40px tablet / 34px mobile (see responsive blocks) */
   line-height:1em;          /* 50 / 50 */
   letter-spacing:-0.04em;   /* -2 / 50 */
 }
@@ -263,7 +263,7 @@ a {
 }
 
 .hero h1 {
-  font-size:clamp(40px,7vw,70px);   /* 70px desktop, scales down on portables */
+  font-size:70px;           /* 56px tablet / 42px mobile (see responsive blocks) */
   margin-bottom:32px;
 }
 
@@ -379,7 +379,7 @@ section {
 }
 
 .sec-head h2 {
-  font-size:clamp(34px,4.5vw,50px);
+  font-size:50px;           /* 40px tablet / 34px mobile (see responsive blocks) */
 }
 
 .gold {
@@ -423,11 +423,6 @@ section {
   left:28px;
   font-size:26px;
   color:var(--gold);
-}
-
-.center-cta {
-  text-align:center;
-  margin-top:48px;
 }
 
 /* ---------- LENDING SOLUTIONS (text + 3 hover cards) ---------- */
@@ -489,13 +484,6 @@ section {
   height:32px;
 }
 
-/* Box-character icon placeholder (until real asset icons are supplied). */
-span.svc-icon {
-  height:auto;
-  font-size:26px;
-  line-height:1;
-}
-
 /* Card title — Times New Roman 30px / 28px line / -1.2px tracking (px→em). */
 .svc-card h3 {
   position:relative;   /* sit above the hover image layer */
@@ -517,7 +505,7 @@ span.svc-icon {
 
 @media (max-width:1024px) {
   .svc-section {
-    padding:120px 0;
+    padding:65px 0;   /* uniform tablet band gap */
   }
 
   .svc-grid {
@@ -529,11 +517,27 @@ span.svc-icon {
     align-self:start;
     margin-bottom:16px;
   }
+
+  /* 3-up cards are ~215px wide on tablet — shorter card + smaller title so
+     long names ("CMHC Insured & Construction") don't crowd the edges. */
+  .svc-card {
+    min-height:280px;
+  }
+
+  .svc-card h3 {
+    font-size:26px;
+  }
+
+  /* No hover on touch — show each card's image + gradient by default
+     (covers both the navy and the gold/asset variants). */
+  .svc-card::before {
+    opacity:1;
+  }
 }
 
 @media (max-width:767px) {
   .svc-section {
-    padding:80px 0;
+    padding:50px 0;
   }
 
   .svc-grid {
@@ -541,7 +545,7 @@ span.svc-icon {
   }
 
   .svc-card {
-    min-height:340px;
+    min-height:230px;
   }
 }
 
@@ -699,7 +703,9 @@ span.svc-icon {
 .logo-chip {
   flex:none;
   /* width/height set per-logo (equal area) via the img attributes */
-  margin-right:50px;           /* spacing owned by the item → seamless loop */
+  margin-right:50px;           /* spacing owned by the item → seamless loop.
+                                  MUST equal LOGO_GAP in index.astro — the
+                                  marquee duration math assumes this gap. */
   filter:grayscale(1) opacity(.3);   /* greyed out at rest (lighter) */
   transition:filter .35s ease;
   -webkit-user-drag:none;
@@ -762,17 +768,40 @@ span.svc-icon {
   .capital-logos {
     position:static;
     justify-content:flex-start;
-    padding:64px 0 0;
+    padding:35px 0;      /* 35px above and below the rows */
+    gap:30px;            /* rows are in normal flow here — space them out */
+  }
+
+  /* Rows 4-6 repeat the same 3 logo groups — 3 rows is plenty on portables. */
+  .capital-logos .logo-row:nth-child(n+4) {
+    display:none;
+  }
+
+  /* Smaller logos (~80% linear) via the per-logo tablet sizes computed in
+     index.astro — each keeps its own ratio; the 50px gaps are untouched. */
+  .logo-chip {
+    width:var(--wt);
+    height:var(--ht);
   }
 
   .capital-panel {
     width:auto;
     margin-left:0;
-    padding:64px 5%;
+    padding:65px 5%;   /* 50px on mobile (see the ≤767 rule below) */
   }
 
   .capital-content {
     width:auto;
+  }
+}
+
+@media (max-width:767px) {
+  .capital-panel {
+    padding:50px 5%;   /* uniform mobile band gap */
+  }
+
+  .capital-list {
+    gap:21px;          /* tighter rows on mobile */
   }
 }
 
@@ -894,13 +923,13 @@ span.svc-icon {
 
 .test-track {
   display:flex;
-  width:max-content;
-  /* Stepped movement (one slide every 5s) is driven by JS. */
+  /* Fills the slider window (no max-content) so card % widths resolve against
+     it; the flex:none cards overflow in a row. Stepped movement is JS-driven. */
 }
 
 .tcard {
   flex:none;
-  width:min(376px, 80vw);   /* 376 + 24 margin = 400 → 3 fit in the 1200 wrap; shrinks on mobile */
+  width:376px;              /* 376 + 24 margin = 400 → 3 fit in the 1200 wrap; 300px mobile */
   margin-right:24px;        /* gap owned by the item → seamless loop */
   background:var(--offwhite);   /* brand grey F6F5F5 */
   padding:40px;
@@ -1209,7 +1238,70 @@ footer .wrap {
 /* ---------- RESPONSIVE ---------- */
 @media (max-width:1024px) {
   section {
-    padding:120px 0;   /* scale the 170px section padding down on tablet */
+    padding:65px 0;   /* uniform 65px content gap for every band on tablet */
+  }
+
+  /* Tablet type scale (fixed px — no fluid sizing). */
+  h2,
+  .sec-head h2 {
+    font-size:44px;
+  }
+
+  .hero h1 {
+    font-size:48px;
+  }
+
+  .eyebrow {
+    font-size:14px;
+  }
+
+  /* Tighter h2 → paragraph (20px) and paragraph → button (30px) gaps, global
+     on tablet. The .why/.svc-text variants are repeated so this outranks
+     their higher-specificity desktop margins. */
+  .intro-copy,
+  .why .intro-copy,
+  .svc-text .intro-copy {
+    margin-top:20px;
+    margin-bottom:30px;
+  }
+
+  /* Reason-row subheadings (Responsiveness, Speed, …). */
+  .reasons h3 {
+    font-size:24px;
+  }
+
+  /* Testimonials: hide the FT watermark; 2 cards fit the width at 768
+     (2×320 + 24 gap = 664 ≤ the 691px wrap) with tighter text/gaps. */
+  .test-ft {
+    display:none;
+  }
+
+  .tcard {
+    width:320px;
+    padding:32px;
+  }
+
+  .tcard blockquote {
+    font-size:21px;
+  }
+
+  .who {
+    margin-top:70px;
+  }
+
+  .who .name {
+    font-size:20px;
+  }
+
+  .who .title {
+    font-size:14px;
+  }
+
+  /* Hero: heading sits 65px below the bar's bottom edge (72px bar + 65px),
+     and the band's height comes from its content, not the desktop 770px. */
+  .hero {
+    min-height:0;
+    padding-top:137px;
   }
 
   /* Collapse the inline nav into a hamburger dropdown; bar stays solid + sticky. */
@@ -1222,8 +1314,20 @@ footer .wrap {
     display:flex;
   }
 
-  .nav-menu:not([hidden]) {
+  /* Dropdown: always rendered on portables, collapsed via max-height so it can
+     slide open/closed (0.5s). JS sets the open max-height to the menu's real
+     content height; visibility flips after the close finishes (a11y). */
+  .nav-menu {
     display:flex;
+    max-height:0;
+    overflow:hidden;
+    visibility:hidden;
+    transition:max-height .5s ease, visibility 0s linear .5s;
+  }
+
+  .nav-menu.open {
+    visibility:visible;
+    transition:max-height .5s ease, visibility 0s;
   }
 
   .cards {
@@ -1237,8 +1341,9 @@ footer .wrap {
     gap:40px;
   }
 
-  .why-band {
-    padding:120px 0;
+  .why-band,
+  .consult-band {
+    padding:65px 0;   /* match the uniform tablet band gap (own desktop paddings) */
   }
 
   .row-arrow {
@@ -1254,27 +1359,162 @@ footer .wrap {
     transform:none;
     width:100%;
     max-width:420px;
-    margin-top:36px;
+    margin-top:50px;   /* a bit more air between the hero button and the card */
   }
 
   .hero-body {
-    padding-bottom:48px;
+    justify-content:flex-start;   /* heading pinned to the 65px nav gap */
+    padding-bottom:65px;
+  }
+
+  /* The -40px lift only balances the absolute rates card on desktop; in the
+     stacked layout it just leaves a hole above the card. */
+  .hero-inner {
+    transform:none;
+  }
+
+  /* Text columns span full width on portables — let the copy breathe instead
+     of keeping the narrow 240px desktop column measure. */
+  .intro-copy {
+    max-width:560px;
+  }
+
+  /* Footer: one vertical flow on portables — logo → "You Ask. We Deliver." →
+     Quick Links → Office/Contact → Newsletter → social icons. The brand block
+     dissolves (display:contents) so its children join the flex column and can
+     be ordered against the link columns; the icons move to the end. */
+  footer {
+    padding:65px 0 32px;   /* 65px top — same band gap as the other sections */
+  }
+
+  .foot-top {
+    display:flex;
+    flex-direction:column;
+    gap:40px;
+  }
+
+  .foot-brand {
+    display:contents;
+  }
+
+  .foot-brand .logo {
+    order:1;
+    margin-bottom:0;     /* the column gap owns the spacing */
+  }
+
+  .foot-brand .logo img {
+    width:290px;
+    height:54px;
+  }
+
+  .foot-brand .deliver {
+    order:2;
+    white-space:normal;
+    margin-top:-16px;    /* logo + title read as one brand unit (24px gap) */
+  }
+
+  .foot-col {
+    order:3;             /* the three columns keep their DOM order */
+  }
+
+  .foot-social {
+    order:4;
+    margin-top:0;
+  }
+
+  .news-input {
+    max-width:420px;     /* don't stretch the input across the full band */
+  }
+
+  .foot-bottom {
+    margin-top:65px;     /* social icons → white rule, same 65px band gap */
+  }
+
+  /* Touch devices have no hover — pin buttons, links, and icons to their
+     resting state so tap-sticky hover styles never appear. */
+  .btn-solid:hover,
+  .news-btn:hover {
+    box-shadow:none;
+  }
+
+  .btn-outline:hover {
+    background:transparent;
+    color:var(--gold);
+  }
+
+  .nav-menu-item:hover {
+    background:var(--navy);
+  }
+
+  .foot-social a:hover {
+    background:var(--white);
+  }
+
+  .foot-col a:hover,
+  .foot-bottom a:hover {
+    color:inherit;
+  }
+
+  .logo-chip:hover {
+    filter:grayscale(1) opacity(.3);
+  }
+
+  .reasons .row:hover h3,
+  .reasons .row:hover p {
+    color:inherit;
+  }
+
+  .team-arrow:hover {
+    background:transparent;
+    color:var(--gold);
   }
 }
 
 @media (max-width:767px) {
   section {
-    padding:80px 0;
+    padding:50px 0;   /* uniform 50px content gap for every band on mobile */
   }
 
-  .logo img {
-    width:215px;
-    height:40px;
+  /* Mobile type scale (fixed px — no fluid sizing). */
+  h2,
+  .sec-head h2 {
+    font-size:34px;
+  }
+
+  .hero h1 {
+    font-size:42px;
+  }
+
+  /* Body copy drops 1px. The hero/intro paragraphs and the body-text lists
+     are listed explicitly — their own font-size rules outrank a bare p. */
+  p,
+  .hero p,
+  .intro-copy,
+  .capital-list li,
+  .sources li,
+  .foot-col li,
+  .foot-col p {
+    font-size:16px;
+  }
+
+  /* Hero: heading 50px below the bar's bottom edge (63px bar + 50px). */
+  .hero {
+    padding-top:113px;
+  }
+
+  .hero-body {
+    padding-bottom:50px;
+  }
+
+  /* Exactly one card in view: the card fills the slider window, so the next
+     card sits fully off-screen behind the 24px gap. % is safe here — the
+     track fills the window, so it's scrollbar-proof (vw is not). */
+  .tcard {
+    width:100%;
   }
 
   .cards,
   .asset-cards,
-  .tcards,
   .logos {
     grid-template-columns:1fr;
   }
@@ -1283,20 +1523,55 @@ footer .wrap {
     grid-template-columns:1fr;
   }
 
-  .why-band {
-    padding:80px 0;
+  .why-band,
+  .consult-band {
+    padding:50px 0;
   }
 
-  .foot-top {
-    grid-template-columns:1fr;
+  footer {
+    padding:50px 0 32px;
   }
 
   .foot-bottom {
     flex-direction:column;
+    gap:12px;          /* clearer break between © line and the CGICA credit */
+    margin-top:50px;   /* icons → white rule, matching the mobile band gap */
+  }
+
+  /* Social icons 2px smaller on mobile. */
+  .foot-social a {
+    width:25px;
+    height:25px;
   }
 
   .rates-grid {
     gap:18px 12px;
+  }
+
+  /* Rates card: 55px side padding squeezes the 2-col grid on small screens.
+     The hr/foot dividers follow the var, so they keep bleeding edge-to-edge. */
+  .rates {
+    --rates-pad:30px;
+  }
+
+  /* Testimonials: tighten the desktop-scale gaps inside the cards. */
+  .test-band .sec-head {
+    margin-bottom:40px;
+  }
+
+  .tcard {
+    padding:30px;
+  }
+
+  .who {
+    margin-top:60px;
+  }
+
+  /* Footer: brand logo scaled to the header's mobile size (this override
+     outranks the generic .logo img rule; layout comes from the ≤1024 flow). */
+  .foot-brand .logo img {
+    width:215px;
+    height:40px;
   }
 }
 
@@ -1361,7 +1636,7 @@ footer .wrap {
 }
 
 .page-head h1 {
-  font-size:clamp(40px,6vw,64px);
+  font-size:64px;           /* 52px tablet / 40px mobile (see blocks below) */
   margin-bottom:14px;
 }
 
@@ -1370,6 +1645,1469 @@ footer .wrap {
   opacity:.9;
   max-width:620px;
   margin:0 auto;
+}
+
+/* Slimmer fixed bar on portables (no scroll-shrink there, so slim it statically).
+   Tablet logo matches the desktop scrolled size (236×44); mobile drops to 188×35.
+   .page-head's offset must track the bar height exactly — bar = logo + 2×padding:
+   tablet 44 + 28 = 72px, mobile 35 + 28 = 63px. Placed after the .page-head
+   definitions above so these win the cascade. */
+@media (max-width:1024px) {
+  .nav {
+    padding:14px 0;
+  }
+
+  .logo img {
+    width:236px;
+    height:44px;
+  }
+
+  .page-head {
+    margin-top:72px;
+  }
+
+  .page-head h1 {
+    font-size:52px;
+  }
+}
+
+@media (max-width:767px) {
+  .logo img {
+    width:188px;
+    height:35px;
+  }
+
+  .page-head {
+    margin-top:63px;
+  }
+
+  .page-head h1 {
+    font-size:40px;
+  }
+}
+
+/* ---------- ABOUT PAGE ---------- */
+/* Hero — same pattern as the homepage hero but shorter (no rates card), so the
+   inner page reads as a sibling, not a copy. PLACEHOLDER: reuses the homepage
+   background image until a dedicated About photo/video is supplied. */
+.hero--about,
+.hero--services,
+.hero--resources {
+  min-height:640px;   /* content is centred, so the extra height pads top + bottom */
+  background:linear-gradient(rgba(19,39,79,.35),rgba(19,39,79,.35)),url('/home/home-hero-bg.png') center center/cover no-repeat;
+}
+
+.hero--about .hero-inner,
+.hero--services .hero-inner,
+.hero--resources .hero-inner {
+  transform:none;        /* no rates card to balance against — true vertical centre */
+  max-width:760px;
+}
+
+.hero--about p,
+.hero--services p,
+.hero--resources p {
+  max-width:600px;
+}
+
+/* Mission — full-width typographic statement. The headline IS the section.
+   Top padding is 20px shy of the bottom: the small eyebrow leaves its leading
+   empty up top while the headline's descenders fill the bottom — equal
+   paddings read top-heavy. */
+.mission-band {
+  background:var(--white);
+  text-align:center;
+  padding:150px 0 170px;
+}
+
+.mission-band h2 {
+  font-size:70px;           /* h1-scale; 56px tablet / 42px mobile */
+  max-width:900px;
+  margin-inline:auto;
+}
+
+/* Story — split grid: media left, narrative right. */
+.story-band {
+  background:var(--offwhite);
+}
+
+.story {
+  display:grid;
+  grid-template-columns:0.9fr 1.1fr;
+  gap:90px;
+  align-items:stretch;   /* image column matches the text column's height */
+}
+
+.story-media img {
+  width:100%;
+  height:100%;
+  min-height:480px;
+  object-fit:cover;
+}
+
+.story-text h2 {
+  margin-bottom:35px;
+}
+
+.story-text p {
+  margin-bottom:20px;
+  max-width:560px;
+}
+
+.story-text p:last-child {
+  margin-bottom:0;
+}
+
+/* Stat band — full-bleed navy strip, 3 columns split by 1px gold rules (same
+   divider language as the hero rates card). */
+.stat-band {
+  background:var(--navy);
+  color:var(--white);
+  padding:110px 0;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+}
+
+.stat {
+  text-align:center;
+  padding:10px 32px;
+}
+
+.stat + .stat {
+  border-left:1px solid var(--gold);
+}
+
+/* Big figures — Times New Roman, gold. One size for numerals AND word-stats;
+   54px is the largest at which "Coast-to-Coast" still fits its column. */
+.stat .num {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:54px;           /* 54px tablet / 44px mobile */
+  line-height:1em;
+  letter-spacing:-0.04em;
+  color:var(--gold);
+}
+
+.stat .lbl {
+  margin-top:16px;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+  opacity:.92;
+}
+
+/* Team — header row (copy left, arrows right) + a stepped card slider. */
+.team-band {
+  background:var(--white);
+}
+
+.team-head {
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:32px;
+  margin-bottom:65px;
+}
+
+.team-head .sec-head {
+  margin-bottom:0;
+}
+
+.team-head .intro-copy {
+  max-width:480px;
+  margin:35px 0 0;
+}
+
+.team-nav {
+  display:flex;
+  gap:14px;
+}
+
+/* Circle arrows — outline gold, fill on hover (same language as the buttons). */
+.team-arrow {
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  border:1px solid var(--gold);
+  background:transparent;
+  color:var(--gold);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .4s ease, color .4s ease, opacity .4s ease;
+}
+
+.team-arrow:hover {
+  background:var(--gold);
+  color:var(--white);
+}
+
+.team-arrow svg {
+  width:20px;
+  height:20px;
+}
+
+.team-slider {
+  overflow:hidden;
+}
+
+.team-track {
+  display:flex;
+  /* Fills the slider window (no max-content) so card % widths resolve against
+     it. Movement transition is set inline by the slider JS (animated steps vs
+     instant loop-snaps need different values). */
+}
+
+/* Card — offwhite block (same surface as the testimonial cards).
+   384px → 3 cards + 2 gaps fill the 1200 wrap exactly, so the third card's
+   right edge lines up with the nav arrows above. */
+.tm-card {
+  flex:none;
+  width:384px;           /* 320px tablet / 90vw mobile */
+  margin-right:24px;     /* gap owned by the item, same as the testimonial track */
+  background:var(--offwhite);
+}
+
+/* Headshot — grayscale at rest, colours up on hover (echoes the lender logos). */
+.tm-photo {
+  aspect-ratio:1/1;
+  overflow:hidden;
+}
+
+.tm-photo img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:grayscale(1);
+  transition:filter .5s ease;
+}
+
+.tm-card:hover .tm-photo img {
+  filter:grayscale(0);
+}
+
+.tm-body {
+  padding:30px 28px 36px;
+}
+
+/* Name — Times New Roman 25 (same spec as testimonial names). */
+.tm-name {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:25px;
+  line-height:1.04em;
+  letter-spacing:-0.04em;
+  color:var(--navy);
+}
+
+.tm-title {
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+  color:var(--gold);
+  margin-top:4px;
+}
+
+/* Signature quote — serif, smaller than testimonial quotes. */
+.tm-quote {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:21px;
+  line-height:1.15em;
+  letter-spacing:-0.04em;
+  color:var(--navy);
+  margin-top:24px;
+}
+
+/* CTA banner — centred close. */
+.cta-band {
+  background:var(--offwhite);
+  text-align:center;
+  padding:150px 0;
+}
+
+.cta-band .btn {
+  margin-top:45px;
+}
+
+@media (max-width:1024px) {
+  /* Mission headline matches the CTA headline: the global h2 scale (44/34).
+     The explicit rule is needed — the 70px desktop rule outranks the bare
+     h2 media rule by specificity. */
+  .mission-band h2 {
+    font-size:44px;
+  }
+
+  /* One size for numerals and word-stats (desktop rule); 40px is the largest
+     at which "Nationwide" fits the narrow 3-up tablet columns, with the side
+     padding trimmed to give it room. */
+  .stat {
+    padding:10px 16px;
+  }
+
+  .stat .num {
+    font-size:40px;
+  }
+
+  /* Story stacks on tablet: image full-width on top, but kept short with a
+     wide 2:1 crop so it doesn't dominate the section. */
+  .story {
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+
+  .story-media img {
+    min-height:0;
+    aspect-ratio:5/2;
+  }
+
+  .mission-band,
+  .stat-band,
+  .cta-band {
+    padding:65px 0;      /* uniform tablet band gap (own desktop paddings) */
+  }
+
+  /* CTA: heading → button gap follows the global tablet p → button gap. */
+  .cta-band .btn {
+    margin-top:30px;
+  }
+
+  /* Slider nav arrows 3px smaller on portables. */
+  .team-arrow {
+    width:45px;
+    height:45px;
+  }
+
+  .team-head {
+    flex-direction:column;
+    align-items:flex-start;
+    gap:20px;            /* intro paragraph → arrows */
+    margin-bottom:40px;  /* arrows → cards */
+  }
+
+  /* Inner-page heroes: content-driven height, like the homepage hero on
+     portables (this outranks the 640px rule above by file order). */
+  .hero--about,
+  .hero--services,
+  .hero--resources {
+    min-height:0;
+  }
+
+  /* Global tablet h2 → paragraph gap (these outrank the bare .intro-copy
+     media rule by specificity, so they're repeated here). */
+  .story-text h2 {
+    margin-bottom:20px;
+  }
+
+  .team-head .intro-copy {
+    margin-top:20px;
+  }
+
+  /* Team cards: exactly 3 in view with no cut-off — a third of the slider
+     window minus the two 24px gaps (% of the track). */
+  .tm-card {
+    width:calc((100% - 48px) / 3);
+  }
+
+  .tm-body {
+    padding:26px 24px 32px;
+  }
+
+  .tm-name {
+    font-size:20px;
+  }
+
+  .tm-title {
+    font-size:14px;
+  }
+
+  .tm-quote {
+    font-size:19px;
+    margin-top:20px;
+  }
+
+  /* No hover on touch — headshots show in colour by default. */
+  .tm-photo img {
+    filter:grayscale(0);
+  }
+}
+
+@media (max-width:767px) {
+  /* Mission headline at the global mobile h2 size (same reason as tablet). */
+  .mission-band h2 {
+    font-size:34px;
+  }
+
+  /* Slider nav arrows smaller again on mobile (45px tablet → 40px). */
+  .team-arrow {
+    width:40px;
+    height:40px;
+  }
+
+  .team-arrow svg {
+    width:18px;
+    height:18px;
+  }
+
+  /* Story stacks on mobile: image full-width above the text. */
+  .story {
+    grid-template-columns:1fr;
+    gap:32px;
+  }
+
+  .story-media img {
+    aspect-ratio:16/10;
+  }
+
+  /* One size for numerals and word-stats; the stacked single column has room
+     for "Nationwide" at full size. */
+  .stat .num {
+    font-size:44px;
+  }
+
+  /* Exactly one team card in view (same as the client slider). */
+  .tm-card {
+    width:100%;
+  }
+
+  /* Section header gap matches the testimonial band's mobile spacing. */
+  .team-head {
+    margin-bottom:40px;
+  }
+
+  /* Stat labels follow the 16px mobile body copy. */
+  .stat .lbl {
+    font-size:16px;
+  }
+
+  /* Stats stack with horizontal gold rules instead of vertical. */
+  .stats {
+    grid-template-columns:1fr;
+  }
+
+  .stat {
+    padding:32px 0;
+  }
+
+  .stat + .stat {
+    border-left:none;
+    border-top:1px solid var(--gold);
+  }
+
+  .mission-band,
+  .stat-band,
+  .cta-band {
+    padding:50px 0;   /* uniform mobile band gap */
+  }
+}
+
+/* ---------- SERVICES PAGE ---------- */
+/* What We Do — 10 services as divider rows, 2 columns × 5 (1 column mobile).
+   Icons are white line-icon PNGs recoloured gold via mask (same technique as
+   the footer social icons). */
+.svcdo-band {
+  background:var(--white);
+}
+
+.svcdo-intro {
+  margin:25px 0 0;     /* h2 → intro; no button below, so no bottom margin */
+  max-width:620px;
+}
+
+.sv-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 60px;
+  margin-top:10px;
+}
+
+.sv-row {
+  display:flex;
+  align-items:flex-start;
+  gap:22px;
+  padding:26px 0;
+  border-bottom:1px solid rgba(19,39,79,.15);
+}
+
+/* Last row of each column (row-major grid → the final two items). */
+.sv-row:nth-last-child(-n+2) {
+  border-bottom:none;
+}
+
+.sv-icon {
+  flex:none;
+  width:30px;
+  height:30px;
+  margin-top:4px;
+  background:var(--gold);
+  -webkit-mask:var(--icon) center/contain no-repeat;
+  mask:var(--icon) center/contain no-repeat;
+}
+
+/* Name — Times New Roman 25 (testimonial-name spec). */
+.sv-name {
+  font-size:25px;
+  line-height:1.04em;
+  letter-spacing:-0.04em;
+  transition:color .6s ease;
+}
+
+.sv-row p {
+  margin-top:8px;
+  transition:color .6s ease;
+}
+
+.sv-row:hover .sv-name,
+.sv-row:hover p {
+  color:var(--gold);
+}
+
+/* What We Finance — navy band + compact gold tiles (homepage asset identity). */
+.finance-band {
+  background:var(--navy);
+  color:var(--white);
+}
+
+.asset-tiles {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+}
+
+.asset-tile {
+  position:relative;
+  min-height:140px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:18px;
+  background:var(--gold);
+  color:var(--white);
+}
+
+.at-icon {
+  position:absolute;
+  top:18px;
+  left:18px;
+  width:26px;
+  height:26px;
+  background:var(--white);
+  -webkit-mask:var(--icon) center/contain no-repeat;
+  mask:var(--icon) center/contain no-repeat;
+}
+
+.asset-tile h3 {
+  font-size:25px;
+  line-height:1.04em;
+  letter-spacing:-0.04em;
+}
+
+/* How We Work — statement left, 5 numbered step rows right (Why-section
+   layout on the offwhite band, navy dividers). */
+.process-band {
+  background:var(--offwhite);
+}
+
+.process {
+  display:grid;
+  grid-template-columns:390px 1fr;
+  gap:120px;
+  align-items:start;
+}
+
+.process-intro {
+  max-width:390px;
+  margin:35px 0 0;
+}
+
+.step {
+  display:flex;
+  align-items:flex-start;
+  gap:28px;
+  padding-bottom:30px;
+  margin-bottom:30px;
+  border-bottom:1px solid rgba(19,39,79,.2);
+}
+
+.step:last-child {
+  padding-bottom:0;
+  margin-bottom:0;
+  border-bottom:none;
+}
+
+/* Big gold step number — Times New Roman, fixed column so titles align. */
+.step-num {
+  flex:none;
+  width:44px;
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:30px;
+  line-height:1.04em;
+  letter-spacing:-0.04em;
+  color:var(--gold);
+}
+
+.step h3 {
+  font-size:25px;
+  line-height:1.04em;
+  letter-spacing:-0.04em;
+}
+
+.step p {
+  margin-top:10px;
+}
+
+/* Notable Transactions — data-forward cards in the shared infinite slider
+   (reuses .team-head/.team-nav/.team-arrow/.team-slider/.team-track). */
+.deals-band {
+  background:var(--white);
+}
+
+.deals-btn {
+  margin-top:35px;
+}
+
+.deal-card {
+  flex:none;
+  width:384px;           /* 3 + 2 gaps fill the 1200 wrap (same as .tm-card) */
+  margin-right:24px;
+  background:var(--offwhite);
+  padding:36px 32px;
+}
+
+/* Amount — the hero figure of each card (rates-card typography, gold). */
+.deal-amount {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:40px;
+  line-height:1em;
+  letter-spacing:-0.04em;
+  color:var(--gold);
+}
+
+.deal-card hr {
+  border:none;
+  border-top:1px solid var(--gold);
+  margin:22px 0;
+}
+
+.deal-row {
+  margin-bottom:16px;
+}
+
+.deal-row:last-of-type {
+  margin-bottom:0;
+}
+
+/* Label/value pairs — rates-card language: small gold sans label, serif value. */
+.deal-row .k {
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:12px;
+  line-height:1em;
+  letter-spacing:0.02em;
+  color:var(--gold);
+  margin-bottom:5px;
+}
+
+.deal-row .v {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:22px;
+  line-height:1.1em;
+  letter-spacing:-0.04em;
+  color:var(--navy);
+}
+
+.deal-note {
+  margin-top:20px;
+  font-size:14px;
+  line-height:1.5em;
+  letter-spacing:0.02em;
+  color:rgba(19,39,79,.7);
+}
+
+@media (max-width:1024px) {
+  /* Tablet h2 → intro gap follows the global 20px rhythm (these rules sit
+     after the generic media block, so they need their own override). */
+  .svcdo-intro,
+  .process-intro {
+    margin-top:20px;
+  }
+
+  /* Intro → service rows gap on tablet (tighter than desktop's 48px). */
+  .svcdo-band .sec-head {
+    margin-bottom:30px;
+  }
+
+  .sv-grid {
+    gap:0 40px;
+    margin-top:0;
+  }
+
+  /* Full-width tablet column — match the global portable intro width. */
+  .process-intro {
+    max-width:560px;
+  }
+
+  /* Deal cards: exactly 2 full cards in view on tablet (these rules must live
+     here, AFTER the base 384px rule, to win the cascade). */
+  .deal-card {
+    width:calc((100% - 24px) / 2);
+  }
+
+  /* Tighter process rows. */
+  .step {
+    padding-bottom:22px;
+    margin-bottom:22px;
+  }
+
+  /* Proof of Work header: button → arrows gap, and the button follows the
+     global tablet 30px button rhythm. */
+  .deals-btn {
+    margin-top:30px;
+  }
+
+  .deals-band .team-head {
+    gap:32px;
+  }
+
+  /* Tablet name tier drops to 20px (matches team/testimonial names). */
+  .sv-name,
+  .step h3,
+  .asset-tile h3 {
+    font-size:20px;
+  }
+
+  .sv-icon {
+    width:26px;
+    height:26px;
+    margin-top:0;
+  }
+
+  .asset-tiles {
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+
+  .asset-tile {
+    min-height:120px;
+  }
+
+  .process {
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+
+  .step-num {
+    width:36px;
+    font-size:24px;
+  }
+
+  .deal-card {
+    padding:28px 24px;
+  }
+
+  .deal-amount {
+    font-size:32px;
+  }
+
+  .deal-row .v {
+    font-size:19px;
+  }
+
+  /* No hover on touch — pin the service rows to their resting colour. */
+  .sv-row:hover .sv-name,
+  .sv-row:hover p {
+    color:inherit;
+  }
+}
+
+@media (max-width:767px) {
+  .sv-grid {
+    grid-template-columns:1fr;
+  }
+
+  /* Mobile keeps the tighter intro → rows gap. */
+  .svcdo-band .sec-head {
+    margin-bottom:15px;
+  }
+
+  /* One full deal card in view on mobile. */
+  .deal-card {
+    width:100%;
+  }
+
+  /* Single column: only the very last row drops its divider. */
+  .sv-row:nth-last-child(-n+2) {
+    border-bottom:1px solid rgba(19,39,79,.15);
+  }
+
+  .sv-row:last-child {
+    border-bottom:none;
+  }
+
+  .sv-row {
+    padding:20px 0;
+  }
+
+  .asset-tiles {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  /* Narrow half-width tiles: top padding reserves the icon's corner so long
+     labels ("Multifamily (including CMHC)") can't stack into it. */
+  .asset-tile {
+    min-height:110px;
+    padding:44px 14px 14px;
+  }
+
+  .at-icon {
+    top:14px;
+    left:14px;
+    width:22px;
+    height:22px;
+  }
+
+  .asset-tile h3 {
+    font-size:18px;
+  }
+}
+
+/* ---------- RESOURCES PAGE ---------- */
+.news-band {
+  background:var(--white);
+}
+
+.news-intro {
+  margin:25px 0 0;
+  max-width:620px;
+}
+
+/* Controls row — category tabs left, search + sort right, one shared rule. */
+.res-controls {
+  display:flex;
+  align-items:flex-end;
+  gap:32px;
+  margin-top:50px;
+  border-bottom:1px solid rgba(19,39,79,.15);
+}
+
+.res-tools {
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding-bottom:12px;
+  margin-left:auto;
+}
+
+/* Underline search field (brand form language, compact). */
+.res-search {
+  width:200px;
+  border:none;
+  border-bottom:1px solid rgba(19,39,79,.3);
+  background:transparent;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:14px;
+  line-height:1.5em;
+  letter-spacing:0.02em;
+  color:var(--navy);
+  padding:0 0 6px;
+}
+
+.res-search::placeholder {
+  color:rgba(19,39,79,.45);
+}
+
+.res-search:focus {
+  outline:none;
+  border-bottom-color:var(--gold);
+}
+
+.res-sort {
+  border:none;
+  background:transparent;
+  font-family:var(--sans);
+  font-weight:500;
+  font-size:14px;
+  letter-spacing:0.02em;
+  color:var(--navy);
+  cursor:pointer;
+}
+
+.res-sort:focus {
+  outline:none;
+}
+
+/* Filter tabs — the gold underline indicator slides between tabs (JS sets
+   its left/width from the active button). */
+.res-tabs {
+  position:relative;
+  display:flex;
+  flex:1;
+  min-width:0;
+  gap:40px;
+}
+
+.res-tab {
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-family:var(--sans);
+  font-weight:500;
+  font-size:16px;
+  line-height:1em;
+  letter-spacing:0.02em;
+  color:rgba(19,39,79,.5);
+  padding:0 0 16px;
+  transition:color .4s ease;
+  white-space:nowrap;
+}
+
+.res-tab:hover {
+  color:var(--gold);
+}
+
+.res-tab.active {
+  color:var(--navy);
+}
+
+.tab-line {
+  position:absolute;
+  bottom:-1px;
+  left:0;
+  width:0;
+  height:2px;
+  background:var(--gold);
+  transition:left .35s ease, width .35s ease;
+}
+
+/* Article grid — the first visible card carries .res-card--featured (full-row,
+   horizontal); the rest are standard vertical cards. Same markup, restyled. */
+.res-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-top:40px;
+  transition:opacity .25s ease, transform .25s ease;
+}
+
+/* Filter switch: the grid dips out, cards swap, grid fades back. */
+.res-grid.switching {
+  opacity:0;
+  transform:translateY(12px);
+}
+
+.res-card {
+  display:flex;
+  flex-direction:column;
+  background:var(--offwhite);
+}
+
+.res-card.hidden {
+  display:none;
+}
+
+/* Cards stagger in on every render — tab switch, search, sort, load-more
+   (the JS sets a per-card animation-delay; `both` keeps them hidden until
+   their turn). */
+.res-card--in {
+  animation:card-in .5s ease both;
+}
+
+@keyframes card-in {
+  from {
+    opacity:0;
+    transform:translateY(20px);
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .res-card--in {
+    animation:none;
+  }
+}
+
+/* Loading / empty message inside the grid. */
+.res-state {
+  grid-column:1 / -1;
+  padding:40px 0;
+  color:rgba(19,39,79,.6);
+}
+
+/* Load More — centred under the grid. */
+.res-more {
+  text-align:center;
+  margin-top:48px;
+}
+
+.res-media {
+  aspect-ratio:16/10;
+  overflow:hidden;
+}
+
+/* Posts without a featured image get a flat navy brand panel. */
+.res-media--empty {
+  background:var(--navy);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.res-media--empty img {
+  width:55%;
+  height:auto;
+  object-fit:contain;
+  filter:none;
+  opacity:.85;
+}
+
+.res-media img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:grayscale(1);          /* colours up on hover, like the team photos */
+  transition:filter .5s ease;
+}
+
+.res-card:hover .res-media img {
+  filter:grayscale(0);
+}
+
+.res-body {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  padding:28px;
+}
+
+.res-tag {
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:12px;
+  line-height:1em;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--gold);
+}
+
+.res-title {
+  margin-top:14px;
+  font-size:25px;
+  line-height:1.04em;
+  letter-spacing:-0.04em;
+  color:var(--navy);
+  transition:color .6s ease;
+}
+
+.res-card:hover .res-title {
+  color:var(--gold);
+}
+
+.res-card p {
+  margin-top:12px;
+}
+
+/* Date · read time — pinned to the card bottom. */
+.res-meta {
+  margin-top:auto;
+  padding-top:20px;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:14px;
+  line-height:1em;
+  letter-spacing:0.02em;
+  color:rgba(19,39,79,.6);
+}
+
+.res-card--featured {
+  grid-column:1 / -1;
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+}
+
+/* The image is absolutely positioned so its intrinsic ratio can NEVER drive
+   the card height (a portrait photo would otherwise stretch the whole row).
+   430px = the height a 3:2 landscape gives this column — the card always
+   renders at that original height, and any photo cover-crops into it. */
+.res-card--featured .res-media {
+  aspect-ratio:auto;
+  position:relative;
+  min-height:430px;
+}
+
+.res-card--featured .res-media img {
+  position:absolute;
+  inset:0;
+}
+
+.res-card--featured .res-body {
+  padding:40px;
+}
+
+.res-card--featured .res-title {
+  font-size:30px;
+}
+
+/* Newsletter — gold full-bleed close. The headline accent inverts to navy
+   (gold-on-gold would vanish). */
+.subscribe-band {
+  background:var(--gold);
+  color:var(--white);
+  text-align:center;
+}
+
+.subscribe-band h2 {
+  max-width:700px;
+  margin-inline:auto;
+}
+
+.subscribe-band h2 .accent {
+  color:var(--navy);
+}
+
+.subscribe-band p {
+  margin:20px auto 0;
+  max-width:480px;
+  opacity:.95;
+}
+
+.sub-form {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  max-width:480px;
+  margin:45px auto 0;
+}
+
+/* Underline input, inverted for the gold band. */
+.sub-form input {
+  flex:1;
+  min-width:0;
+  border:none;
+  border-bottom:1px solid var(--white);
+  background:transparent;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+  color:var(--white);
+  padding:0 0 12px;
+}
+
+.sub-form input::placeholder {
+  color:rgba(255,255,255,.6);
+}
+
+.sub-form input:focus {
+  outline:none;
+}
+
+/* Navy circle submit — the footer news-btn language, inverted + larger. */
+.sub-btn {
+  flex:none;
+  width:48px;
+  height:48px;
+  border:none;
+  border-radius:50%;
+  background:var(--navy);
+  color:var(--white);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:box-shadow .6s ease;
+}
+
+.sub-btn:hover {
+  box-shadow:inset 0 0 0 200px rgba(0,0,0,.25);
+}
+
+.sub-btn svg {
+  width:20px;
+  height:20px;
+}
+
+@media (max-width:1024px) {
+  .news-intro {
+    margin-top:20px;      /* global tablet h2 → paragraph rhythm */
+  }
+
+  /* Controls stack: scrollable tab row on top, search + sort below. */
+  .res-controls {
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    margin-top:40px;
+    border-bottom:none;
+  }
+
+  .res-tabs {
+    gap:28px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    border-bottom:1px solid rgba(19,39,79,.15);
+  }
+
+  .res-tabs::-webkit-scrollbar {
+    display:none;
+  }
+
+  .res-tools {
+    margin-left:0;
+    padding:20px 0 0;
+  }
+
+  .res-search {
+    flex:1;
+    width:auto;
+  }
+
+  .res-grid {
+    margin-top:30px;
+  }
+
+  /* Name tier drops to the portable 20px (24px for the featured title). */
+  .res-title {
+    font-size:20px;
+  }
+
+  .res-card--featured .res-title {
+    font-size:24px;
+  }
+
+  .res-body {
+    padding:24px;
+  }
+
+  .res-card--featured .res-body {
+    padding:28px;
+  }
+
+  .res-card--featured .res-media {
+    min-height:260px;
+  }
+
+  .sub-btn {
+    width:45px;
+    height:45px;
+  }
+
+  /* No hover on touch — pin tabs/cards/button to their resting state;
+     article images show in colour by default. */
+  .res-tab:hover {
+    color:rgba(19,39,79,.5);
+  }
+
+  .res-tab.active,
+  .res-tab.active:hover {
+    color:var(--navy);
+  }
+
+  .res-media img {
+    filter:none;
+  }
+
+  .res-card:hover .res-title {
+    color:var(--navy);
+  }
+
+  .sub-btn:hover {
+    box-shadow:none;
+  }
+}
+
+@media (max-width:767px) {
+  .res-grid {
+    grid-template-columns:1fr;
+  }
+
+  /* Featured card stacks like a regular card on mobile. */
+  .res-card--featured {
+    grid-template-columns:1fr;
+  }
+
+  .res-card--featured .res-media {
+    aspect-ratio:16/10;
+    min-height:0;
+    height:auto;
+  }
+
+  .sub-form {
+    margin-top:35px;
+  }
+
+  .sub-btn {
+    width:40px;
+    height:40px;
+  }
+}
+
+/* ---------- ARTICLE PAGE (/resources/post) ---------- */
+/* Single blog post, rendered client-side from /blog/api.php. The .art-main
+   top margin clears the fixed bar (mirrors .page-head: 126/72/63). */
+.art-main {
+  margin-top:126px;
+  padding:90px 0 120px;
+  background:var(--white);
+}
+
+.art-wrap {
+  max-width:800px;        /* reading measure inside the 1200 wrap */
+}
+
+.art-state {
+  padding:60px 0;
+  color:rgba(19,39,79,.6);
+}
+
+.art-state a {
+  color:var(--gold);
+}
+
+.art-title {
+  font-size:50px;         /* h2 scale — 44px tablet / 34px mobile */
+  line-height:1.05em;
+  letter-spacing:-0.04em;
+  margin-top:14px;
+}
+
+.art-meta {
+  margin-top:16px;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:14px;
+  line-height:1.5em;
+  letter-spacing:0.02em;
+  color:rgba(19,39,79,.6);
+}
+
+.art-featured {
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  margin-top:36px;
+}
+
+/* Post body — block typography on the brand scale. */
+.art-body {
+  margin-top:40px;
+}
+
+.art-body h2 {
+  font-size:30px;
+  line-height:1.1em;
+  letter-spacing:-0.04em;
+  margin:40px 0 16px;
+}
+
+.art-body h3 {
+  font-size:24px;
+  line-height:1.1em;
+  letter-spacing:-0.04em;
+  margin:32px 0 12px;
+}
+
+.art-body p {
+  margin-bottom:18px;
+}
+
+.art-body ul,
+.art-body ol {
+  margin:0 0 18px 22px;
+}
+
+.art-body li {
+  padding:4px 0;
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+}
+
+.art-body li::marker {
+  color:var(--gold);
+}
+
+.art-body figure {
+  margin:32px 0;
+}
+
+.art-body figure img {
+  width:100%;
+}
+
+.art-body figcaption {
+  margin-top:10px;
+  font-family:var(--sans);
+  font-size:14px;
+  line-height:1.5em;
+  letter-spacing:0.02em;
+  color:rgba(19,39,79,.6);
+}
+
+.art-back {
+  display:inline-block;
+  margin-top:48px;
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:18px;
+  letter-spacing:-0.04em;
+  color:var(--gold);
+  transition:color .4s ease;
+}
+
+.art-back:hover {
+  color:var(--navy);
+}
+
+@media (max-width:1024px) {
+  .art-main {
+    margin-top:72px;
+    padding:65px 0;
+  }
+
+  .art-title {
+    font-size:44px;
+  }
+
+  .art-body h2 {
+    font-size:24px;
+  }
+
+  .art-body h3 {
+    font-size:20px;
+  }
+
+  /* No hover on touch. */
+  .art-back:hover {
+    color:var(--gold);
+  }
+}
+
+@media (max-width:767px) {
+  .art-main {
+    margin-top:63px;
+    padding:50px 0;
+  }
+
+  .art-title {
+    font-size:34px;
+  }
+
+  .art-body li {
+    font-size:16px;
+  }
 }
 
 /* ---------- SCROLL REVEAL (GSAP) ---------- */
@@ -1385,4 +3123,20 @@ footer .wrap {
     opacity:1;
     transform:none;
   }
+}
+
+/* Rates cells start hidden when JS is active (the GSAP count-up reveals them). */
+.js-motion .rates .rate {
+  opacity:0;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .js-motion .rates .rate {
+    opacity:1;
+  }
+}
+
+/* Keep each number + % together (the % shifts as the counting number's width changes). */
+.num-wrap {
+  white-space:nowrap;
 }

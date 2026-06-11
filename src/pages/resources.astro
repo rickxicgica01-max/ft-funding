@@ -1,43 +1,318 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
+
+// The article cards are rendered CLIENT-SIDE from the live blog feed
+// (/blog/api.php — the PHP module in public/blog/, managed via /blog/admin).
+// Posts are matched to these tabs by their blog CATEGORY, so the client must
+// use these exact category names when publishing.
+const categories = ['All', 'Market Updates', 'Financing Tips', 'Lending Criteria', 'Case Studies'];
 ---
 <BaseLayout
   title="Resources — FT Funding Direct Capital"
-  description="Our sources of capital span Canadian and international banks, insurers, pension funds, credit unions, CMHC, private equity, MICs, CMBS conduits, and family offices."
+  description="Market moves, lending criteria, and practical guidance for borrowers — insights from the people who arrange commercial financing across Canada."
 >
-  <Nav solid />
+  <!-- HERO — transparent nav over the image, same as the other pages.
+       The button anchors to the newsletter band at the page's end. -->
+  <section class="hero hero--resources">
+    <Nav />
+    <div class="hero-body">
+      <div class="hero-inner" data-reveal-stagger>
+        <h1 data-reveal>Insights from the financing <span class="gold">front line.</span></h1>
+        <p data-reveal>Market moves, lending criteria, and practical guidance for borrowers, straight from the people who arrange the deals.</p>
+        <a href="#subscribe" class="btn btn-outline" data-reveal>Subscribe for Updates</a>
+      </div>
+    </div>
+  </section>
 
-  <section class="page-head">
+  <!-- NEWS & INSIGHTS — category tabs + search + sort, fed by the blog API -->
+  <section class="news-band">
     <div class="wrap">
-      <div class="eyebrow" data-reveal>Resources</div>
-      <h1 data-reveal>Sources of <span class="gold">Capital</span></h1>
-      <p data-reveal>Direct relationships across the full spectrum of commercial lenders let us place every deal with the right capital partner.</p>
+      <div class="sec-head" data-reveal>
+        <div class="eyebrow">News &amp; Insights</div>
+        <h2>What's moving the <span class="gold">market.</span></h2>
+        <p class="intro-copy news-intro">Rates shift. Programs change. Criteria tighten and loosen. We track it so you can make informed decisions, and we share what we learn.</p>
+      </div>
+
+      <!-- Controls + grid + load-more reveal as ONE component (a single
+           data-reveal), so the entrance is one clean fade-up instead of
+           stacked animations. -->
+      <div data-reveal>
+        <div class="res-controls">
+          <div class="res-tabs" role="tablist" aria-label="Article categories">
+            {categories.map((c, i) => (
+              <button class:list={["res-tab", { active: i === 0 }]} type="button" data-cat={c} role="tab" aria-selected={i === 0 ? 'true' : 'false'}>{c}</button>
+            ))}
+            <span class="tab-line" aria-hidden="true"></span>
+          </div>
+          <div class="res-tools">
+            <input class="res-search" type="search" placeholder="Search articles…" aria-label="Search articles">
+            <select class="res-sort" aria-label="Sort articles">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="updated">Recently updated</option>
+              <option value="title">Title A–Z</option>
+              <option value="title_desc">Title Z–A</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="res-grid">
+          <p class="res-state">Loading articles…</p>
+        </div>
+
+        <div class="res-more" hidden>
+          <button class="btn btn-outline" type="button">Load More</button>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="sources-band">
-    <div class="wrap sources">
-      <div class="logos" data-reveal-stagger>
-        <div data-reveal>TD</div><div data-reveal>CIBC</div><div data-reveal>MCAP</div>
-        <div data-reveal>Equitable</div><div data-reveal>Desjardins</div><div data-reveal>RBC</div>
-        <div data-reveal>IAM</div><div data-reveal>Home Trust</div><div data-reveal>First National</div>
-      </div>
-      <div>
-        <h2 style="font-size:clamp(32px,4vw,50px);margin-bottom:24px;" data-reveal>Who We <span class="gold">Work With</span></h2>
-        <ul>
-          <li>Canadian Banks</li>
-          <li>International Banks</li>
-          <li>Insurance Companies (Domestic &amp; Foreign)</li>
-          <li>Pension Funds</li>
-          <li>Credit Unions</li>
-          <li>CMHC</li>
-          <li>Private Equity &amp; Debt Funds</li>
-          <li>Mortgage Investment Corporations (MICs)</li>
-          <li>CMBS Conduits</li>
-          <li>Family Offices</li>
-        </ul>
-      </div>
+  <!-- NEWSLETTER — gold band close -->
+  <section id="subscribe" class="subscribe-band">
+    <div class="wrap">
+      <h2 data-reveal>Get the insights before the market <span class="accent">does.</span></h2>
+      <p data-reveal>Monthly updates on rates, programs, and opportunities. No noise.</p>
+      <form class="sub-form" onsubmit="return false;" data-reveal>
+        <input type="email" placeholder="Enter Your Email" aria-label="Email address">
+        <button class="sub-btn" type="submit" aria-label="Subscribe">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="6" y1="18" x2="18" y2="6"></line>
+            <polyline points="10 6 18 6 18 14"></polyline>
+          </svg>
+        </button>
+      </form>
     </div>
   </section>
+
+  <script>
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  // ------------------------------------------------------------------ data --
+  const API = '/blog/api.php';
+  const UPLOADS = '/blog/uploads/';
+  const PAGE_SIZE = 7;        // 1 featured + 6 grid cards per "page"
+
+  type Block = { type: string; text?: string; items?: string[]; caption?: string; src?: string; level?: string };
+  type Post = {
+    slug: string; title: string; image?: string;
+    categories?: string[]; tags?: string[];
+    blocks?: Block[]; date?: string; updated?: string;
+  };
+
+  // When the PHP feed is unreachable (e.g. `astro dev` serves public/ as
+  // static files), load the seed posts' JSON directly — same content the API
+  // serves in production, so links and the article template work everywhere.
+  const SEED_SLUGS = [
+    'commercial-real-estate-financing-a-borrower-s-guide-for-2026',
+    'multi-residential-financing-in-the-gta-what-lenders-look-for',
+    'cmhc-insured-loans-explained-lower-rates-higher-leverage',
+    'bridge-financing-101-when-speed-beats-rate',
+    'how-lenders-underwrite-your-deal-and-how-to-get-to-yes-faster',
+    'case-study-14-2m-cmhc-construction-loan-closed-on-time',
+  ];
+  const loadSeeds = (): Promise<Post[]> =>
+    Promise.all(SEED_SLUGS.map((s) =>
+      fetch('/blog/posts/' + s + '.json').then((r) => (r.ok ? r.json() : null)).catch(() => null)
+    )).then((list) => list.filter(Boolean) as Post[]);
+
+  // Admin uploads store bare filenames under /blog/uploads/; the seed posts
+  // use absolute URLs — resolve both.
+  const imgUrl = (name: string): string =>
+    /^(https?:)?\/\//.test(name) || name.startsWith('/') ? name : UPLOADS + encodeURIComponent(name);
+
+  // ------------------------------------------------------------- helpers --
+  const excerptOf = (p: Post, limit = 160): string => {
+    let text = '';
+    for (const b of p.blocks ?? []) {
+      if (b.type === 'paragraph' && (b.text ?? '').trim()) { text = b.text!; break; }
+    }
+    if (!text) {
+      for (const b of p.blocks ?? []) {
+        if (b.type === 'heading' && (b.text ?? '').trim()) { text = b.text!; break; }
+        if (b.type === 'list' && b.items?.length) { text = b.items.join(', '); break; }
+      }
+    }
+    text = text.replace(/\s+/g, ' ').trim();
+    return text.length > limit ? text.slice(0, limit) + '…' : text;
+  };
+
+  const readTimeOf = (p: Post): string => {
+    let words = (p.title ?? '').split(/\s+/).length;
+    for (const b of p.blocks ?? []) {
+      if (b.text) words += b.text.split(/\s+/).length;
+      if (b.items) words += b.items.join(' ').split(/\s+/).length;
+    }
+    return Math.max(1, Math.round(words / 200)) + ' min read';
+  };
+
+  const fmtDate = (iso?: string): string => {
+    const d = new Date(iso ?? '');
+    return isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const searchText = (p: Post): string =>
+    [p.title, ...(p.categories ?? []), ...(p.tags ?? []),
+     ...(p.blocks ?? []).map((b) => [b.text ?? '', b.caption ?? '', (b.items ?? []).join(' ')].join(' '))]
+      .join(' ').toLowerCase();
+
+  const SORTS: Record<string, (a: Post, b: Post) => number> = {
+    newest:     (a, b) => (b.date ?? '').localeCompare(a.date ?? ''),
+    oldest:     (a, b) => (a.date ?? '').localeCompare(b.date ?? ''),
+    updated:    (a, b) => (b.updated ?? b.date ?? '').localeCompare(a.updated ?? a.date ?? ''),
+    title:      (a, b) => (a.title ?? '').localeCompare(b.title ?? '', undefined, { numeric: true, sensitivity: 'base' }),
+    title_desc: (a, b) => (b.title ?? '').localeCompare(a.title ?? '', undefined, { numeric: true, sensitivity: 'base' }),
+  };
+
+  // ------------------------------------------------------------- elements --
+  const grid = document.querySelector('.res-grid') as HTMLElement | null;
+  const tabs = document.querySelectorAll('.res-tab') as NodeListOf<HTMLButtonElement>;
+  const line = document.querySelector('.tab-line') as HTMLElement | null;
+  const search = document.querySelector('.res-search') as HTMLInputElement | null;
+  const sortSel = document.querySelector('.res-sort') as HTMLSelectElement | null;
+  const moreWrap = document.querySelector('.res-more') as HTMLElement | null;
+  const moreBtn = moreWrap?.querySelector('button') as HTMLButtonElement | null;
+
+  if (grid && tabs.length && line && search && sortSel && moreWrap && moreBtn) {
+    const g = grid, ln = line, mw = moreWrap, mb = moreBtn, se = search, so = sortSel;
+    let posts: Post[] = [];
+    let activeCat = 'All';
+    let visible = PAGE_SIZE;
+
+    const moveLine = (btn: HTMLButtonElement) => {
+      ln.style.left = btn.offsetLeft + 'px';
+      ln.style.width = btn.offsetWidth + 'px';
+    };
+
+    // Build one card. Everything user-authored goes in via textContent — the
+    // blog stores raw text, so the page owns all escaping.
+    const cardFor = (p: Post, featured: boolean): HTMLElement => {
+      const a = document.createElement('a');
+      a.className = 'res-card' + (featured ? ' res-card--featured' : '');
+      a.href = '/resources/post?slug=' + encodeURIComponent(p.slug);
+
+      const media = document.createElement('div');
+      media.className = 'res-media';
+      if (p.image) {
+        const img = document.createElement('img');
+        img.src = imgUrl(p.image);
+        img.alt = '';
+        img.loading = 'lazy';
+        media.appendChild(img);
+      } else {
+        media.classList.add('res-media--empty');   // brand placeholder panel
+        const logo = document.createElement('img');
+        logo.src = '/navigation/site-logo.png';
+        logo.alt = '';
+        media.appendChild(logo);
+      }
+      a.appendChild(media);
+
+      const body = document.createElement('div');
+      body.className = 'res-body';
+      const tag = document.createElement('div');
+      tag.className = 'res-tag';
+      tag.textContent = (p.categories ?? [])[0] ?? 'Insights';
+      const title = document.createElement('h3');
+      title.className = 'res-title';
+      title.textContent = p.title ?? '(untitled)';
+      body.append(tag, title);
+      const ex = excerptOf(p);
+      if (ex) {
+        const para = document.createElement('p');
+        para.textContent = ex;
+        body.appendChild(para);
+      }
+      const meta = document.createElement('div');
+      meta.className = 'res-meta';
+      meta.textContent = [fmtDate(p.date), readTimeOf(p)].filter(Boolean).join(' · ');
+      body.appendChild(meta);
+      a.appendChild(body);
+      return a;
+    };
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // animateFrom: cards at that index and later stagger in (0 = all of them;
+    // load-more passes the old count so existing cards don't re-flash).
+    const render = (animateFrom = 0) => {
+      const q = se.value.trim().toLowerCase();
+      let list = posts.filter((p) => activeCat === 'All' || (p.categories ?? []).includes(activeCat));
+      if (q) list = list.filter((p) => searchText(p).includes(q));
+      list = [...list].sort(SORTS[so.value] ?? SORTS.newest);
+
+      g.innerHTML = '';
+      if (!list.length) {
+        const empty = document.createElement('p');
+        empty.className = 'res-state';
+        empty.textContent = q ? 'No articles match your search.' : 'No articles in this category yet.';
+        g.appendChild(empty);
+      } else {
+        list.slice(0, visible).forEach((p, i) => {
+          const card = cardFor(p, i === 0);
+          if (!reduceMotion && i >= animateFrom) {
+            card.classList.add('res-card--in');
+            card.style.animationDelay = (i - animateFrom) * 70 + 'ms';
+          }
+          g.appendChild(card);
+        });
+      }
+      mw.hidden = list.length <= visible;
+      // The page height changed — re-measure the reveal triggers below.
+      (ScrollTrigger as any).refresh();
+    };
+
+    const switchAnd = (update: () => void) => {
+      g.classList.add('switching');
+      setTimeout(() => {
+        update();
+        g.classList.remove('switching');
+      }, 250);
+    };
+
+    tabs.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('active')) return;
+        tabs.forEach((b) => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        moveLine(btn);
+        switchAnd(() => { activeCat = btn.dataset.cat || 'All'; visible = PAGE_SIZE; render(); });
+      });
+    });
+
+    let debounce: ReturnType<typeof setTimeout> | null = null;
+    se.addEventListener('input', () => {
+      if (debounce) clearTimeout(debounce);
+      debounce = setTimeout(() => { visible = PAGE_SIZE; render(); }, 250);
+    });
+
+    so.addEventListener('change', () => switchAnd(() => { visible = PAGE_SIZE; render(); }));
+
+    mb.addEventListener('click', () => {
+      const alreadyShown = visible;
+      visible += PAGE_SIZE - 1;
+      render(alreadyShown);   // only the new cards animate in
+    });
+
+    const syncLine = () => {
+      const a = document.querySelector('.res-tab.active') as HTMLButtonElement | null;
+      if (a) moveLine(a);
+    };
+    syncLine();
+    window.addEventListener('resize', syncLine);
+    window.addEventListener('load', syncLine);
+
+    // ------------------------------------------------------------- boot --
+    fetch(API, { headers: { Accept: 'application/json' } })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((data) => {
+        if (!Array.isArray(data?.posts)) throw new Error('bad feed');
+        posts = data.posts;
+        render(Infinity);   // first paint: the grid's own scroll-reveal is the
+                            // entrance — card stagger on top reads as janky
+      })
+      .catch(() => loadSeeds().then((list) => { posts = list; render(Infinity); }));   // local dev / API down
+  }
+  </script>
 </BaseLayout>
