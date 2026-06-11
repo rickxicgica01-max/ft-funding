@@ -80,7 +80,8 @@ $pageUrl = fn(int $n) => 'dashboard.php' . build_query(['sort' => $sort !== 'new
             </div>
 
             <div class="actions">
-              <a class="btn btn-sm" href="<?= e(BASE_URL) ?>/post/<?= e(rawurlencode($p['slug'])) ?>" target="_blank">View</a>
+              <!-- Posts render on the main site's article template, not the module's own page. -->
+              <a class="btn btn-sm" href="/resources/post?slug=<?= e(rawurlencode($p['slug'])) ?>" target="_blank">View</a>
               <a class="btn btn-sm" href="editor.php?slug=<?= e(urlencode($p['slug'])) ?>">Edit</a>
               <!-- duplicate clones the post (and its images) and opens the editor on the copy -->
               <form method="post" action="duplicate-post.php" style="margin:0;">

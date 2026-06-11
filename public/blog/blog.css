@@ -1,0 +1,152 @@
+/* FT Funding — admin PREVIEW stylesheet.
+   Loaded ONLY by the editor's "Preview" tab (admin/editor.php), which mirrors
+   the post markup. It approximates the real article page (/resources/post) so
+   the client previews roughly what visitors will see. The live site does NOT
+   use this file — article styling lives in the site's global.css. */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --navy:#13274f;
+  --gold:#d3a243;
+  --serif:'Times New Roman', Times, Georgia, serif;
+  --sans:'Instrument Sans', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body {
+  font-family:var(--sans);
+  color:var(--navy);
+  background:#fff;
+  line-height:1.5;
+  padding:70px 5%;
+  -webkit-font-smoothing:antialiased;
+}
+
+.article {
+  max-width:800px;
+  margin:0 auto;
+}
+
+.article-title {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:50px;
+  line-height:1.05em;
+  letter-spacing:-0.04em;
+}
+
+.article-meta {
+  margin-top:16px;
+  font-size:14px;
+  letter-spacing:0.02em;
+  color:rgba(19,39,79,.6);
+}
+
+.article-featured {
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  margin-top:36px;
+}
+
+.article h2 {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:30px;
+  line-height:1.1em;
+  letter-spacing:-0.04em;
+  margin:40px 0 16px;
+}
+
+.article h3 {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:24px;
+  line-height:1.1em;
+  letter-spacing:-0.04em;
+  margin:32px 0 12px;
+}
+
+.article p {
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+  margin-bottom:18px;
+}
+
+.article ul,
+.article ol {
+  margin:0 0 18px 22px;
+}
+
+.article li {
+  padding:4px 0;
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+}
+
+.article li::marker {
+  color:var(--gold);
+}
+
+figure.post-image {
+  margin:32px 0;
+}
+
+figure.post-image img {
+  width:100%;
+  display:block;
+}
+
+figure.post-image figcaption {
+  margin-top:10px;
+  font-size:14px;
+  letter-spacing:0.02em;
+  color:rgba(19,39,79,.6);
+}
+
+.post-terms {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:40px;
+}
+
+.post-terms .term {
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--gold);
+  border:1px solid var(--gold);
+  padding:6px 12px;
+}
+
+@media (max-width:767px) {
+  body {
+    padding:40px 5%;
+  }
+
+  .article-title {
+    font-size:34px;
+  }
+
+  .article h2 {
+    font-size:24px;
+  }
+
+  .article h3 {
+    font-size:20px;
+  }
+
+  .article p,
+  .article li {
+    font-size:16px;
+  }
+}
