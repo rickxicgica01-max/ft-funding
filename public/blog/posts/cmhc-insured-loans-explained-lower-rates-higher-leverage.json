@@ -1,9 +1,14 @@
 {
     "slug": "cmhc-insured-loans-explained-lower-rates-higher-leverage",
     "title": "CMHC Insured Loans Explained: Lower Rates, Higher Leverage",
-    "image": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=1200&auto=format&fit=crop",
-    "categories": ["Financing Tips"],
-    "tags": ["CMHC", "multifamily"],
+    "image": "cmhc-insured-loans.jpg",
+    "categories": [
+        "Financing Tips"
+    ],
+    "tags": [
+        "CMHC",
+        "multifamily"
+    ],
     "blocks": [
         {
             "type": "paragraph",

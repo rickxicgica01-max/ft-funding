@@ -1,9 +1,14 @@
 {
     "slug": "multi-residential-financing-in-the-gta-what-lenders-look-for",
     "title": "Multi-Residential Financing in the GTA: What Lenders Look For",
-    "image": "https://images.unsplash.com/photo-1460317442991-0ec209397118?q=80&w=1200&auto=format&fit=crop",
-    "categories": ["Lending Criteria"],
-    "tags": ["GTA", "multifamily"],
+    "image": "gta-multi-residential.jpg",
+    "categories": [
+        "Lending Criteria"
+    ],
+    "tags": [
+        "GTA",
+        "multifamily"
+    ],
     "blocks": [
         {
             "type": "paragraph",

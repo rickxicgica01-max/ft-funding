@@ -1,9 +1,14 @@
 {
     "slug": "commercial-real-estate-financing-a-borrower-s-guide-for-2026",
     "title": "Commercial Real Estate Financing: A Borrower's Guide for 2026",
-    "image": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop",
-    "categories": ["Market Updates"],
-    "tags": ["guide", "2026"],
+    "image": "borrowers-guide-2026.jpg",
+    "categories": [
+        "Market Updates"
+    ],
+    "tags": [
+        "guide",
+        "2026"
+    ],
     "blocks": [
         {
             "type": "paragraph",

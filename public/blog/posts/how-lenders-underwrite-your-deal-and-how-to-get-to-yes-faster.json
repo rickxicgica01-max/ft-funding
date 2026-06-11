@@ -1,9 +1,13 @@
 {
     "slug": "how-lenders-underwrite-your-deal-and-how-to-get-to-yes-faster",
     "title": "How Lenders Underwrite Your Deal, and How to Get to Yes Faster",
-    "image": "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop",
-    "categories": ["Lending Criteria"],
-    "tags": ["underwriting"],
+    "image": "lender-underwriting.jpg",
+    "categories": [
+        "Lending Criteria"
+    ],
+    "tags": [
+        "underwriting"
+    ],
     "blocks": [
         {
             "type": "paragraph",

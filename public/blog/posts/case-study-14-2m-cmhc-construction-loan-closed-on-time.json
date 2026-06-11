@@ -1,9 +1,15 @@
 {
     "slug": "case-study-14-2m-cmhc-construction-loan-closed-on-time",
     "title": "Case Study: $14.2M CMHC Construction Loan, Closed on Time",
-    "image": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop",
-    "categories": ["Case Studies"],
-    "tags": ["CMHC", "construction", "Toronto"],
+    "image": "case-study-cmhc-construction.jpg",
+    "categories": [
+        "Case Studies"
+    ],
+    "tags": [
+        "CMHC",
+        "construction",
+        "Toronto"
+    ],
     "blocks": [
         {
             "type": "paragraph",

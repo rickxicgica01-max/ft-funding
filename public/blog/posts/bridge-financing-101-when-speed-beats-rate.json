@@ -1,9 +1,13 @@
 {
     "slug": "bridge-financing-101-when-speed-beats-rate",
     "title": "Bridge Financing 101: When Speed Beats Rate",
-    "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop",
-    "categories": ["Financing Tips"],
-    "tags": ["bridge"],
+    "image": "bridge-financing-101.jpg",
+    "categories": [
+        "Financing Tips"
+    ],
+    "tags": [
+        "bridge"
+    ],
     "blocks": [
         {
             "type": "paragraph",
