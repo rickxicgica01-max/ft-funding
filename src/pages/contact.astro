@@ -71,9 +71,10 @@ const financingTypes = ['Construction', 'Land & Development', 'Bridge', 'Term', 
         <p class="intro-copy inq-intro" data-reveal>Share a few details and the right expert will be in touch.</p>
       </div>
       <div>
-        <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
-        <form method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+        <form method="POST" action="https://formspree.io/f/mqeoyvad" data-form
           data-success="Thank you — your inquiry has been sent. The right expert will be in touch." data-reveal>
+          <input type="hidden" name="_subject" value="Contact Inquiry — FT Funding website">
+          <input type="hidden" name="source" value="Contact Inquiry">
           <div class="formgrid">
             <div class="field"><input type="text" name="name" placeholder="Your Name" autocomplete="name" required></div>
             <div class="field"><input type="email" name="email" placeholder="Your Email" autocomplete="email" required></div>

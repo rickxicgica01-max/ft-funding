@@ -204,9 +204,10 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
         <h2 data-reveal>Book a<br><span class="gold">Consultation</span></h2>
       </div>
       <div>
-        <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
-        <form method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+        <form method="POST" action="https://formspree.io/f/mqeoyvad" data-form
           data-success="Thank you — your request has been sent. We'll be in touch shortly." data-reveal>
+          <input type="hidden" name="_subject" value="Homepage Consultation — FT Funding website">
+          <input type="hidden" name="source" value="Homepage Consultation">
           <div class="formgrid">
             <div class="field"><input type="text" name="name" placeholder="Your Name" autocomplete="name" required></div>
             <div class="field"><input type="email" name="email" placeholder="Your Email" autocomplete="email" required></div>

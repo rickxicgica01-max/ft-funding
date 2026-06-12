@@ -3331,7 +3331,7 @@ footer .wrap {
 
 .consult-swap > div:first-child {
   order:2;             /* text block moves right */
-  padding-left:70px;   /* nudges the text right WITHIN its column — the
+  padding-left:100px;  /* nudges the text right WITHIN its column — the
                           form column's width is untouched */
 }
 

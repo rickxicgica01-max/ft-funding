@@ -46,7 +46,7 @@ body {
 .btn {
   display: inline-flex; align-items: center; gap: 6px;
   font-family: var(--serif); font-weight: 700; font-size: .95rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.02em; line-height: 1.5;   /* <a> and <button> match */
   padding: 8px 16px; border-radius: var(--radius); border: 1px solid var(--accent);
   background: var(--surface); color: var(--accent);
   text-decoration: none; cursor: pointer;
@@ -96,8 +96,10 @@ body {
   margin-bottom: 6px;
 }
 .field input[type=text],
+.field input[type=password],
+.field input[type=email],
 .field textarea {
-  width: 100%; font: inherit; padding: 11px 13px;
+  width: 100%; font: inherit; padding: 13px 14px;
   border: 1px solid var(--line); border-radius: var(--radius);
   background: #fff; color: var(--ink);
 }

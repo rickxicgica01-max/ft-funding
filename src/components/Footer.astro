@@ -43,9 +43,10 @@ const quickLinks = [
       </div>
       <div class="foot-col">
         <h4>Newsletter</h4>
-        <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
-        <form class="news-input" method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+        <form class="news-input" method="POST" action="https://formspree.io/f/mqeoyvad" data-form
           data-success="Thanks — you're subscribed!">
+          <input type="hidden" name="_subject" value="Newsletter signup — FT Funding website">
+          <input type="hidden" name="source" value="Footer Newsletter">
           <input type="email" name="email" placeholder="Enter Your Email" aria-label="Email address" data-label="Your email" required>
           <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button class="news-btn" type="submit" aria-label="Subscribe">

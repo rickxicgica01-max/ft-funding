@@ -73,9 +73,10 @@ const categories = ['All', 'Market Updates', 'Financing Tips', 'Lending Criteria
     <div class="wrap">
       <h2 data-reveal>Get the insights before the<br class="br-tablet"> <span class="nowrap">market <span class="accent">does.</span></span></h2>
       <p data-reveal>Monthly updates on rates, programs, and opportunities. <span class="nowrap">No noise.</span></p>
-      <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
-      <form class="sub-form" method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+      <form class="sub-form" method="POST" action="https://formspree.io/f/mqeoyvad" data-form
         data-success="Thanks — you're subscribed!" data-reveal>
+        <input type="hidden" name="_subject" value="Newsletter signup — FT Funding website">
+        <input type="hidden" name="source" value="Resources Subscribe">
         <input type="email" name="email" placeholder="Enter Your Email" aria-label="Email address" data-label="Your email" required>
         <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button class="sub-btn" type="submit" aria-label="Subscribe">

@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
   <div class="login-shell">
     <div class="panel login-card">
-      <h1>Blog Admin</h1>
+      <h1>Blog Admin Login</h1>
       <?php if ($error): ?><div class="notice"><?= e($error) ?></div><?php endif; ?>
       <form method="post" action="login.php">
         <div class="field">
