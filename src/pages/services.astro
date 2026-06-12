@@ -277,8 +277,13 @@ const deals = [
       }, CLICK_HOLD_MS);
     };
 
-    next.addEventListener('click', () => { stepForward(); pauseByClick(); });
-    prev.addEventListener('click', () => { stepBack(); pauseByClick(); });
+    // Click cooldown: ignore clicks while a move is in flight, so spamming
+    // the arrows can't outrun the 900ms slide.
+    let busy = false;
+    const cooldown = () => { busy = true; setTimeout(() => { busy = false; }, MOVE_MS); };
+
+    next.addEventListener('click', () => { if (busy) return; stepForward(); pauseByClick(); cooldown(); });
+    prev.addEventListener('click', () => { if (busy) return; stepBack(); pauseByClick(); cooldown(); });
 
     if (!reduce) {
       // Pause region covers the arrows too (they sit outside the slider box).

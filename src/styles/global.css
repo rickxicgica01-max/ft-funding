@@ -831,10 +831,6 @@ section {
   z-index:1;
 }
 
-.test-band .sec-head {
-  margin-bottom:65px;       /* heading → cards */
-}
-
 /* Auto-scrolling, non-draggable, seamless loop. Text stays selectable. */
 .test-slider {
   overflow:hidden;
@@ -848,7 +844,8 @@ section {
 
 .tcard {
   flex:none;
-  width:376px;              /* 376 + 24 margin = 400 → 3 fit in the 1200 wrap; 300px mobile */
+  width:384px;              /* 3 cards + 2 gaps fill the 1200 wrap exactly, so
+                               the last card's edge aligns with the nav arrows */
   margin-right:24px;        /* gap owned by the item → seamless loop */
   background:var(--offwhite);   /* brand grey F6F5F5 */
   padding:40px;
@@ -1263,14 +1260,22 @@ footer .wrap {
     font-size:24px;
   }
 
-  /* Testimonials: hide the FT watermark; 2 cards fit the width at 768
-     (2×320 + 24 gap = 664 ≤ the 691px wrap) with tighter text/gaps. */
+  /* Testimonials: hide the FT watermark; EXACTLY 2 full cards fill the
+     slider window on tablet (half the track minus the one 24px gap). */
   .test-ft {
     display:none;
   }
 
+  /* This header has no intro/button between heading and arrows, so it needs
+     its own rhythm: more air under the heading, less above the cards
+     (higher specificity than the shared .team-head portable rule). */
+  .test-band .team-head {
+    gap:32px;
+    margin-bottom:26px;
+  }
+
   .tcard {
-    width:320px;
+    width:calc((100% - 24px) / 2);
     padding:32px;
   }
 
@@ -1294,7 +1299,7 @@ footer .wrap {
      and the band's height comes from its content, not the desktop 770px. */
   .hero {
     min-height:0;
-    padding-top:137px;
+    padding-top:147px;
   }
 
   /* Collapse the inline nav into a hamburger dropdown; bar stays solid + sticky. */
@@ -1491,9 +1496,9 @@ footer .wrap {
     font-size:16px;
   }
 
-  /* Hero: heading 50px below the bar's bottom edge (63px bar + 50px). */
+  /* Hero: heading 50px below the bar's bottom edge (73px bar + 50px). */
   .hero {
-    padding-top:113px;
+    padding-top:123px;
   }
 
   .hero-body {
@@ -1543,10 +1548,6 @@ footer .wrap {
   }
 
   /* Testimonials: tighten the desktop-scale gaps inside the cards. */
-  .test-band .sec-head {
-    margin-bottom:40px;
-  }
-
   .tcard {
     padding:30px;
   }
@@ -1617,11 +1618,11 @@ footer .wrap {
 
 /* Slimmer fixed bar on portables (no scroll-shrink there, so slim it statically).
    Tablet logo matches the desktop scrolled size (236×44); mobile drops to 188×35.
-   Bar heights = logo + 2×padding: 126px desktop, 72px tablet, 63px mobile —
-   any fixed-bar offset (e.g. .art-main) must track these. */
+   Bar heights = logo + 2×padding: 126px desktop, 82px tablet, 73px mobile —
+   any fixed-bar offset (e.g. .art-main, hero padding) must track these. */
 @media (max-width:1024px) {
   .nav {
-    padding:14px 0;
+    padding:19px 0;
   }
 
   .logo img {
@@ -1631,6 +1632,11 @@ footer .wrap {
 }
 
 @media (max-width:767px) {
+  /* Taller mobile bar: 35px logo + 2×19px = 73px (offsets below track this). */
+  .nav {
+    padding:19px 0;
+  }
+
   .logo img {
     width:188px;
     height:35px;
@@ -2452,7 +2458,7 @@ footer .wrap {
 
   /* Word-wall scales down on tablet; extra bottom air under the wall. */
   .finance-band {
-    padding:65px 0 70px;
+    padding:95px 0 100px;   /* +30 over the standard tablet band gap */
   }
 
   .finance-band .sec-head {
@@ -2541,7 +2547,11 @@ footer .wrap {
 
   /* Word-wall on mobile: smaller type, tighter dots; extra bottom air. */
   .finance-band {
-    padding:50px 0 53px;
+    padding:70px 0 70px;    /* +30 over the standard mobile band gap */
+  }
+
+  .finance-band .sec-head {
+    margin-bottom:45px;     /* more air before the word-wall than tablet's 35px */
   }
 
   .asset-flow {
@@ -2934,8 +2944,16 @@ footer .wrap {
   .res-tabs {
     gap:28px;
     overflow-x:auto;
+    overflow-y:hidden;      /* the row itself only pans horizontally;
+                               vertical swipes fall through to page scroll */
     scrollbar-width:none;
     border-bottom:1px solid rgba(19,39,79,.15);
+  }
+
+  /* The indicator's desktop -1px overlap would poke outside the scroll box
+     and create 1px of vertical scrollability — keep it inside here. */
+  .tab-line {
+    bottom:0;
   }
 
   .res-tabs::-webkit-scrollbar {
@@ -3068,6 +3086,7 @@ footer .wrap {
 
   .sub-form {
     margin-top:35px;
+    max-width:300px;   /* don't stretch the email field across the screen */
   }
 
   .sub-btn {
@@ -3078,7 +3097,7 @@ footer .wrap {
 
 /* ---------- ARTICLE PAGE (/resources/post) ---------- */
 /* Single blog post, rendered client-side from /blog/api.php. The .art-main
-   top margin clears the fixed bar (bar heights: 126/72/63). */
+   top margin clears the fixed bar (bar heights: 126/82/73). */
 .art-main {
   margin-top:76px;     /* condensed solid bar: 44px logo + 2×16px padding */
   padding:90px 0 120px;
@@ -3195,7 +3214,7 @@ footer .wrap {
 
 @media (max-width:1024px) {
   .art-main {
-    margin-top:72px;
+    margin-top:82px;
     padding:65px 0;
   }
 
@@ -3224,7 +3243,7 @@ footer .wrap {
 
 @media (max-width:767px) {
   .art-main {
-    margin-top:63px;
+    margin-top:73px;   /* mobile bar height */
     padding:50px 0;
   }
 

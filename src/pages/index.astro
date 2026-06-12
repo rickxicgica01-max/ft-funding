@@ -78,7 +78,7 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
         <p class="intro-copy">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
         <a href="/services" class="btn btn-outline">View All Loan Services</a>
       </div>
-      <article class="svc-card" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+      <article class="svc-card" style="--img:url('/home/home-card-bg-01.jpg')" data-reveal>
         <img class="svc-icon" src="/home/home-icon-construction.png" alt="" />
         <h3>Construction<br>Loans</h3>
       </article>
@@ -173,9 +173,25 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
   <section class="test-band">
     <img class="test-ft" src="/home/testimonial-ft.png" alt="" aria-hidden="true" />
     <div class="wrap">
-      <div class="sec-head" data-reveal>
-        <div class="eyebrow">Client Stories</div>
-        <h2>What Our Clients Say</h2>
+      <div class="team-head">
+        <div class="sec-head" data-reveal>
+          <div class="eyebrow">Client Stories</div>
+          <h2>What Our Clients Say</h2>
+        </div>
+        <div class="team-nav" data-reveal>
+          <button class="team-arrow prev" type="button" aria-label="Previous testimonials">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <button class="team-arrow next" type="button" aria-label="Next testimonials">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
       </div>
       <div class="test-slider" data-reveal>
         <div class="test-track">
@@ -221,58 +237,110 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
   </section>
 
   <script>
-  // Testimonials: stepped carousel — advance one slide, pause 5s, repeat.
-  // Pauses on hover; resumes 3s after the pointer leaves. Seamless infinite loop
-  // (the 5 unique slides are rendered twice, so it snaps back invisibly).
+  // Testimonials: the shared slider engine (same as the team/deals sliders) —
+  // infinite loop in both directions, 5s auto-step, hover pause with 2s
+  // resume, arrow clicks hold the autoplay for 5s.
   const slider = document.querySelector('.test-slider');
   const track = slider?.querySelector('.test-track') as HTMLElement | null;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const prev = document.querySelector('.team-arrow.prev') as HTMLButtonElement | null;
+  const next = document.querySelector('.team-arrow.next') as HTMLButtonElement | null;
 
-  if (slider && track && !reduce) {
+  if (slider && track && prev && next) {
     const tr = track;
     const cards = tr.querySelectorAll('.tcard') as NodeListOf<HTMLElement>;
-    const ORIGINALS = 5;     // number of unique slides
-    const STEP_MS = 5000;    // each slide is shown 5s
-    const RESUME_MS = 2000;  // restart 2s after hover leaves
-    const MOVE_MS = 900;     // duration of the slide movement (slower)
+    const ORIGINALS = cards.length / 2;   // slides rendered twice for the loop
+    const MOVE_MS = 900;
     let index = 0;
+
+    const step = () =>
+      cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth;
+
+    const setX = (animate: boolean) => {
+      tr.style.transition = animate ? `transform ${MOVE_MS}ms ease` : 'none';
+      tr.style.transform = `translateX(-${index * step()}px)`;
+    };
+
+    let snap: (() => void) | null = null;
+
+    const finishSnap = () => {
+      if (!snap) return;
+      tr.removeEventListener('transitionend', snap);
+      snap = null;
+      index -= ORIGINALS;
+      setX(false);
+      void tr.offsetWidth;
+    };
+
+    const stepForward = () => {
+      finishSnap();
+      index++;
+      setX(true);
+      if (index >= ORIGINALS) {
+        snap = () => { snap = null; index -= ORIGINALS; setX(false); };
+        tr.addEventListener('transitionend', snap, { once: true });
+      }
+    };
+
+    const stepBack = () => {
+      finishSnap();
+      if (index === 0) {
+        index = ORIGINALS;
+        setX(false);
+        void tr.offsetWidth;
+      }
+      index--;
+      setX(true);
+    };
+
+    const STEP_MS = 5000;
+    const RESUME_MS = 2000;
+    const CLICK_HOLD_MS = 5000;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let timer: ReturnType<typeof setInterval> | null = null;
     let resume: ReturnType<typeof setTimeout> | null = null;
-
-    const stepWidth = () =>
-      cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : cards[0].offsetWidth + 24;
-
-    function advance() {
-      index++;
-      tr.style.transition = `transform ${MOVE_MS}ms ease`;
-      tr.style.transform = `translateX(-${index * stepWidth()}px)`;
-      if (index >= ORIGINALS) {
-        // After the move finishes, snap back to the start with no transition.
-        tr.addEventListener('transitionend', function snap() {
-          tr.style.transition = 'none';
-          index = 0;
-          tr.style.transform = 'translateX(0)';
-        }, { once: true });
-      }
-    }
+    let hovering = false;
+    let clickHold = 0;
 
     const stop = () => { if (timer) clearInterval(timer); timer = null; };
-    const start = () => { stop(); timer = setInterval(advance, STEP_MS); };
+    const start = () => { stop(); if (!reduce) timer = setInterval(stepForward, STEP_MS); };
 
-    slider.addEventListener('mouseenter', () => { if (resume) clearTimeout(resume); stop(); });
-    slider.addEventListener('mouseleave', () => {
+    const pauseByClick = () => {
+      stop();
       if (resume) clearTimeout(resume);
-      // After 2s, slide immediately, then keep the normal 5s cadence.
-      resume = setTimeout(() => { advance(); start(); }, RESUME_MS);
-    });
+      if (reduce) return;
+      clickHold = performance.now() + CLICK_HOLD_MS;
+      resume = setTimeout(() => {
+        if (!hovering) { stepForward(); start(); }
+      }, CLICK_HOLD_MS);
+    };
 
-    // Re-apply the current offset when the card width changes (e.g. phone
-    // rotation) — otherwise the track sits misaligned until the next step.
-    window.addEventListener('resize', () => {
-      tr.style.transition = 'none';
-      tr.style.transform = `translateX(-${index * stepWidth()}px)`;
-    });
+    // Click cooldown: ignore clicks while a move is in flight, so spamming
+    // the arrows can't outrun the 900ms slide.
+    let busy = false;
+    const cooldown = () => { busy = true; setTimeout(() => { busy = false; }, MOVE_MS); };
 
+    next.addEventListener('click', () => { if (busy) return; stepForward(); pauseByClick(); cooldown(); });
+    prev.addEventListener('click', () => { if (busy) return; stepBack(); pauseByClick(); cooldown(); });
+
+    if (!reduce) {
+      const zones = [slider, document.querySelector('.team-nav')].filter(Boolean) as Element[];
+      zones.forEach((zone) => {
+        zone.addEventListener('mouseenter', () => {
+          hovering = true;
+          if (resume) clearTimeout(resume);
+          stop();
+        });
+        zone.addEventListener('mouseleave', () => {
+          hovering = false;
+          if (resume) clearTimeout(resume);
+          const delay = Math.max(RESUME_MS, clickHold - performance.now());
+          resume = setTimeout(() => { stepForward(); start(); }, delay);
+        });
+      });
+    }
+
+    window.addEventListener('resize', () => { finishSnap(); setX(false); });
+    window.addEventListener('load', () => setX(false));
     start();
   }
 
