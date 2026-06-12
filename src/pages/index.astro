@@ -82,11 +82,11 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
         <img class="svc-icon" src="/home/home-icon-construction.png" alt="" />
         <h3>Construction<br>Loans</h3>
       </article>
-      <article class="svc-card" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+      <article class="svc-card" style="--img:url('/home/home-card-bg-02.jpg')" data-reveal>
         <img class="svc-icon" src="/home/home-icon-bridge.png" alt="" />
         <h3>Bridge<br>Financing</h3>
       </article>
-      <article class="svc-card" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+      <article class="svc-card" style="--img:url('/home/home-card-bg-03.jpg')" data-reveal>
         <img class="svc-icon" src="/home/home-icon-cmhc.png" alt="" />
         <h3>CMHC Insured<br>&amp; Construction</h3>
       </article>
@@ -102,15 +102,15 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
         <p class="intro-copy">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
         <a href="/services" class="btn btn-outline">View All Services</a>
       </div>
-      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-04.jpg')" data-reveal>
         <img class="svc-icon" src="/home/home-icon-retail.png" alt="" />
         <h3>Retail</h3>
       </article>
-      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-05.jpg')" data-reveal>
         <img class="svc-icon" src="/home/home-icon-office.png" alt="" />
         <h3>Office</h3>
       </article>
-      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-01.png')" data-reveal>
+      <article class="svc-card svc-card--gold" style="--img:url('/home/home-card-bg-06.jpg')" data-reveal>
         <img class="svc-icon" src="/home/home-icon-student.png" alt="" />
         <h3>Student<br>Housing</h3>
       </article>
@@ -204,12 +204,15 @@ const rowDuration = (g: number) => ((groupWidth(g) * COPIES) / 2 / SPEED).toFixe
         <h2 data-reveal>Book a<br><span class="gold">Consultation</span></h2>
       </div>
       <div>
-        <form onsubmit="return false;" data-reveal>
+        <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
+        <form method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+          data-success="Thank you — your request has been sent. We'll be in touch shortly." data-reveal>
           <div class="formgrid">
-            <div class="field"><input type="text" placeholder="Your Name"></div>
-            <div class="field"><input type="email" placeholder="Your Email"></div>
-            <div class="field full"><textarea placeholder="Your Message" rows="3"></textarea></div>
+            <div class="field"><input type="text" name="name" placeholder="Your Name" autocomplete="name" required></div>
+            <div class="field"><input type="email" name="email" placeholder="Your Email" autocomplete="email" required></div>
+            <div class="field full"><textarea name="message" placeholder="Your Message" rows="3" required></textarea></div>
           </div>
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <button class="btn btn-outline" type="submit">Get Your Free Consultation</button>
         </form>
       </div>

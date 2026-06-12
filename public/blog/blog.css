@@ -23,13 +23,31 @@ body {
   color:var(--navy);
   background:#fff;
   line-height:1.5;
-  padding:70px 5%;
   -webkit-font-smoothing:antialiased;
+}
+
+/* Simplified site chrome around the preview (navy logo bar + footer strip). */
+.pv-bar {
+  background:var(--navy);
+  padding:24px 5%;
+}
+
+.pv-bar img {
+  display:block;
+  width:236px;
+  height:44px;
+}
+
+.pv-foot {
+  font-size:13px;
+  letter-spacing:0.02em;
+  color:rgba(255,255,255,.85);
 }
 
 .article {
   max-width:800px;
   margin:0 auto;
+  padding:70px 20px;
 }
 
 .article-title {

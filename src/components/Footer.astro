@@ -1,6 +1,17 @@
 ---
 // Shared site footer used on every page.
 const year = new Date().getFullYear();
+
+// Current path (normalised like the Nav) so the Quick Link for this page
+// lights up gold on every device.
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+
+const quickLinks = [
+  { href: '/about', label: 'About Us' },
+  { href: '/services', label: 'Services' },
+  { href: '/resources', label: 'Resources' },
+  { href: '/contact', label: 'Contact Us' },
+];
 ---
 <footer>
   <div class="wrap">
@@ -17,30 +28,33 @@ const year = new Date().getFullYear();
       <div class="foot-col">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="/about">About Us</a></li>
-          <li><a href="/services">Services</a></li>
-          <li><a href="/resources">Resources</a></li>
-          <li><a href="/contact">Contact Us</a></li>
+          {quickLinks.map(({ href, label }) => (
+            <li><a href={href} class:list={{ active: path === href }} aria-current={path === href ? 'page' : undefined}>{label}</a></li>
+          ))}
         </ul>
       </div>
       <div class="foot-col">
         <h4>Office</h4>
         <p>7181 Woodbine Ave #108, Markham, ON L3R 1A3</p>
         <h4 class="mt">Contact</h4>
-        <p><a href="tel:+6471234567">+647-123-4567</a></p>
+        <!-- PLACEHOLDER number — keep the tel: in +1 E.164 form when replacing -->
+        <p><a href="tel:+16471234567">+1 647-123-4567</a></p>
         <p><a href="mailto:info@FTfunding.com">info@FTfunding.com</a></p>
       </div>
       <div class="foot-col">
         <h4>Newsletter</h4>
-        <div class="news-input">
-          <input type="email" placeholder="Enter Your Email">
-          <button class="news-btn" type="button" aria-label="Subscribe">
+        <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
+        <form class="news-input" method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+          data-success="Thanks — you're subscribed!">
+          <input type="email" name="email" placeholder="Enter Your Email" aria-label="Email address" data-label="Your email" required>
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="news-btn" type="submit" aria-label="Subscribe">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <line x1="6" y1="18" x2="18" y2="6"></line>
               <polyline points="10 6 18 6 18 14"></polyline>
             </svg>
           </button>
-        </div>
+        </form>
       </div>
     </div>
     <div class="foot-bottom">

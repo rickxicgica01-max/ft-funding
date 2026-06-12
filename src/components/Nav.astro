@@ -15,7 +15,9 @@ const links = [
 ];
 
 // The mobile/tablet dropdown adds the CTA as a 5th row, styled like the others.
-const menuItems = [...links, { href: '/contact', label: 'Book A Consultation' }];
+// `cta` keeps it out of the active-state matching — it shares /contact with
+// the Contact link, which would otherwise highlight both on that page.
+const menuItems = [...links.map((l) => ({ ...l, cta: false })), { href: '/contact', label: 'Book A Consultation', cta: true }];
 ---
 <header class:list={["nav-wrap", { "nav-solid": solid }]}>
   <nav class="nav">
@@ -34,8 +36,8 @@ const menuItems = [...links, { href: '/contact', label: 'Book A Consultation' }]
   </nav>
 
   <div class="nav-menu" id="nav-menu">
-    {menuItems.map(({ href, label }) => (
-      <a href={href} class:list={["nav-menu-item", { active: path === href }]} aria-current={path === href ? 'page' : undefined}>{label}</a>
+    {menuItems.map(({ href, label, cta }) => (
+      <a href={href} class:list={["nav-menu-item", { active: !cta && path === href }]} aria-current={!cta && path === href ? 'page' : undefined}>{label}</a>
     ))}
   </div>
 </header>

@@ -414,7 +414,13 @@ $maxPost   = $fmt(ini_get('post_max_size'));        // whole-submission limit
         '<meta name="viewport" content="width=device-width, initial-scale=1">' +
         '<title>' + esc(title) + ' — Preview</title>' +
         '<link rel="stylesheet" href="' + esc(BLOG_CSS) + '">' +
-        '</head><body><article class="article">' + body + '</article></body></html>';
+        '</head><body>' +
+        // Simplified FT site chrome for context — the live article page uses
+        // the real nav and footer.
+        '<header class="pv-bar"><img src="' + ORIGIN + '/navigation/site-logo.png" alt="FT Funding Direct Capital"></header>' +
+        '<article class="article">' + body + '</article>' +
+        '<footer class="pv-bar pv-foot">© FT Funding Direct Capital — article preview</footer>' +
+        '</body></html>';
     }
 
     previewBtn.addEventListener('click', () => {

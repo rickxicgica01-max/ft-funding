@@ -27,18 +27,19 @@ const services = [
   { icon: ic.cmhc, name: 'Credit Enhancement', desc: 'Strengthening the deal so lenders can say yes with confidence.' },
 ];
 
+// PLACEHOLDER imagery — stock photos per asset class; swap for client shots.
 const assetClasses = [
-  { icon: ic.retail, name: 'Retail' },
-  { icon: ic.cmhc, name: 'Multifamily (including CMHC)' },
-  { icon: ic.office, name: 'Office' },
-  { icon: ic.construction, name: 'Industrial' },
-  { icon: ic.bridge, name: 'Hospitality' },
-  { icon: ic.student, name: 'Retirement Housing' },
-  { icon: ic.student, name: 'Student Housing' },
-  { icon: ic.office, name: 'Self Storage' },
-  { icon: ic.retail, name: 'Mixed Use' },
-  { icon: ic.construction, name: 'Land & Development' },
-  { icon: ic.bridge, name: 'Special Purpose' },
+  { name: 'Retail', img: '/services/finance-01.jpg' },
+  { name: 'Multifamily (including CMHC)', img: '/services/finance-02.jpg' },
+  { name: 'Office', img: '/services/finance-03.jpg' },
+  { name: 'Industrial', img: '/services/finance-04.jpg' },
+  { name: 'Hospitality', img: '/services/finance-05.jpg' },
+  { name: 'Retirement Housing', img: '/services/finance-06.jpg' },
+  { name: 'Student Housing', img: '/services/finance-07.jpg' },
+  { name: 'Self Storage', img: '/services/finance-08.jpg' },
+  { name: 'Mixed Use', img: '/services/finance-09.jpg' },
+  { name: 'Land & Development', img: '/services/finance-10.jpg' },
+  { name: 'Special Purpose', img: '/services/finance-11.jpg' },
 ];
 
 const steps = [
@@ -68,7 +69,7 @@ const deals = [
     <Nav />
     <div class="hero-body">
       <div class="hero-inner" data-reveal-stagger>
-        <h1 data-reveal>Financing for every stage of your <span class="gold">project.</span></h1>
+        <h1 data-reveal>Financing for every stage<br class="br-tablet"> of your <span class="gold">project.</span></h1>
         <p data-reveal>From land to lease-up, acquisition to refinance, we structure commercial financing across every asset class, and we package it to the standard lenders expect.</p>
         <a href="/contact" class="btn btn-outline" data-reveal>Request a Quote</a>
       </div>
@@ -97,19 +98,24 @@ const deals = [
     </div>
   </section>
 
-  <!-- WHAT WE FINANCE — navy band, compact gold tiles -->
+  <!-- WHAT WE FINANCE — word-wall showcase: the active name is gold and its
+       related photo cross-fades in behind a navy overlay; autoplays 3s per
+       asset, hover (desktop) / tap (touch) takes over, loop resumes after -->
   <section class="finance-band">
+    <div class="fin-bgs" aria-hidden="true">
+      {assetClasses.map((a) => (
+        <div class="fin-bg" style={`background-image:url('${a.img}')`}></div>
+      ))}
+    </div>
+    <div class="fin-overlay" aria-hidden="true"></div>
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <div class="eyebrow">What We Finance</div>
-        <h2>Every commercial <span class="gold">asset class.</span></h2>
+        <h2>Every commercial<br class="br-sm"> <span class="gold">asset class.</span></h2>
       </div>
-      <div class="asset-tiles" data-reveal-stagger>
+      <div class="asset-flow" data-reveal-stagger>
         {assetClasses.map((a) => (
-          <div class="asset-tile" data-reveal>
-            <span class="at-icon" style={`--icon:url('${a.icon}')`} aria-hidden="true"></span>
-            <h3>{a.name}</h3>
-          </div>
+          <button class="af-item" type="button" data-reveal>{a.name}</button>
         ))}
       </div>
     </div>
@@ -127,7 +133,7 @@ const deals = [
         {steps.map((s, i) => (
           <div class="step" data-reveal>
             <div class="step-num">{String(i + 1).padStart(2, '0')}</div>
-            <div>
+            <div class="step-body">
               <h3>{s.title}</h3>
               <p>{s.body}</p>
             </div>
@@ -224,7 +230,7 @@ const deals = [
       void tr.offsetWidth;
     };
 
-    next.addEventListener('click', () => {
+    const stepForward = () => {
       finishSnap();
       index++;
       setX(true);
@@ -232,9 +238,9 @@ const deals = [
         snap = () => { snap = null; index -= ORIGINALS; setX(false); };
         tr.addEventListener('transitionend', snap, { once: true });
       }
-    });
+    };
 
-    prev.addEventListener('click', () => {
+    const stepBack = () => {
       finishSnap();
       if (index === 0) {
         index = ORIGINALS;
@@ -243,10 +249,125 @@ const deals = [
       }
       index--;
       setX(true);
-    });
+    };
+
+    // Auto-advance — the homepage slider cadence: a step every 5s, pause on
+    // hover (resume 2s after the pointer leaves). Arrow clicks hold the
+    // autoplay for 5s; if the pointer is still on the slider when the hold
+    // ends, the hover pause carries on until 2s after it leaves.
+    const STEP_MS = 5000;
+    const RESUME_MS = 2000;
+    const CLICK_HOLD_MS = 5000;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let resume: ReturnType<typeof setTimeout> | null = null;
+    let hovering = false;
+    let clickHold = 0;          // timestamp until which the click pause runs
+
+    const stop = () => { if (timer) clearInterval(timer); timer = null; };
+    const start = () => { stop(); if (!reduce) timer = setInterval(stepForward, STEP_MS); };
+
+    const pauseByClick = () => {
+      stop();
+      if (resume) clearTimeout(resume);
+      if (reduce) return;
+      clickHold = performance.now() + CLICK_HOLD_MS;
+      resume = setTimeout(() => {
+        if (!hovering) { stepForward(); start(); }   // still hovered → hover rules own it
+      }, CLICK_HOLD_MS);
+    };
+
+    next.addEventListener('click', () => { stepForward(); pauseByClick(); });
+    prev.addEventListener('click', () => { stepBack(); pauseByClick(); });
+
+    if (!reduce) {
+      // Pause region covers the arrows too (they sit outside the slider box).
+      const zones = [slider, band?.querySelector('.team-nav')].filter(Boolean) as Element[];
+      zones.forEach((zone) => {
+        zone.addEventListener('mouseenter', () => {
+          hovering = true;
+          if (resume) clearTimeout(resume);
+          stop();
+        });
+        zone.addEventListener('mouseleave', () => {
+          hovering = false;
+          if (resume) clearTimeout(resume);
+          // Honour whatever remains of a click hold; never less than 2s.
+          const delay = Math.max(RESUME_MS, clickHold - performance.now());
+          resume = setTimeout(() => { stepForward(); start(); }, delay);
+        });
+      });
+    }
 
     window.addEventListener('resize', () => { finishSnap(); setX(false); });
     window.addEventListener('load', () => setX(false));
+    start();
+  }
+
+  // What We Finance showcase: 3s sequential autoplay through the asset names;
+  // the active name golds and its photo cross-fades in. Desktop hover takes
+  // over an item (loop resumes from it on leave); tap does the same on touch.
+  const finBand = document.querySelector('.finance-band');
+  const finItems = finBand?.querySelectorAll('.af-item') as NodeListOf<HTMLButtonElement> | undefined;
+  const finBgs = finBand?.querySelectorAll('.fin-bg') as NodeListOf<HTMLElement> | undefined;
+
+  if (finBand && finItems && finBgs && finItems.length && finBgs.length === finItems.length) {
+    const items = finItems;
+    const bgs = finBgs;
+    const HOLD_MS = 3800;   /* 200ms moved into the longer cross-fade */
+    const reduceFin = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let cur = 0;
+    let finTimer: ReturnType<typeof setInterval> | null = null;
+
+    // The incoming photo is raised to the top of the stack so every switch is
+    // a fade-IN over the old image (otherwise backward jumps read as a slow
+    // top-layer fade-out and feel different from forward auto-steps). BUT a
+    // layer that is still mid-fade keeps its position — re-raising a partly
+    // visible layer changes the composite instantly and shows as a flash.
+    let zTop = 1;
+    const setActive = (i: number) => {
+      cur = ((i % items.length) + items.length) % items.length;
+      items.forEach((el, j) => el.classList.toggle('active', j === cur));
+      bgs.forEach((el, j) => {
+        if (j === cur && parseFloat(getComputedStyle(el).opacity) < 0.05) {
+          el.style.zIndex = String(++zTop);
+        }
+        el.classList.toggle('active', j === cur);
+      });
+    };
+
+    const finStop = () => { if (finTimer) clearInterval(finTimer); finTimer = null; };
+    const finStart = () => { finStop(); if (!reduceFin) finTimer = setInterval(() => setActive(cur + 1), HOLD_MS); };
+
+    const finCanHover = window.matchMedia('(hover: hover)').matches;
+    items.forEach((el, i) => {
+      // Hover claims the item and parks the loop (desktop).
+      el.addEventListener('mouseenter', () => { finStop(); setActive(i); });
+      // Tap claims it and keeps the loop running from there (touch). On
+      // hover devices a click behaves like the hover: parked until leave.
+      el.addEventListener('click', () => {
+        setActive(i);
+        if (finCanHover) finStop(); else finStart();
+      });
+    });
+
+    // Pointer leaves the word-wall → resume from the current item.
+    finBand.querySelector('.asset-flow')?.addEventListener('mouseleave', () => finStart());
+
+    // Hide the separator dot on each line's LAST name — a wrapped flex row
+    // can't be detected in CSS, so compare row positions per item.
+    const markRowEnds = () => {
+      items.forEach((el, i) => {
+        const nextEl = items[i + 1];
+        el.classList.toggle('no-dot', !nextEl || nextEl.offsetTop !== el.offsetTop);
+      });
+    };
+    markRowEnds();
+    window.addEventListener('resize', markRowEnds);
+    window.addEventListener('load', markRowEnds);   // re-measure once fonts settle
+
+    setActive(0);
+    finStart();
   }
   </script>
 </BaseLayout>

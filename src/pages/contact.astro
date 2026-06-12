@@ -1,39 +1,122 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
+
+const propertyTypes = ['Multifamily', 'Industrial', 'Office', 'Retail', 'Hospitality', 'Land', 'Other'];
+const financingTypes = ['Construction', 'Land & Development', 'Bridge', 'Term', 'CMHC', 'Other'];
 ---
 <BaseLayout
   title="Contact — FT Funding Direct Capital"
-  description="Book a consultation with FT Funding Direct Capital. Direct access to senior brokers serving Toronto, the GTA, and Greater Vancouver."
+  description="Let's talk about your deal. Reach FT Funding Direct Capital by phone, email, or the inquiry form — we'll respond within 3 business days."
 >
-  <Nav solid />
-
-  <section class="page-head">
-    <div class="wrap">
-      <div class="eyebrow" data-reveal>Contact</div>
-      <h1 data-reveal>Book a <span class="gold">Consultation</span></h1>
-      <p data-reveal>Direct access to senior brokers, not call centres. Tell us about your deal and we'll respond within hours.</p>
+  <!-- HERO — transparent nav over the image, same as the other pages -->
+  <section class="hero hero--contact">
+    <Nav />
+    <div class="hero-body">
+      <div class="hero-inner" data-reveal-stagger>
+        <h1 data-reveal>Let's talk about your <span class="gold">deal.</span></h1>
+        <p data-reveal>Whether you have a property under contract or a question about your options, we're ready to help. Reach out and we'll respond within 3 business days.</p>
+      </div>
     </div>
   </section>
 
+  <!-- GET IN TOUCH — direct contact details + map -->
+  <section class="touch-band">
+    <div class="wrap touch">
+      <div class="touch-info">
+        <div class="eyebrow" data-reveal>Get In Touch</div>
+        <h2 data-reveal>Prefer to <span class="gold">talk first?</span></h2>
+        <p class="intro-copy touch-intro" data-reveal>Reach us directly:</p>
+        <div class="touch-rows" data-reveal-stagger>
+          <!-- PLACEHOLDER phone — matches the footer until the real number is supplied -->
+          <div class="t-row" data-reveal>
+            <div class="t-label">Phone</div>
+            <div class="t-value"><a href="tel:+16471234567">+1 647-123-4567</a></div>
+          </div>
+          <div class="t-row" data-reveal>
+            <div class="t-label">Email</div>
+            <div class="t-value"><a href="mailto:info@FTfunding.com">info@FTfunding.com</a></div>
+          </div>
+          <div class="t-row" data-reveal>
+            <div class="t-label">Stay Connected</div>
+            <div class="touch-social">
+              <a href="#" aria-label="Instagram" style="--icon:url('/home/social/instagram.png')"></a>
+              <a href="#" aria-label="LinkedIn" style="--icon:url('/home/social/linkedin.png')"></a>
+              <a href="#" aria-label="Facebook" style="--icon:url('/home/social/facebook.png')"></a>
+            </div>
+          </div>
+          <div class="t-row" data-reveal>
+            <div class="t-label">Visit Us</div>
+            <div class="t-value">7181 Woodbine Ave #108,<br>Markham, ON L3R 1A3</div>
+          </div>
+        </div>
+      </div>
+      <div class="touch-map" data-reveal>
+        <iframe
+          src="https://www.google.com/maps?q=7181%20Woodbine%20Ave%20%23108%2C%20Markham%2C%20ON%20L3R%201A3&output=embed"
+          title="FT Funding Direct Capital office — 7181 Woodbine Ave #108, Markham"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- GENERAL INQUIRY — the consult-band form with qualifying dropdowns -->
   <section class="consult-band">
-    <div class="wrap consult">
+    <div class="wrap consult consult-swap">
       <div>
-        <h2 data-reveal>Let's <span class="gold">Talk</span></h2>
-        <p class="intro-copy" style="margin-top:18px;" data-reveal>7181 Woodbine Ave #108, Markham, ON L3R 1A3</p>
-        <p class="intro-copy" data-reveal>+647-123-4567</p>
-        <p class="intro-copy" data-reveal>info@FTfunding.com</p>
+        <div class="eyebrow" data-reveal>General Inquiry</div>
+        <h2 data-reveal>Tell us what you're<br><span class="gold">working on.</span></h2>
+        <p class="intro-copy inq-intro" data-reveal>Share a few details and the right expert will be in touch.</p>
       </div>
       <div>
-        <form onsubmit="return false;" data-reveal>
+        <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
+        <form method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+          data-success="Thank you — your inquiry has been sent. The right expert will be in touch." data-reveal>
           <div class="formgrid">
-            <div class="field"><input type="text" placeholder="Your Name"></div>
-            <div class="field"><input type="email" placeholder="Your Email"></div>
-            <div class="field full"><input type="text" placeholder="Your Message"></div>
+            <div class="field"><input type="text" name="name" placeholder="Your Name" autocomplete="name" required></div>
+            <div class="field"><input type="email" name="email" placeholder="Your Email" autocomplete="email" required></div>
+            <div class="field"><input type="tel" name="phone" placeholder="Phone (optional)" autocomplete="tel"></div>
+            <div class="field">
+              <select name="property_type" aria-label="Property Type" required>
+                <option value="" selected disabled>Property Type</option>
+                {propertyTypes.map((t) => <option value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div class="field full">
+              <select name="financing" aria-label="Financing Needed" required>
+                <option value="" selected disabled>Financing Needed</option>
+                {financingTypes.map((t) => <option value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div class="field full"><textarea name="message" placeholder="Your Message" rows="3" required></textarea></div>
           </div>
-          <button class="btn btn-outline" type="submit">Get Your Free Consultation</button>
+          <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <button class="btn btn-outline" type="submit">Book a Free Consult</button>
         </form>
       </div>
     </div>
   </section>
+
+  <script>
+  // Selects read as placeholders (navy @50%) until a real choice is made.
+  document.querySelectorAll('.field select').forEach((node) => {
+    const s = node as HTMLSelectElement;
+    const sync = () => s.classList.toggle('placeholder', s.value === '');
+    s.addEventListener('change', sync);
+    sync();
+  });
+
+  // Message field grows with its content (same behaviour as the homepage form).
+  const ta = document.querySelector('.consult textarea') as HTMLTextAreaElement | null;
+  if (ta) {
+    const minH = ta.offsetHeight;
+    const grow = () => {
+      ta.style.height = 'auto';
+      ta.style.height = Math.max(ta.scrollHeight, minH) + 'px';
+    };
+    ta.addEventListener('input', grow);
+  }
+  </script>
 </BaseLayout>

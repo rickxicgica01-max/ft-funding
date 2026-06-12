@@ -15,6 +15,10 @@ import Nav from '../../components/Nav.astro';
 
   <main class="art-main">
     <div class="wrap art-wrap">
+      <noscript>
+        <style>#art-loading { display:none; }</style>
+        <p class="art-state">Articles need JavaScript to display. Please enable it, or head back to <a href="/resources">Resources</a>.</p>
+      </noscript>
       <p class="art-state" id="art-loading">Loading article…</p>
       <p class="art-state" id="art-error" hidden>
         This article could not be found. <a href="/resources">Back to Resources</a>

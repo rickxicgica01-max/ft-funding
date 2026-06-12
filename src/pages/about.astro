@@ -9,37 +9,37 @@ const team = [
     name: 'Michael Chen',
     title: 'Managing Partner',
     quote: '“A deal is won in the underwriting, long before the term sheet.”',
-    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop',
+    img: '/about/team-01.jpg',
   },
   {
     name: 'Sarah Whitfield',
     title: 'Senior Director, Origination',
     quote: '“Lenders say yes to files that answer their questions before they ask.”',
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop',
+    img: '/about/team-02.jpg',
   },
   {
     name: 'David Rosenberg',
     title: 'Director, Debt Structuring',
     quote: '“Structure is where the real money is made or lost.”',
-    img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop',
+    img: '/about/team-03.jpg',
   },
   {
     name: 'Priya Sharma',
     title: 'Director, CMHC Programs',
     quote: '“Insured financing rewards the borrowers who prepare early.”',
-    img: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=600&auto=format&fit=crop',
+    img: '/about/team-04.jpg',
   },
   {
     name: 'James Okafor',
     title: 'Vice President, Capital Markets',
     quote: '“Know the lender’s book and you’ll know their answer.”',
-    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop',
+    img: '/about/team-05.jpg',
   },
   {
     name: 'Émilie Tremblay',
     title: 'Senior Analyst',
     quote: '“Every strong approval starts with an honest model.”',
-    img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop',
+    img: '/about/team-06.jpg',
   },
 ];
 ---
@@ -72,7 +72,7 @@ const team = [
     <div class="wrap story">
       <!-- PLACEHOLDER image — replace with a real office/team photo -->
       <div class="story-media" data-reveal>
-        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" alt="Commercial towers in a Canadian downtown core" loading="lazy" />
+        <img src="/about/story.jpg" alt="Commercial towers in a Canadian downtown core" loading="lazy" />
       </div>
       <div class="story-text">
         <div class="eyebrow" data-reveal>Our Story</div>
@@ -215,7 +215,7 @@ const team = [
       void tr.offsetWidth;                // flush so the next move animates
     };
 
-    next.addEventListener('click', () => {
+    const stepForward = () => {
       finishSnap();
       index++;
       setX(true);
@@ -223,9 +223,9 @@ const team = [
         snap = () => { snap = null; index -= ORIGINALS; setX(false); };
         tr.addEventListener('transitionend', snap, { once: true });
       }
-    });
+    };
 
-    prev.addEventListener('click', () => {
+    const stepBack = () => {
       finishSnap();
       if (index === 0) {
         index = ORIGINALS;                // jump to the identical clone position…
@@ -234,10 +234,59 @@ const team = [
       }
       index--;
       setX(true);
-    });
+    };
+
+    // Auto-advance — the homepage slider cadence: a step every 5s, pause on
+    // hover (resume 2s after the pointer leaves). Arrow clicks hold the
+    // autoplay for 5s; if the pointer is still on the slider when the hold
+    // ends, the hover pause carries on until 2s after it leaves.
+    const STEP_MS = 5000;
+    const RESUME_MS = 2000;
+    const CLICK_HOLD_MS = 5000;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let timer: ReturnType<typeof setInterval> | null = null;
+    let resume: ReturnType<typeof setTimeout> | null = null;
+    let hovering = false;
+    let clickHold = 0;          // timestamp until which the click pause runs
+
+    const stop = () => { if (timer) clearInterval(timer); timer = null; };
+    const start = () => { stop(); if (!reduce) timer = setInterval(stepForward, STEP_MS); };
+
+    const pauseByClick = () => {
+      stop();
+      if (resume) clearTimeout(resume);
+      if (reduce) return;
+      clickHold = performance.now() + CLICK_HOLD_MS;
+      resume = setTimeout(() => {
+        if (!hovering) { stepForward(); start(); }   // still hovered → hover rules own it
+      }, CLICK_HOLD_MS);
+    };
+
+    next.addEventListener('click', () => { stepForward(); pauseByClick(); });
+    prev.addEventListener('click', () => { stepBack(); pauseByClick(); });
+
+    if (!reduce) {
+      // Pause region covers the arrows too (they sit outside the slider box).
+      const zones = [slider, document.querySelector('.team-nav')].filter(Boolean) as Element[];
+      zones.forEach((zone) => {
+        zone.addEventListener('mouseenter', () => {
+          hovering = true;
+          if (resume) clearTimeout(resume);
+          stop();
+        });
+        zone.addEventListener('mouseleave', () => {
+          hovering = false;
+          if (resume) clearTimeout(resume);
+          // Honour whatever remains of a click hold; never less than 2s.
+          const delay = Math.max(RESUME_MS, clickHold - performance.now());
+          resume = setTimeout(() => { stepForward(); start(); }, delay);
+        });
+      });
+    }
 
     window.addEventListener('resize', () => { finishSnap(); setX(false); });
     window.addEventListener('load', () => setX(false));
+    start();
   }
   </script>
 </BaseLayout>

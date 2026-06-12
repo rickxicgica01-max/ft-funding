@@ -77,6 +77,46 @@ a {
   margin-inline:auto;
 }
 
+/* Tablet-only line break — for controlling heading wraps in the 768-1024
+   range, where the desktop and mobile natural breaks both fall badly. */
+.br-tablet {
+  display:none;
+}
+
+@media (min-width:768px) and (max-width:1024px) {
+  .br-tablet {
+    display:inline;
+  }
+}
+
+/* Desktop + tablet line break (mobile wraps naturally — the forced second
+   line would overflow a phone). */
+.br-md {
+  display:none;
+}
+
+@media (min-width:768px) {
+  .br-md {
+    display:inline;
+  }
+}
+
+/* Mobile-only line break. */
+.br-sm {
+  display:none;
+}
+
+@media (max-width:767px) {
+  .br-sm {
+    display:inline;
+  }
+}
+
+/* Keep a short phrase on one line (kills one-word widows). */
+.nowrap {
+  white-space:nowrap;
+}
+
 /* Small subheading — Instrument Sans 17px / 25px line / 5.1px tracking (px→em). */
 .eyebrow {
   font-family:var(--sans);
@@ -169,7 +209,7 @@ a {
   display:flex;
   gap:50px;            /* space between each nav link */
   margin-left:auto;
-  margin-right:30px;   /* space between the links and the CTA button */
+  margin-right:22px;   /* space between the links and the CTA button */
   font-family:var(--sans);
   font-weight:400;
   font-size:16px;
@@ -386,45 +426,6 @@ section {
   color:var(--gold);
 }
 
-/* Lending solutions */
-.cards {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:24px;
-}
-
-.card {
-  position:relative;
-  min-height:390px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:28px;
-  color:#fff;
-  overflow:hidden;
-}
-
-.card.navy {
-  background:var(--navy);
-}
-
-.card.photo {
-  background:linear-gradient(180deg,rgba(19,39,79,0),rgba(19,39,79,.75)),url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=800&auto=format&fit=crop') center/cover;
-}
-
-.card h3 {
-  font-size:28px;
-  line-height:1.05em;
-}
-
-.card .icon {
-  position:absolute;
-  top:24px;
-  left:28px;
-  font-size:26px;
-  color:var(--gold);
-}
-
 /* ---------- LENDING SOLUTIONS (text + 3 hover cards) ---------- */
 /* Full-width section; .wrap inside is the 1200px content holder (5% gutters). */
 .svc-section {
@@ -559,92 +560,10 @@ section {
   color:var(--gold);
 }
 
-.asset-cards {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:24px;
-}
-
-.asset {
-  background:var(--gold);
-  min-height:390px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:28px;
-  color:#fff;
-  position:relative;
-}
-
-.asset .icon {
-  position:absolute;
-  top:24px;
-  left:28px;
-  font-size:26px;
-}
-
-.asset h3 {
-  font-size:28px;
-  line-height:1.05em;
-}
-
 .intro-copy {
   max-width:240px;
   font-size:17px;
   margin:35px 0 60px;   /* 35px below the h2, 60px above the button */
-}
-
-/* Sources of capital */
-.sources-band {
-  background:var(--white);
-}
-
-.sources {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:48px;
-  align-items:center;
-}
-
-.sources ul {
-  list-style:none;
-  columns:1;
-}
-
-.sources li {
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:9px 0;
-  font-size:17px;
-}
-
-.sources li::before {
-  content:'';
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--gold);
-  flex:none;
-}
-
-.logos {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-  opacity:.5;
-}
-
-.logos div {
-  background:var(--white);
-  border:1px solid rgba(19,39,79,.15);
-  height:70px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  color:var(--navy);
-  font-size:14px;
 }
 
 /* ---------- SOURCES OF CAPITAL (homepage) ---------- */
@@ -964,7 +883,7 @@ section {
   width:62px;
   height:62px;
   border-radius:50%;
-  background:rgba(19,39,79,.12) url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop') center/cover;
+  background:rgba(19,39,79,.12) url('/home/avatar-client.jpg') center/cover;   /* PLACEHOLDER headshot */
   flex:none;
 }
 
@@ -1052,6 +971,73 @@ section {
   margin-top:34px;
 }
 
+/* ---------- FORM VALIDATION + NOTIFICATIONS (all forms, see forms.js) ---------- */
+/* Honeypot — visually gone, still in the POST body so bots fill it. */
+.hp {
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  opacity:0;
+}
+
+/* Status line under each form: required / bad email / sending / sent / denied. */
+.form-note {
+  margin-top:16px;
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:15px;
+  line-height:1.471em;
+}
+
+.form-note.error {
+  color:var(--gold);
+}
+
+.form-note.pending,
+.form-note.success {
+  color:var(--navy);
+}
+
+/* Footer (navy band): success/pending read white; errors stay gold.
+   `.foot-col p.form-note` outranks the later `.foot-col p` font-size rules. */
+footer .foot-col p.form-note {
+  font-size:14px;
+}
+
+footer .form-note.pending,
+footer .form-note.success {
+  color:var(--white);
+}
+
+/* Resources subscribe (gold band): gold is invisible there — flip to navy/white. */
+.subscribe-band .form-note.error {
+  color:var(--navy);
+}
+
+.subscribe-band .form-note.pending,
+.subscribe-band .form-note.success {
+  color:var(--white);
+}
+
+/* Invalid fields: underline forms flip their rule to gold; boxed inputs
+   (footer + subscribe) get a gold / navy inner ring. */
+.field.invalid input,
+.field.invalid select,
+.field.invalid textarea {
+  border-bottom-color:var(--gold);
+}
+
+.news-input input.invalid {
+  box-shadow:inset 0 0 0 2px var(--gold);
+}
+
+/* Underline-style input on the gold band: error = the underline flips navy. */
+.sub-form input.invalid {
+  border-bottom-color:var(--navy);
+  border-bottom-width:2px;
+}
+
 /* Footer */
 footer {
   background:var(--navy);
@@ -1096,7 +1082,7 @@ footer .wrap {
 .foot-social {
   display:flex;
   gap:27px;
-  margin-top:50px;           /* heading → icons */
+  margin-top:36px;           /* heading → icons */
 }
 
 /* White social glyphs (PNG used as a mask) → brand gold on hover. */
@@ -1152,6 +1138,13 @@ footer .wrap {
 }
 
 .foot-col a:hover {
+  color:var(--gold);
+}
+
+/* Current page's Quick Link stays gold on every device. The :hover variant
+   outranks the portable hover-pin so a tap can't flash it back to white. */
+.foot-col a.active,
+.foot-col a.active:hover {
   color:var(--gold);
 }
 
@@ -1330,13 +1323,8 @@ footer .wrap {
     transition:max-height .5s ease, visibility 0s;
   }
 
-  .cards {
-    grid-template-columns:repeat(2,1fr);
-  }
-
   .why,
-  .consult,
-  .sources {
+  .consult {
     grid-template-columns:1fr;
     gap:40px;
   }
@@ -1491,7 +1479,6 @@ footer .wrap {
   .hero p,
   .intro-copy,
   .capital-list li,
-  .sources li,
   .foot-col li,
   .foot-col p {
     font-size:16px;
@@ -1511,12 +1498,6 @@ footer .wrap {
      track fills the window, so it's scrollbar-proof (vw is not). */
   .tcard {
     width:100%;
-  }
-
-  .cards,
-  .asset-cards,
-  .logos {
-    grid-template-columns:1fr;
   }
 
   .formgrid {
@@ -1622,36 +1603,10 @@ footer .wrap {
   }
 }
 
-/* Push inner-page content below the fixed bar (homepage hero sits behind it). */
-.page-head {
-  margin-top:126px;
-}
-
-/* Generic page header band for inner pages */
-.page-head {
-  background:var(--navy);
-  color:#fff;
-  padding:72px 0 64px;
-  text-align:center;
-}
-
-.page-head h1 {
-  font-size:64px;           /* 52px tablet / 40px mobile (see blocks below) */
-  margin-bottom:14px;
-}
-
-.page-head p {
-  font-size:18px;
-  opacity:.9;
-  max-width:620px;
-  margin:0 auto;
-}
-
 /* Slimmer fixed bar on portables (no scroll-shrink there, so slim it statically).
    Tablet logo matches the desktop scrolled size (236×44); mobile drops to 188×35.
-   .page-head's offset must track the bar height exactly — bar = logo + 2×padding:
-   tablet 44 + 28 = 72px, mobile 35 + 28 = 63px. Placed after the .page-head
-   definitions above so these win the cascade. */
+   Bar heights = logo + 2×padding: 126px desktop, 72px tablet, 63px mobile —
+   any fixed-bar offset (e.g. .art-main) must track these. */
 @media (max-width:1024px) {
   .nav {
     padding:14px 0;
@@ -1661,28 +1616,12 @@ footer .wrap {
     width:236px;
     height:44px;
   }
-
-  .page-head {
-    margin-top:72px;
-  }
-
-  .page-head h1 {
-    font-size:52px;
-  }
 }
 
 @media (max-width:767px) {
   .logo img {
     width:188px;
     height:35px;
-  }
-
-  .page-head {
-    margin-top:63px;
-  }
-
-  .page-head h1 {
-    font-size:40px;
   }
 }
 
@@ -1692,21 +1631,24 @@ footer .wrap {
    background image until a dedicated About photo/video is supplied. */
 .hero--about,
 .hero--services,
-.hero--resources {
+.hero--resources,
+.hero--contact {
   min-height:640px;   /* content is centred, so the extra height pads top + bottom */
   background:linear-gradient(rgba(19,39,79,.35),rgba(19,39,79,.35)),url('/home/home-hero-bg.png') center center/cover no-repeat;
 }
 
 .hero--about .hero-inner,
 .hero--services .hero-inner,
-.hero--resources .hero-inner {
+.hero--resources .hero-inner,
+.hero--contact .hero-inner {
   transform:none;        /* no rates card to balance against — true vertical centre */
   max-width:760px;
 }
 
 .hero--about p,
 .hero--services p,
-.hero--resources p {
+.hero--resources p,
+.hero--contact p {
   max-width:600px;
 }
 
@@ -1997,7 +1939,8 @@ footer .wrap {
      portables (this outranks the 640px rule above by file order). */
   .hero--about,
   .hero--services,
-  .hero--resources {
+  .hero--resources,
+  .hero--contact {
     min-height:0;
   }
 
@@ -2046,7 +1989,12 @@ footer .wrap {
     font-size:34px;
   }
 
-  /* Slider nav arrows smaller again on mobile (45px tablet → 40px). */
+  /* Slider nav arrows smaller again on mobile (45px tablet → 40px),
+     sitting a little closer together. */
+  .team-nav {
+    gap:10px;
+  }
+
   .team-arrow {
     width:40px;
     height:40px;
@@ -2170,44 +2118,102 @@ footer .wrap {
   color:var(--gold);
 }
 
-/* What We Finance — navy band + compact gold tiles (homepage asset identity). */
+/* What We Finance — word-wall showcase: the names flow inline as serif type;
+   the ACTIVE name is gold while its related photo cross-fades in behind a
+   navy overlay (3s autoplay; hover/tap takes over — JS drives .active). */
 .finance-band {
+  position:relative;
+  overflow:hidden;
   background:var(--navy);
   color:var(--white);
+  padding:190px 0 200px;
 }
 
-.asset-tiles {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:24px;
-}
-
-.asset-tile {
-  position:relative;
-  min-height:140px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:18px;
-  background:var(--gold);
-  color:var(--white);
-}
-
-.at-icon {
+/* Stacked photo layers — the active one fades in (button-speed transition). */
+.fin-bgs,
+.fin-bg,
+.fin-overlay {
   position:absolute;
-  top:18px;
-  left:18px;
-  width:26px;
-  height:26px;
-  background:var(--white);
-  -webkit-mask:var(--icon) center/contain no-repeat;
-  mask:var(--icon) center/contain no-repeat;
+  inset:0;
 }
 
-.asset-tile h3 {
-  font-size:25px;
-  line-height:1.04em;
+/* isolation keeps the JS-raised layer z-indexes INSIDE this stack, so they
+   can never climb above the overlay or the content. */
+.fin-bgs {
+  isolation:isolate;
+}
+
+.fin-bg {
+  background-size:cover;
+  background-position:center;
+  opacity:0;
+  transition:opacity 2s ease;
+}
+
+.fin-bg.active {
+  opacity:1;
+}
+
+/* Dark wash (hero-style black) keeps the type readable over any photo. */
+.fin-overlay {
+  background:rgba(0,0,0,.7);
+}
+
+.finance-band .wrap {
+  position:relative;
+  z-index:1;
+}
+
+.finance-band .sec-head {
+  margin-bottom:70px;
+}
+
+.asset-flow {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:baseline;
+  row-gap:38px;
+}
+
+.af-item {
+  display:inline-flex;
+  align-items:center;
+  border:none;
+  background:none;
+  padding:0;
+  cursor:pointer;
+  color:var(--white);
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:33px;
+  line-height:1.1em;
   letter-spacing:-0.04em;
+  transition:color .6s ease;   /* matches the site's button easing */
+}
+
+.af-item:hover,
+.af-item.active {
+  color:var(--gold);
+}
+
+.af-item:focus {
+  outline:none;
+}
+
+/* Gold dot separator (none after the final name). */
+.af-item::after {
+  content:'';
+  flex:none;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--gold);
+  margin:0 40px;
+}
+
+.af-item:last-child::after,
+.af-item.no-dot::after {
+  display:none;       /* .no-dot = last name on its wrapped line (set by JS) */
 }
 
 /* How We Work — statement left, 5 numbered step rows right (Why-section
@@ -2228,31 +2234,62 @@ footer .wrap {
   margin:35px 0 0;
 }
 
+/* Timeline: each number sits in a gold outline circle; a vertical line links
+   the circles. The row divider lives on .step-body, so it starts at the text
+   edge and never crosses the timeline column. */
 .step {
+  position:relative;
   display:flex;
   align-items:flex-start;
   gap:28px;
-  padding-bottom:30px;
   margin-bottom:30px;
-  border-bottom:1px solid rgba(19,39,79,.2);
 }
 
 .step:last-child {
-  padding-bottom:0;
   margin-bottom:0;
-  border-bottom:none;
 }
 
-/* Big gold step number — Times New Roman, fixed column so titles align. */
+/* Connector — from this circle's bottom to the next circle's top. */
+.step::before {
+  content:'';
+  position:absolute;
+  left:24px;            /* circle centre (48px / 2) */
+  top:48px;
+  bottom:-30px;         /* bridges the row margin to the next circle */
+  width:1px;
+  background:rgba(211,162,67,.5);
+}
+
+.step:last-child::before {
+  display:none;
+}
+
 .step-num {
   flex:none;
-  width:44px;
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--gold);
+  border-radius:50%;
   font-family:var(--serif);
   font-weight:700;
-  font-size:30px;
-  line-height:1.04em;
-  letter-spacing:-0.04em;
+  font-size:18px;
+  line-height:1;
+  letter-spacing:-0.02em;
   color:var(--gold);
+}
+
+.step-body {
+  flex:1;
+  padding:11px 0 30px;  /* top: optically centres the title on the circle */
+  border-bottom:1px solid rgba(19,39,79,.2);
+}
+
+.step:last-child .step-body {
+  padding-bottom:0;
+  border-bottom:none;
 }
 
 .step h3 {
@@ -2364,10 +2401,19 @@ footer .wrap {
     width:calc((100% - 24px) / 2);
   }
 
-  /* Tighter process rows. */
+  /* Tighter process rows; timeline geometry scales with the smaller circle. */
   .step {
-    padding-bottom:22px;
     margin-bottom:22px;
+  }
+
+  .step::before {
+    left:20px;          /* circle centre (40px / 2) */
+    top:40px;
+    bottom:-22px;
+  }
+
+  .step-body {
+    padding:9px 0 22px;
   }
 
   /* Proof of Work header: button → arrows gap, and the button follows the
@@ -2382,8 +2428,7 @@ footer .wrap {
 
   /* Tablet name tier drops to 20px (matches team/testimonial names). */
   .sv-name,
-  .step h3,
-  .asset-tile h3 {
+  .step h3 {
     font-size:20px;
   }
 
@@ -2393,13 +2438,35 @@ footer .wrap {
     margin-top:0;
   }
 
-  .asset-tiles {
-    grid-template-columns:repeat(3,1fr);
-    gap:16px;
+  /* Word-wall scales down on tablet; extra bottom air under the wall. */
+  .finance-band {
+    padding:65px 0 70px;
   }
 
-  .asset-tile {
-    min-height:120px;
+  .finance-band .sec-head {
+    margin-bottom:35px;
+  }
+
+  .asset-flow {
+    row-gap:28px;
+  }
+
+  .af-item {
+    font-size:25px;
+  }
+
+  .af-item::after {
+    margin:0 28px;
+  }
+
+  /* No hover styling on touch — taps drive .active instead. */
+  .af-item:hover {
+    color:var(--white);
+  }
+
+  .af-item.active,
+  .af-item.active:hover {
+    color:var(--gold);
   }
 
   .process {
@@ -2408,8 +2475,9 @@ footer .wrap {
   }
 
   .step-num {
-    width:36px;
-    font-size:24px;
+    width:40px;
+    height:40px;
+    font-size:15px;
   }
 
   .deal-card {
@@ -2459,26 +2527,23 @@ footer .wrap {
     padding:20px 0;
   }
 
-  .asset-tiles {
-    grid-template-columns:repeat(2,1fr);
+  /* Word-wall on mobile: smaller type, tighter dots; extra bottom air. */
+  .finance-band {
+    padding:50px 0 53px;
   }
 
-  /* Narrow half-width tiles: top padding reserves the icon's corner so long
-     labels ("Multifamily (including CMHC)") can't stack into it. */
-  .asset-tile {
-    min-height:110px;
-    padding:44px 14px 14px;
+  .asset-flow {
+    row-gap:20px;
   }
 
-  .at-icon {
-    top:14px;
-    left:14px;
-    width:22px;
-    height:22px;
+  .af-item {
+    font-size:20px;
   }
 
-  .asset-tile h3 {
-    font-size:18px;
+  .af-item::after {
+    width:6px;
+    height:6px;
+    margin:0 18px;
   }
 }
 
@@ -2716,6 +2781,7 @@ footer .wrap {
 
 .res-card p {
   margin-top:12px;
+  font-size:16px;     /* 1px under body copy; 15px mobile */
 }
 
 /* Date · read time — pinned to the card bottom. */
@@ -2733,7 +2799,7 @@ footer .wrap {
 .res-card--featured {
   grid-column:1 / -1;
   display:grid;
-  grid-template-columns:1.1fr 1fr;
+  grid-template-columns:6fr 4fr;   /* image owns 60% of the card */
 }
 
 /* The image is absolutely positioned so its intrinsic ratio can NEVER drive
@@ -2874,17 +2940,50 @@ footer .wrap {
     width:auto;
   }
 
+  /* One card per row on portables (the featured card keeps its horizontal
+     layout until mobile stacks it). */
   .res-grid {
+    grid-template-columns:1fr;
     margin-top:30px;
   }
 
-  /* Name tier drops to the portable 20px (24px for the featured title). */
-  .res-title {
-    font-size:20px;
+  /* ALL cards go horizontal on tablet — image left, text right (the featured
+     card's layout); no vertical cards. The absolute image can't drive the
+     card height, so text + min-height decide and the photo cover-crops. */
+  .res-card {
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
   }
 
+  .res-media {
+    aspect-ratio:auto;
+    position:relative;
+    min-height:240px;
+  }
+
+  .res-media img {
+    position:absolute;
+    inset:0;
+  }
+
+  .res-card--featured .res-media {
+    min-height:260px;
+  }
+
+  /* One title size for ALL cards on portables — the featured card's former
+     24px minus 1, so it no longer outsizes the rest. */
+  .res-title,
   .res-card--featured .res-title {
-    font-size:24px;
+    font-size:23px;
+  }
+
+  /* Excerpt caps at 4 lines on tablet (the 160-char excerpt can reach 5). */
+  .res-card p {
+    font-size:14px;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:4;
+    overflow:hidden;
   }
 
   .res-body {
@@ -2893,10 +2992,6 @@ footer .wrap {
 
   .res-card--featured .res-body {
     padding:28px;
-  }
-
-  .res-card--featured .res-media {
-    min-height:260px;
   }
 
   .sub-btn {
@@ -2919,6 +3014,13 @@ footer .wrap {
     filter:none;
   }
 
+  /* Must repeat the hover selector at full specificity: setting grayscale(0)
+     on hover would promote the image to a new compositing layer, which shows
+     as a "pop"/shift even though the colours don't change. */
+  .res-card:hover .res-media img {
+    filter:none;
+  }
+
   .res-card:hover .res-title {
     color:var(--navy);
   }
@@ -2929,19 +3031,27 @@ footer .wrap {
 }
 
 @media (max-width:767px) {
-  .res-grid {
+  .res-card p {
+    font-size:15px;
+  }
+
+  /* All cards stack on mobile: image on top, text below. The featured
+     selectors are repeated so its higher-specificity desktop/tablet rules
+     (min-height, aspect, padding) can't make the first card differ. */
+  .res-card {
     grid-template-columns:1fr;
   }
 
-  /* Featured card stacks like a regular card on mobile. */
-  .res-card--featured {
-    grid-template-columns:1fr;
-  }
-
+  .res-media,
   .res-card--featured .res-media {
     aspect-ratio:16/10;
     min-height:0;
     height:auto;
+  }
+
+  .res-body,
+  .res-card--featured .res-body {
+    padding:24px;
   }
 
   .sub-form {
@@ -2956,7 +3066,7 @@ footer .wrap {
 
 /* ---------- ARTICLE PAGE (/resources/post) ---------- */
 /* Single blog post, rendered client-side from /blog/api.php. The .art-main
-   top margin clears the fixed bar (mirrors .page-head: 126/72/63). */
+   top margin clears the fixed bar (bar heights: 126/72/63). */
 .art-main {
   margin-top:126px;
   padding:90px 0 120px;
@@ -3089,6 +3199,11 @@ footer .wrap {
     font-size:20px;
   }
 
+  /* Slightly tighter article end → back link gap on portables. */
+  .art-back {
+    margin-top:36px;
+  }
+
   /* No hover on touch. */
   .art-back:hover {
     color:var(--gold);
@@ -3106,6 +3221,217 @@ footer .wrap {
   }
 
   .art-body li {
+    font-size:16px;
+  }
+}
+
+/* ---------- CONTACT PAGE ---------- */
+/* Narrower hero paragraph: at 600px the copy strands "days." on its own
+   line — 540px breaks it into three clean lines. */
+.hero--contact p {
+  max-width:540px;
+}
+
+/* Get In Touch — direct contact details left, Google Maps embed right. */
+.touch-band {
+  background:var(--white);
+}
+
+.touch {
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  gap:90px;
+  align-items:stretch;   /* map matches the info column's height */
+}
+
+.touch-intro {
+  margin:35px 0 0;
+  max-width:480px;
+}
+
+.touch-rows {
+  margin-top:40px;
+}
+
+.t-row {
+  margin-bottom:28px;
+}
+
+.t-row:last-child {
+  margin-bottom:0;
+}
+
+/* Label/value pairs — rates-card language: small gold sans label, serif value. */
+.t-label {
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:12px;
+  line-height:1em;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:8px;
+}
+
+.t-value {
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:22px;
+  line-height:1.2em;
+  letter-spacing:-0.04em;
+  color:var(--navy);
+}
+
+.t-value a {
+  transition:color .4s ease;
+}
+
+.t-value a:hover {
+  color:var(--gold);
+}
+
+/* Social icons — the footer's masked PNGs, navy on the white band. */
+.touch-social {
+  display:flex;
+  gap:20px;
+  padding-top:4px;
+}
+
+.touch-social a {
+  width:22px;
+  height:22px;
+  background:var(--navy);
+  -webkit-mask:var(--icon) center/contain no-repeat;
+  mask:var(--icon) center/contain no-repeat;
+  transition:background .4s ease;
+}
+
+.touch-social a:hover {
+  background:var(--gold);
+}
+
+/* Map — flat, edge-to-edge in its column, desaturated to sit with the brand. */
+.touch-map iframe {
+  display:block;
+  width:100%;
+  height:100%;
+  min-height:440px;
+  border:0;
+  filter:grayscale(1);
+}
+
+/* Inquiry form (reuses the homepage consult band + formgrid underline fields).
+   Swapped columns on desktop: form left, text right. The column split + gap
+   MIRROR the Get In Touch grid above (1fr / 90px / 1.1fr), so the text block
+   starts exactly where the map starts. */
+.consult-swap {
+  grid-template-columns:1fr 1.1fr;
+  gap:90px;     /* mirrors the map grid — form width matches the info column */
+}
+
+.consult-swap > div:first-child {
+  order:2;             /* text block moves right */
+  padding-left:70px;   /* nudges the text right WITHIN its column — the
+                          form column's width is untouched */
+}
+
+.consult-swap > div:last-child {
+  order:1;             /* form moves left */
+}
+
+.inq-intro {
+  margin:35px 0 0;
+  max-width:360px;     /* breaks the subtext into two even lines (no widow) */
+}
+
+/* Underline selects matching the text fields; gold chevron, square corners. */
+.field select {
+  appearance:none;
+  -webkit-appearance:none;
+  border:none;
+  border-radius:0;
+  border-bottom:1px solid var(--navy);
+  background:transparent url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23d3a243' stroke-width='2'/></svg>") right center/12px 8px no-repeat;
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:17px;
+  line-height:1.471em;
+  letter-spacing:0.02em;
+  color:var(--navy);
+  padding:0 24px 12px 0;
+  cursor:pointer;
+}
+
+.field select:focus {
+  outline:none;
+}
+
+/* Until a choice is made, the select reads like a placeholder (JS toggles). */
+.field select.placeholder {
+  color:rgba(19,39,79,.5);
+}
+
+@media (max-width:1024px) {
+  .touch {
+    grid-template-columns:1fr;
+    gap:48px;
+  }
+
+  .touch-intro,
+  .inq-intro {
+    margin-top:20px;     /* global tablet h2 → paragraph gap */
+  }
+
+  .touch-rows {
+    margin-top:30px;
+  }
+
+  .touch-map iframe {
+    min-height:0;
+    height:300px;      /* fixed height once stacked (100% has no reference) */
+  }
+
+  /* Stacked layout: text back on top, form below (natural reading order),
+     standard stacked gap (the 90px desktop gap outranks the generic rule). */
+  .consult-swap {
+    gap:40px;
+  }
+
+  /* :first-child matches the desktop rule's specificity — a bare `> div`
+     reset would lose and leave the text BELOW the form when stacked. */
+  .consult-swap > div:first-child {
+    order:0;
+    padding-left:0;    /* the desktop nudge doesn't apply when stacked */
+  }
+
+  .consult-swap > div:last-child {
+    order:0;
+  }
+
+  .t-value {
+    font-size:18px;
+  }
+
+  /* No hover on touch. */
+  .t-value a:hover {
+    color:var(--navy);
+  }
+
+  .touch-social a:hover {
+    background:var(--navy);
+  }
+}
+
+@media (max-width:767px) {
+  .touch-map iframe {
+    height:240px;
+  }
+
+  /* Form text down to 16px — but NOT below: under 16px, iOS Safari auto-zooms
+     the page when an input gains focus. */
+  .field input,
+  .field textarea,
+  .field select {
     font-size:16px;
   }
 }

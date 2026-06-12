@@ -18,7 +18,7 @@ const categories = ['All', 'Market Updates', 'Financing Tips', 'Lending Criteria
     <Nav />
     <div class="hero-body">
       <div class="hero-inner" data-reveal-stagger>
-        <h1 data-reveal>Insights from the financing <span class="gold">front line.</span></h1>
+        <h1 data-reveal>Insights from the<br class="br-md"> financing <span class="gold">front line.</span></h1>
         <p data-reveal>Market moves, lending criteria, and practical guidance for borrowers, straight from the people who arrange the deals.</p>
         <a href="#subscribe" class="btn btn-outline" data-reveal>Subscribe for Updates</a>
       </div>
@@ -71,10 +71,13 @@ const categories = ['All', 'Market Updates', 'Financing Tips', 'Lending Criteria
   <!-- NEWSLETTER — gold band close -->
   <section id="subscribe" class="subscribe-band">
     <div class="wrap">
-      <h2 data-reveal>Get the insights before the market <span class="accent">does.</span></h2>
-      <p data-reveal>Monthly updates on rates, programs, and opportunities. No noise.</p>
-      <form class="sub-form" onsubmit="return false;" data-reveal>
-        <input type="email" placeholder="Enter Your Email" aria-label="Email address">
+      <h2 data-reveal>Get the insights before the<br class="br-tablet"> <span class="nowrap">market <span class="accent">does.</span></span></h2>
+      <p data-reveal>Monthly updates on rates, programs, and opportunities. <span class="nowrap">No noise.</span></p>
+      <!-- Formspree: replace YOUR_FORM_ID with the real endpoint id -->
+      <form class="sub-form" method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-form
+        data-success="Thanks — you're subscribed!" data-reveal>
+        <input type="email" name="email" placeholder="Enter Your Email" aria-label="Email address" data-label="Your email" required>
+        <input type="text" name="_gotcha" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button class="sub-btn" type="submit" aria-label="Subscribe">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="6" y1="18" x2="18" y2="6"></line>
