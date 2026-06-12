@@ -1310,6 +1310,13 @@ footer .wrap {
   /* Dropdown: always rendered on portables, collapsed via max-height so it can
      slide open/closed (0.5s). JS sets the open max-height to the menu's real
      content height; visibility flips after the close finishes (a11y). */
+  /* Soft shadow under the bar's container: it sits under the bar when the
+     menu is closed and rides the dropdown's bottom edge as it slides
+     open/closed (the dropdown lives inside the same container). */
+  .nav-wrap {
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
+  }
+
   .nav-menu {
     display:flex;
     max-height:0;
@@ -1592,12 +1599,17 @@ footer .wrap {
     box-shadow:0 1px 8px rgba(19,39,79,.18);
   }
 
-  .nav-wrap.scrolled .nav {
+  /* Solid-nav pages (no hero image, e.g. blog articles) start CONDENSED —
+     there's no hero for the tall bar to sit over, so the shrunk state is the
+     resting state, not a scroll effect. */
+  .nav-wrap.scrolled .nav,
+  .nav-solid .nav {
     padding-top:16px;
     padding-bottom:16px;
   }
 
-  .nav-wrap.scrolled .logo img {
+  .nav-wrap.scrolled .logo img,
+  .nav-solid .logo img {
     width:236px;
     height:44px;
   }
@@ -3068,7 +3080,7 @@ footer .wrap {
 /* Single blog post, rendered client-side from /blog/api.php. The .art-main
    top margin clears the fixed bar (bar heights: 126/72/63). */
 .art-main {
-  margin-top:126px;
+  margin-top:76px;     /* condensed solid bar: 44px logo + 2×16px padding */
   padding:90px 0 120px;
   background:var(--white);
 }
@@ -3222,6 +3234,10 @@ footer .wrap {
 
   .art-body li {
     font-size:16px;
+  }
+
+  .art-back {
+    margin-top:31px;   /* 5px tighter than tablet's 36px */
   }
 }
 
@@ -3391,9 +3407,11 @@ footer .wrap {
     height:300px;      /* fixed height once stacked (100% has no reference) */
   }
 
-  /* Stacked layout: text back on top, form below (natural reading order),
-     standard stacked gap (the 90px desktop gap outranks the generic rule). */
+  /* Stacked layout: ONE column (the desktop 2-col rule outranks the generic
+     .consult reset by file order), text back on top, form below, standard
+     stacked gap. */
   .consult-swap {
+    grid-template-columns:1fr;
     gap:40px;
   }
 
