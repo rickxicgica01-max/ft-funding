@@ -201,5 +201,25 @@ body {
   border-top: 3px solid var(--accent); padding: 32px 28px; }
 .login-card h1 {
   font-family: var(--serif); font-weight: 700;
-  font-size: 1.5rem; letter-spacing: -0.04em; margin: 0 0 20px;
+  font-size: 1.75rem; letter-spacing: -0.04em; margin: 0 0 20px;
+}
+/* Login-only: shorter password field + slightly larger button text */
+.login-card .field input { padding: 9px 14px; }
+.login-card .btn { font-size: calc(.95rem + 1px); }
+
+/* ----- Tablet / mobile ----- */
+@media (max-width: 720px) {
+  .wrap { padding: 24px 16px 64px; }
+  .panel { padding: 18px 16px; }
+
+  /* Topbar wraps instead of squeezing the buttons into the title */
+  .topbar { flex-wrap: wrap; gap: 12px; }
+
+  /* Post rows: thumb + title share the first line, actions drop below
+     full-width — no more buttons overlapping the title text. */
+  .post-row { flex-wrap: wrap; row-gap: 10px; }
+  .post-row .meta { flex: 1 1 calc(100% - 72px); }
+  .post-row .actions { flex: 1 1 100%; flex-wrap: wrap; }
+
+  .form-actions { flex-wrap: wrap; }
 }

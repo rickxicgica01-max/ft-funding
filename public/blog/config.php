@@ -11,7 +11,7 @@ return [
     // Admin password, stored as a bcrypt HASH (never the plain password).
     // Generate one in a terminal with:
     //   php -r "echo password_hash('your-password', PASSWORD_DEFAULT);"
-    'admin_hash' => '$2y$12$8MfZetxZxL6K/Jzn4LBpVOFhIjAe4zAb95gr42k5aGrzlUNdR.Mz.',
+    'admin_hash' => '$2y$12$bdvHUKOKTVLchU0Abho.fug6HmlTKk.lP9nhKlssvF85zhms5vjTy',
 
     // WHERE the blog lives on the site:
     //   ''       -> a web root or its own subdomain   (e.g. blog.example.com)
